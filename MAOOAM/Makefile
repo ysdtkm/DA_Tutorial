@@ -7,7 +7,7 @@
 #   cmd_*: Command to be executed
 #================================
 
-STEP_ALL = prep nudging ETKF plot
+STEP_ALL = prep ETKF plot
 
 src_prep = generate_observations.py generate_nature_run.py runall_tutorial_1.sh \
            module_obs_network.py params_maooam.py
@@ -15,13 +15,13 @@ dep_prep =
 out_prep = x_nature.pkl x_freerun.pkl y_obs.pkl
 cmd_prep = sh runall_tutorial_1.sh
 
-src_nudging = runall_tutorial_2.sh analysis_init.py class_da_system.py module_ad_hoc.py \
+src_nudging = runall_tutorial_2.sh analysis_init.py class_da_system.py module_constants.py \
               generate_analysis_3dDet.py
 dep_nudging = prep
 out_nudging = x_analysis_init.pkl
 cmd_nudging = sh runall_tutorial_2.sh nudging
 
-src_ETKF = runall_tutorial_3.sh analysis_init.py class_da_system.py module_ad_hoc.py \
+src_ETKF = runall_tutorial_3.sh analysis_init.py class_da_system.py module_constants.py \
            generate_analysis_3dEns.py
 dep_ETKF = prep
 out_ETKF = x_analysis_init.pkl
