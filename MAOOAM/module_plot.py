@@ -39,6 +39,27 @@ def plot_mean_bcov(bcov, img_name, title, log=False):
     plt.savefig(img_name)
     plt.close()
 
+def plot_eig_bcov(bcov, img_name_eigval, img_name_eigvec):
+    eigval, eigvec = np.linalg.eig(bcov)
+    idx = eigval.argsort()[::-1]   
+    eigval = eigval[idx]
+    eigvec = eigvec[:,idx]
+
+    plt.plot(eigval)
+    plt.yscale("log")
+    plt.title("eigenvalues of B")
+    plt.savefig(img_name_eigval)
+    plt.close()
+
+    eigvec[:, -1] = 0.0
+    cm = plt.imshow(eigvec, cmap="RdBu_r")
+    cm.set_clim(-1, 1)
+    plt.colorbar(cm)
+    plt.xlabel("eigenvector index")
+    plt.ylabel("model variable")
+    plt.savefig(img_name_eigvec)
+    plt.close()
+
 def cov_to_corr(cov):
     corr = np.copy(cov)
     n = cov.shape[0]
@@ -95,6 +116,7 @@ def read_and_plot_bcov():
     counter = Pb_hist.shape[0]
     title = "mean B cov (sample = %d, BV dim = %f)" % (counter, get_bv_dim(mean_cov))
     plot_mean_bcov(mean_cov, "img/bcov.pdf", title, True)
+    plot_eig_bcov(mean_cov, "img/bcov_eigval.pdf", "img/bcov_eigvec.pdf")
 
     n = Pb_hist.shape[1]
     mean_corr = np.zeros((n, n))
