@@ -25,25 +25,15 @@ def plot_time_colormap(dat, img_name, vmin=None, vmax=None, title="", cmap="RdBu
     plt.savefig(img_name)
     plt.close()
 
-def plot_mean_bcov(bcov, counter, img_dir):
+def plot_mean_bcov(bcov, img_name, title):
     cm = plt.imshow(bcov, cmap="RdBu_r")
     vmax = np.max(bcov)
     cm.set_clim(-vmax, vmax)
     plt.colorbar(cm)
     plt.xlabel("model variable")
     plt.ylabel("model variable")
-    plt.title("mean B cov (sample = %d, BV dim = %f)" % (counter, get_bv_dim(bcov)))
-    plt.savefig("%s/bcov.pdf" % img_dir)
-    plt.close()
-
-    bcorr = cov_to_corr(bcov)
-    cm = plt.imshow(bcorr, cmap="RdBu_r")
-    cm.set_clim(-1, 1)
-    plt.colorbar(cm)
-    plt.xlabel("model variable")
-    plt.ylabel("model variable")
-    plt.title("mean B corr (sample = %d, BV dim = %f)" % (counter, get_bv_dim(bcorr)))
-    plt.savefig("%s/bcorr.pdf" % img_dir)
+    plt.title(title)
+    plt.savefig(img_name)
     plt.close()
 
 def cov_to_corr(cov):
@@ -94,5 +84,22 @@ def __sample_read_files():
                            "img/analysis_%s.png" % method, *vlim_raw,
                            "analysis %s" % method, "viridis")
 
+def read_and_plot_bcov():
+    Pb_hist = np.load("Pb_hist.npy")
+    assert len(Pb_hist.shape) == 3
+    assert Pb_hist.shape[1] == Pb_hist.shape[2]
+    mean_cov = np.mean(Pb_hist, axis=0)
+    counter = Pb_hist.shape[0]
+    title = "mean B cov (sample = %d, BV dim = %f)" % (counter, get_bv_dim(mean_cov))
+    plot_mean_bcov(mean_cov, "img/bcov.pdf", title)
+
+    n = Pb_hist.shape[1]
+    mean_corr = np.zeros((n, n))
+    for t in range(counter):
+        mean_corr += cov_to_corr(Pb_hist[t, :, :])
+    title = "mean B corr (sample = %d, BV dim = %f)" % (counter, get_bv_dim(mean_corr))
+    plot_mean_bcov(mean_corr, "img/bcorr.pdf", title)
+
 if __name__ == "__main__":
     __sample_read_files()
+    read_and_plot_bcov()
