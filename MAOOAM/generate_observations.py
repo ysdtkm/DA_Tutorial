@@ -11,7 +11,7 @@ outfile = 'y_obs.pkl'
 # Note: sigma will be multiplied by nature run climatological standard deviation
 #--------------------------------------------------------------------------------
 mu = 0
-sigma = 0.001
+sigma = 1.0
 
 #--------------------------------------------------------------------------------
 # Create observation object
@@ -42,8 +42,8 @@ for i in range(nc):
 yo = np.zeros_like(x_nature)
 eta = np.zeros_like(x_nature)
 hx = np.zeros_like(x_nature)
-H = np.identity(nc)
-# H = get_h_full_coverage()
+# H = np.identity(nc)
+H = get_h_full_coverage()
 for i in range(nc):
   # Compute error as a percentage of climatological variance
   eta[:, i] = np.random.normal(mu, sigma, nr)
