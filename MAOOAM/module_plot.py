@@ -25,9 +25,12 @@ def plot_time_colormap(dat, img_name, vmin=None, vmax=None, title="", cmap="RdBu
     plt.savefig(img_name)
     plt.close()
 
-def plot_mean_bcov(bcov, img_name, title):
-    cm = plt.imshow(bcov, cmap="RdBu_r")
+def plot_mean_bcov(bcov, img_name, title, log=False):
     vmax = np.max(bcov)
+    if log:
+        cm = plt.imshow(bcov, cmap="RdBu_r", norm=matplotlib.colors.SymLogNorm(linthresh=0.001 * vmax))
+    else:
+        cm = plt.imshow(bcov, cmap="RdBu_r")
     cm.set_clim(-vmax, vmax)
     plt.colorbar(cm)
     plt.xlabel("model variable")
@@ -91,7 +94,7 @@ def read_and_plot_bcov():
     mean_cov = np.mean(Pb_hist, axis=0)
     counter = Pb_hist.shape[0]
     title = "mean B cov (sample = %d, BV dim = %f)" % (counter, get_bv_dim(mean_cov))
-    plot_mean_bcov(mean_cov, "img/bcov.pdf", title)
+    plot_mean_bcov(mean_cov, "img/bcov.pdf", title, True)
 
     n = Pb_hist.shape[1]
     mean_corr = np.zeros((n, n))
