@@ -6,6 +6,7 @@ from class_maooam import maooam
 from class_state_vector import state_vector
 from class_obs_data import obs_data
 from class_da_system import da_system
+from module_plot import plot_mean_bcov
 from copy import deepcopy
 
 #-----------------------------------------------------------------------
@@ -84,6 +85,7 @@ xa_history = np.zeros_like(x_nature)
 xa_history[:] = np.nan
 KH_history = []
 KH_idx = []
+sum_Pb = np.zeros((xdim, xdim)); counter_Pb = -200
 for i in range(0,maxit-acyc_step,acyc_step):
 
   #----------------------------------------------
@@ -106,7 +108,8 @@ for i in range(0,maxit-acyc_step,acyc_step):
     # Compute forecast ensemble mean
     xf_4d = xf_4d + xf_4d_k
   xf_4d = xf_4d / das.edim
-
+  counter_Pb += 1
+  sum_Pb += Xf @ Xf.T if counter_Pb > 0 else 0
   #----------------------------------------------
   # Get the observations for this analysis cycle
   #----------------------------------------------
@@ -145,6 +148,9 @@ xm = np.mean(Xa,axis=1)
 Xa = Xa - np.matlib.repmat(xm, 1, das.edim)
 print('Last background error covariance matrix Xa*Xa.T = ')
 print((1/(das.edim-1))*np.dot(Xa,np.transpose(Xa)))
+
+mean_Pb = sum_Pb / counter_Pb
+plot_mean_bcov(mean_Pb, counter_Pb, "img")
 
 sv.setTrajectory(xa_history)
 sv.setName(name)

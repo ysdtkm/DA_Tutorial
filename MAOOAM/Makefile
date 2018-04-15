@@ -22,7 +22,7 @@ out_nudging = x_analysis_init.pkl
 cmd_nudging = sh runall_tutorial_2.sh nudging
 
 src_ETKF = runall_tutorial_3.sh analysis_init.py class_da_system.py module_constants.py \
-           generate_analysis_3dEns.py
+           generate_analysis_3dEns.py module_plot.py
 dep_ETKF = prep
 out_ETKF = x_analysis_init.pkl
 cmd_ETKF = sh runall_tutorial_3.sh ETKF

@@ -25,6 +25,41 @@ def plot_time_colormap(dat, img_name, vmin=None, vmax=None, title="", cmap="RdBu
     plt.savefig(img_name)
     plt.close()
 
+def plot_mean_bcov(bcov, counter, img_dir):
+    cm = plt.imshow(bcov, cmap="RdBu_r")
+    vmax = np.max(bcov)
+    cm.set_clim(-vmax, vmax)
+    plt.colorbar(cm)
+    plt.xlabel("model variable")
+    plt.ylabel("model variable")
+    plt.title("mean B cov (sample = %d, BV dim = %f)" % (counter, get_bv_dim(bcov)))
+    plt.savefig("%s/bcov.pdf" % img_dir)
+    plt.close()
+
+    bcorr = cov_to_corr(bcov)
+    cm = plt.imshow(bcorr, cmap="RdBu_r")
+    cm.set_clim(-1, 1)
+    plt.colorbar(cm)
+    plt.xlabel("model variable")
+    plt.ylabel("model variable")
+    plt.title("mean B corr (sample = %d, BV dim = %f)" % (counter, get_bv_dim(bcorr)))
+    plt.savefig("%s/bcorr.pdf" % img_dir)
+    plt.close()
+
+def cov_to_corr(cov):
+    corr = np.copy(cov)
+    n = cov.shape[0]
+    for i in range(n):
+        for j in range(n):
+            corr[i, j] /= np.sqrt(cov[i, i] * cov[j, j])
+    return corr
+
+def get_bv_dim(cov):
+    eigvals = np.maximum(0, np.real(np.linalg.eigvals(cov)))
+    singvals = eigvals ** 0.5
+    bv_dim = np.sum(singvals) ** 2 / np.sum(singvals ** 2)
+    return bv_dim
+
 def __test_plot_time_colormap():
     nt = 100
     dat = np.random.randn(nt, NDIM)
