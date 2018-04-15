@@ -2,11 +2,16 @@
 # Model: MAOOAM
 # DA Methods: Nudging, 3D-Var, 4D-Var, Particle Filter, EnKF, Hybrid
 import numpy as np
+import multiprocessing, functools
 from class_maooam import maooam
 from class_state_vector import state_vector
 from class_obs_data import obs_data
 from class_da_system import da_system
 from copy import deepcopy
+
+def model_integ(Xa, t, k):
+  xf_4d_k = model.run(Xa[:, k].A1, t)
+  return xf_4d_k
 
 #-----------------------------------------------------------------------
 # Read the da system object
@@ -99,10 +104,12 @@ for j, i in enumerate(range(0,maxit-acyc_step,acyc_step)):
   # Run the model ensemble forecast
   Xf = np.zeros_like(Xa)
   xf_4d = 0
-  # Preferably, run this loop in parallel:
+  nproc = 4
+  with multiprocessing.Pool(nproc) as p:
+    xf_4d_k_map = p.map(functools.partial(model_integ, Xa, t), range(das.edim))
   for k in range(das.edim):
     # Run model run for ensemble member k
-    xf_4d_k =  model.run(Xa[:,k].A1,t)
+    xf_4d_k = xf_4d_k_map[k]
     # Get last timestep of the forecast
     Xf[:,k] = np.transpose(np.matrix(xf_4d_k[-1,:]))
     # Compute forecast ensemble mean
