@@ -7,7 +7,7 @@
 #   cmd_*: Command to be executed
 #================================
 
-STEP_ALL = prep ETKF plot
+STEP_ALL = prep ETKF plot tex
 
 src_prep = generate_observations.py generate_nature_run.py runall_tutorial_1.sh \
            module_obs_network.py params_maooam.py
@@ -31,6 +31,11 @@ src_plot = module_plot.py
 dep_plot = ETKF
 out_plot = img/*
 cmd_plot = python module_plot.py
+
+src_tex =
+dep_tex = plot
+out_tex = out.pdf
+cmd_tex = ~/repos/works/2018/dir_to_latex/main.py img 9
 
 # ===============================================
 # end of settings
