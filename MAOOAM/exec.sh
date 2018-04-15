@@ -4,6 +4,7 @@ set -e
 
 wdir_base="/lustre/tyoshida/shrt/exec"
 modeldir="/lustre/tyoshida/prgm/DA_Tutorial/MAOOAM"
+storagedir="/lustre/tyoshida/data/da_maooam"
 
 # preparation
 word=t`/lustre/tyoshida/repos/python/pythonpath/oneliner/serial`
@@ -19,11 +20,12 @@ cd ${wdir}
 
 cp -rf ${modeldir}/* .
 
-echo "#!/bin/bash"                 > tmp.sh
-echo "#SBATCH -n 20"               >> tmp.sh
-echo "#SBATCH -t 22:15:00"         >> tmp.sh
-echo "#SBATCH -J ${word}"          >> tmp.sh
-echo "set -e"                      >> tmp.sh
-echo "make clean all"              >> tmp.sh
+echo "#!/bin/bash"                                    > tmp.sh
+echo "#SBATCH -n 20"                                 >> tmp.sh
+echo "#SBATCH -t 22:15:00"                           >> tmp.sh
+echo "#SBATCH -J ${word}"                            >> tmp.sh
+echo "set -e"                                        >> tmp.sh
+echo "make clean all"                                >> tmp.sh
+echo "cp out.pdf ${storagedir}/${word}.pdf"          >> tmp.sh
 
 sbatch tmp.sh
