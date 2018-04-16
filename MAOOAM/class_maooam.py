@@ -10,6 +10,7 @@ import params_maooam
 from params_maooam import ndim, tw, t_run, t_trans, dt
 #from maooam import params_maooam
 #from maooam.params_maooam import ndim, tw, t_run, t_trans, dt
+import tl_ad
 from maooam import integrator
 import time
 from maooam import ic_def
@@ -39,7 +40,7 @@ def Ja(state, t):
 #-------------------------------------------------------------------------------
   # Compute the analytic Jacobian of the MAOOAM system
   # at a point represented by 'state'. The time 't' is unused.
-  J = tl_ad_tensor.compute_tltensor(state)
+  J = tl_ad.jacobi_mat(state)
   return J
 
 #-------------------------------------------------------------------------------
