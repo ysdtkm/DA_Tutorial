@@ -52,6 +52,7 @@ def plot_eig_bcov(bcov, img_name_eigval, img_name_eigvec):
     plt.plot(eigval)
     plt.yscale("log")
     plt.title("eigenvalues of B")
+    plt.xlabel("eigenvector index")
     plt.savefig(img_name_eigval)
     plt.close()
 
