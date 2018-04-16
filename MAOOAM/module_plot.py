@@ -11,11 +11,15 @@ from class_da_system import da_system
 
 NDIM = 36
 
-def plot_time_colormap(dat, img_name, vmin=None, vmax=None, title="", cmap="RdBu_r"):
+def plot_time_colormap(dat, img_name, vmin=None, vmax=None, title="", cmap="RdBu_r", log=False):
     assert dat.__class__ == np.ndarray
     assert len(dat.shape) == 2
     assert dat.shape[1] == NDIM
-    cm = plt.imshow(dat, aspect="auto", cmap=cmap, origin="bottom")
+    if log:
+        cm = plt.imshow(dat, aspect="auto", cmap=cmap, origin="bottom",
+            norm=matplotlib.colors.SymLogNorm(linthresh=0.001 * vmax))
+    else:
+        cm = plt.imshow(dat, aspect="auto", cmap=cmap, origin="bottom")
     if (vmin is not None) and (vmax is not None):
         cm.set_clim(vmin, vmax)
     plt.colorbar(cm)
@@ -82,7 +86,7 @@ def __test_plot_time_colormap():
 
 def __sample_read_files():
     vlim_raw = [-0.05, 0.1]
-    vlim_diff = [None, None]
+    vlim_diff = [-0.15, 0.15]
     nature_file ='x_nature.pkl'
     nature = state_vector()
     nature = nature.load(nature_file)
@@ -91,7 +95,7 @@ def __sample_read_files():
     freerun = freerun.load(freerun_file)
     sp.run("mkdir -p img", shell=True, check=True)
     plot_time_colormap(freerun.getTrajectory() - nature.getTrajectory(),
-                       "img/error_free_run.png", *vlim_diff, "error free run")
+                       "img/error_free_run.png", *vlim_diff, "error free run", "RdBu_r", True)
     plot_time_colormap(freerun.getTrajectory(),
                        "img/freerun.png", *vlim_raw, "freerun", "viridis")
     plot_time_colormap(nature.getTrajectory(),
@@ -103,7 +107,7 @@ def __sample_read_files():
         analysis = das.getStateVector()
         plot_time_colormap(analysis.getTrajectory() - nature.getTrajectory(),
                            "img/error_analysis_%s.png" % method, *vlim_diff,
-                           "error analysis %s" % method)
+                           "error analysis %s" % method, "RdBu_r", True)
         plot_time_colormap(analysis.getTrajectory(),
                            "img/analysis_%s.png" % method, *vlim_raw,
                            "analysis %s" % method, "viridis")

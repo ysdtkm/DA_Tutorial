@@ -116,7 +116,7 @@ class maooam:
     I = np.identity(nc)
 
     # Compute Jacobian / linear propagator for each timestep
-    sigma,rho,beta = self.params
+    # sigma,rho,beta = self.params
     maxit = len(t)
     Mhist=[]
     for i in range(maxit):
@@ -126,7 +126,7 @@ class maooam:
         dt = t[-1] - t[-2]
 
       # Evaluate Jacobian
-      Df = Ja(states[i,:], t[i], sigma, rho, beta)
+      Df = Ja(states[i,:], t[i])
 
 #     print('Df = ')
 #     print(Df)
