@@ -35,7 +35,7 @@ cmd_ETKF = time sh runall_tutorial_3.sh ETKF
 src_plot = module_plot.py
 dep_plot = ETKF
 out_plot = img/*
-cmd_plot = python module_plot.py
+cmd_plot = python module_plot.py && python plot_error.py ETKF
 
 src_tex =
 dep_tex = plot
