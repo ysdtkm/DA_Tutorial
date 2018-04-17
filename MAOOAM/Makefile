@@ -7,11 +7,16 @@
 #   cmd_*: Command to be executed
 #================================
 
-STEP_ALL = prep ETKF plot tex
+STEP_ALL = compile prep ETKF plot tex
+
+src_compile =
+dep_compile =
+out_compile = step_maooam.so
+cmd_compile = cd maooam_fortran && make && cd ../ && cp maooam_fortran/step_maooam.so .
 
 src_prep = generate_observations.py generate_nature_run.py runall_tutorial_1.sh \
            module_obs_network.py params_maooam.py tl_ad.py
-dep_prep =
+dep_prep = compile
 out_prep = x_nature.pkl x_freerun.pkl y_obs.pkl
 cmd_prep = sh runall_tutorial_1.sh
 
@@ -25,7 +30,7 @@ src_ETKF = runall_tutorial_3.sh analysis_init.py class_da_system.py module_const
            generate_analysis_3dEns.py
 dep_ETKF = prep
 out_ETKF = x_analysis_init.pkl Pb_hist.npy
-cmd_ETKF = sh runall_tutorial_3.sh ETKF
+cmd_ETKF = time sh runall_tutorial_3.sh ETKF
 
 src_plot = module_plot.py
 dep_plot = ETKF
