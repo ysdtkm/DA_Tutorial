@@ -32,7 +32,7 @@ dep_ETKF = prep
 out_ETKF = x_analysis_init.pkl Pb_hist.npy
 cmd_ETKF = time sh runall_tutorial_3.sh ETKF
 
-src_plot = module_plot.py
+src_plot = module_plot.py plot_error.py
 dep_plot = ETKF
 out_plot = img/*
 cmd_plot = python module_plot.py && python plot_error.py ETKF
