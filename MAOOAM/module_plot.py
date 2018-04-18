@@ -52,7 +52,6 @@ def plot_eig_bcov(bcov, img_name_eigval, img_name_eigvec):
     plt.savefig(img_name_eigval)
     plt.close()
 
-    eigvec[:, -1] = 0.0
     cm = plt.imshow(eigvec, cmap="RdBu_r", extent=get_extent_square())
     cm.set_clim(-1, 1)
     plt.colorbar(cm)
@@ -136,5 +135,6 @@ def read_and_plot_bcov():
     plot_mean_bcov(mean_corr, "img/bcorr.pdf", title)
 
 if __name__ == "__main__":
+    np.set_printoptions(formatter={'float': '{: 0.4f}'.format}, threshold=2000, linewidth=150)
     __sample_read_files()
     read_and_plot_bcov()
