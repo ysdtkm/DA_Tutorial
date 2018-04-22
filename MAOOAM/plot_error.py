@@ -29,6 +29,12 @@ def plot_rmse_all(nature, freerun, analysis, method, slice, img_name):
     plt.plot(nature.getTimes(),
              np.linalg.norm(analysis.getTrajectory()[slice] - nature.getTrajectory()[slice],
                             axis=1), label='Analysis ({method})'.format(method=method))
+    if analysis.getEnsembleTrajectory is not None:
+        ptb = analysis.getEnsembleTrajectory()[:, :, :] - analysis.getTrajectory()[:, :, np.newaxis]
+        edim = ptb.shape[2]
+        sprd = (np.sum(ptb ** 2, axis=2) / (edim - 1.0)) ** 0.5
+        plt.plot(nature.getTimes(), np.linalg.norm(sprd[slice], axis=1),
+            label='Analysis spread ({method})'.format(method=method))
     plt.legend()
     plt.xlabel('Time')
     plt.ylabel('Error', rotation='horizontal', labelpad=20)
