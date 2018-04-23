@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 # ref: a49p76
 
-import sys, os
+import sys, os, re
 import subprocess as sp
 import itertools
 from multiprocessing import Pool, cpu_count
 import numpy as np
+
+MODELDIR = "/home/tak/prgm/DA_Tutorial/MAOOAM"
+WDIR_BASE = "/home/tak/shrt/parallel_exp"
 
 def shell(cmd):
     assert isinstance(cmd, str)
@@ -16,10 +19,21 @@ def exec_single_job(param):
     dname = get_dir_name(p1, p2)
     shell("mkdir -p %s" % dname)
     os.chdir(dname)
-    modeldir = "/home/tak/prgm/DA_Tutorial/MAOOAM"
-    shell("cp -r %s/* . && make" % modeldir)
+    shell("cp -r %s/* ." % MODELDIR)
+    shell("make")
     print("%s done")
     return None
+
+def rewrite_file(filename, linenum, txt_from, txt_to):
+    with open(filename, "r") as f:
+        lines = f.readlines()
+    with open(filename, "w") as f:
+        for i, l in enumerate(lines):
+            if i == linenum - 1:
+                assert txt_from in l
+                f.write(txt_to + "\n")
+            else:
+                f.write(l)
 
 def get_dir_name(p1, p2):
     dn = "%s/oerr_%.05f/aint_%05d" % (WDIR_BASE, p1, p2)
@@ -45,11 +59,8 @@ def inverse_itertools_2d_product(params1, params2, map_result):
     return res
 
 def main():
-    global WDIR_BASE
-    WDIR_BASE = "/home/tak/shrt/parallel_exp"
-
-    params1 = [0.1 ** i for i in range(0, 4)]
-    params2 = [10 ** i for i in range(0, 3)]
+    params1 = [0.1 ** i for i in range(0, 2)]
+    params2 = [10 ** i for i in range(0, 2)]
     params_prod = itertools.product(params1, params2)
 
     shell("rm -rf %s" % WDIR_BASE)
@@ -59,5 +70,6 @@ def main():
     reduce_mapped_result(params1, params2, res2d)
 
 if __name__ == "__main__":
-    main()
+    # main()
+    rewrite_file("sample", 137, "acyc_step", "acyc_step = 10")
 
