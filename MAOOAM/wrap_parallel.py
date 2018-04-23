@@ -20,6 +20,9 @@ def exec_single_job(param):
     shell("mkdir -p %s" % dname)
     os.chdir(dname)
     shell("cp -r %s/* ." % MODELDIR)
+    rewrite_file("analysis_init.py", 137, "acyc_step", "acyc_step = %d" % p2)
+    rewrite_file("analysis_init.py", 104, "sigma_r", "sigma_r = %f" % p1)
+    rewrite_file("generate_observations.py", 14, "sigma", "sigma = %f" % p1)
     shell("make")
     print("%s done")
     return None
@@ -63,13 +66,13 @@ def main():
     params2 = [10 ** i for i in range(0, 2)]
     params_prod = itertools.product(params1, params2)
 
+    shell("cd %s && make clean" % MODELDIR)
     shell("rm -rf %s" % WDIR_BASE)
     with Pool(cpu_count()) as p:
         res = p.map(exec_single_job, params_prod)
     res2d = inverse_itertools_2d_product(params1, params2, res)
-    reduce_mapped_result(params1, params2, res2d)
+    # reduce_mapped_result(params1, params2, res2d)
 
 if __name__ == "__main__":
-    # main()
-    rewrite_file("sample", 137, "acyc_step", "acyc_step = 10")
+    main()
 
