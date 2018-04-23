@@ -121,8 +121,8 @@ def read_and_plot_bcov():
     Pb_hist = np.load("Pb_hist.npy")
     assert len(Pb_hist.shape) == 3
     assert Pb_hist.shape[1] == Pb_hist.shape[2]
-    mean_cov = np.mean(Pb_hist, axis=0)
     counter = Pb_hist.shape[0]
+    mean_cov = np.mean(Pb_hist[counter // 2:, :, :], axis=0)
     title = "mean B cov (sample = %d, BV dim = %f)" % (counter, get_bv_dim(mean_cov))
     plot_mean_bcov(mean_cov, "img/bcov.pdf", title, True)
     plot_eig_bcov(mean_cov, "img/bcov_eigval.pdf", "img/bcov_eigvec.pdf")
@@ -130,11 +130,11 @@ def read_and_plot_bcov():
     n = Pb_hist.shape[1]
     mean_corr = np.zeros((n, n))
     for t in range(counter):
-        mean_corr += cov_to_corr(Pb_hist[t, :, :])
+        mean_corr += cov_to_corr(Pb_hist[t, :, :]) / counter
     title = "mean B corr (sample = %d, BV dim = %f)" % (counter, get_bv_dim(mean_corr))
     plot_mean_bcov(mean_corr, "img/bcorr.pdf", title)
 
 if __name__ == "__main__":
-    np.set_printoptions(formatter={'float': '{: 0.4f}'.format}, threshold=2000, linewidth=150)
+    np.set_printoptions(formatter={'float': '{: 10.6g}'.format}, threshold=2000, linewidth=150)
     __sample_read_files()
     read_and_plot_bcov()

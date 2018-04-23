@@ -29,12 +29,12 @@ cmd_nudging = sh runall_tutorial_2.sh nudging
 src_ETKF = runall_tutorial_3.sh analysis_init.py class_da_system.py module_constants.py \
            generate_analysis_3dEns.py
 dep_ETKF = prep
-out_ETKF = x_analysis_init.pkl Pb_hist.npy
+out_ETKF = x_analysis_init.pkl Pb_hist.npy x_analysis_ETKF.pkl ETKF_vs_nature.html
 cmd_ETKF = sh runall_tutorial_3.sh ETKF
 
 src_plot = module_plot.py plot_error.py
 dep_plot = ETKF
-out_plot = img/*
+out_plot = img
 cmd_plot = python module_plot.py && python plot_error.py ETKF
 
 src_tex =
