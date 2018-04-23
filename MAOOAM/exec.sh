@@ -11,6 +11,7 @@ word=t`/lustre/tyoshida/repos/python/pythonpath/oneliner/serial`
 wdir="${wdir_base}/${word}"
 
 cd ${modeldir}
+rm -f *.pkl *.npy
 git commit -a --allow-empty -m "MAOOAM/fortran exec.sh auto commit: experiment ${word}"
 
 echo "preparing files at ${wdir}"
