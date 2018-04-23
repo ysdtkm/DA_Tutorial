@@ -79,6 +79,7 @@ das.t0 = das.t[0]
 das.edim = 20 #np.int(1*xdim)
 das.ens_bias_init = 0
 das.ens_sigma_init = 0.01
+das.x0 += np.random.randn(xdim) * das.ens_sigma_init  # truth is like an ensemble member
 
 #-----------------------------------------------------------------------
 # Initialize 4D-Var parameters
@@ -100,7 +101,7 @@ B = I * sigma_b**2
 #     [-0.02400967,  0.00074236,  0.03891405]]
 
 # Set observation error covariance
-sigma_r = 1.0  # this should match with generate_observations.py
+sigma_r = 1.0e-3  # this should match with generate_observations.py
 R = I * (sigma_r ** 2)
 
 # Set the linear observation operator matrix as the identity by default 
