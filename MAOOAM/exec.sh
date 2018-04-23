@@ -4,7 +4,7 @@ set -e
 
 wdir_base="/lustre/tyoshida/shrt/exec"
 modeldir="/lustre/tyoshida/prgm/DA_Tutorial/MAOOAM"
-storagedir="/lustre/tyoshida/data/da_maooam"
+storagedir="/lustre/tyoshida/data/sync/maooam"
 
 # preparation
 word=t`/lustre/tyoshida/repos/python/pythonpath/oneliner/serial`
