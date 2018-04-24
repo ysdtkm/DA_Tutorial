@@ -26,7 +26,7 @@ echo "#SBATCH -n 20"                                 >> tmp.sh
 echo "#SBATCH -t 01:15:00"                           >> tmp.sh
 echo "#SBATCH -J ${word}"                            >> tmp.sh
 echo "set -e"                                        >> tmp.sh
-echo "python3 wrap_parallel.py ${wdir}"              >> tmp.sh
+echo "python3 template/wrap_parallel.py ${wdir}"              >> tmp.sh
 # echo "make clean all"                                >> tmp.sh
 echo "cp out.pdf ${storagedir}/${word}.pdf"          >> tmp.sh
 
