@@ -9,8 +9,8 @@ import numpy as np
 
 class GlobalParams:
     wdir_base = "/home/tak/shrt/parallel_exp"
-    params1 = [0.1 ** i for i in range(0, 2)]
-    params2 = [10 ** i for i in range(0, 2)]
+    params1 = [0.1 ** i for i in range(0, 4)]
+    params2 = [10 ** i for i in range(0, 4)]
 
     def get_wdir_absolute_path(p1, p2):
         assert p1 in GlobalParams.params1
