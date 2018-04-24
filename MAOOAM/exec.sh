@@ -13,7 +13,7 @@ parallel=true
 
 cd ${modeldir}
 make clean
-git commit -a --allow-empty -m "MAOOAM/fortran exec.sh auto commit: experiment ${word}"
+git commit -a --allow-empty -m "DA_Tutorial/MAOOAM exec.sh auto commit: experiment ${word}"
 
 echo "preparing files at ${wdir}"
 rm -rf ${wdir}
