@@ -40,7 +40,7 @@ cmd_ETKF = sh runall_tutorial_3.sh ETKF
 
 src_hybrid = runall_tutorial_3.sh analysis_init.py class_da_system.py module_constants.py \
            generate_analysis_3dEns.py
-dep_hybrid = prep
+dep_hybrid = prep 3DVar
 out_hybrid = x_analysis_init.pkl Pb_hist.npy x_analysis_hybrid.pkl hybrid_vs_nature.html
 cmd_hybrid = sh runall_tutorial_3.sh hybrid
 

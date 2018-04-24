@@ -17,15 +17,15 @@ def main():
     das = das.load(analysis_file)
     analysis = das.getStateVector()
     plot_rmse_all(nature, freerun, analysis, method, np.s_[:, :],
-        "img/%s_rmse_all.png" % method)
+        "img/%s_rmse_all.pdf" % method)
     plot_rmse_all(nature, freerun, analysis, method, np.s_[:, 0:10],
-        "img/%s_rmse_atmos_psi.png" % method)
+        "img/%s_rmse_atmos_psi.pdf" % method)
     plot_rmse_all(nature, freerun, analysis, method, np.s_[:, 10:20],
-        "img/%s_rmse_atmos_temp.png" % method)
+        "img/%s_rmse_atmos_temp.pdf" % method)
     plot_rmse_all(nature, freerun, analysis, method, np.s_[:, 20:28],
-        "img/%s_rmse_ocean_psi.png" % method)
+        "img/%s_rmse_ocean_psi.pdf" % method)
     plot_rmse_all(nature, freerun, analysis, method, np.s_[:, 28:36],
-        "img/%s_rmse_ocean_temp.png" % method)
+        "img/%s_rmse_ocean_temp.pdf" % method)
 
 def plot_rmse_all(nature, freerun, analysis, method, slice, img_name):
     plt.plot(nature.getTimes(),

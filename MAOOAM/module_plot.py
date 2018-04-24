@@ -87,7 +87,7 @@ def __test_plot_time_colormap():
     nt = 100
     dat = np.random.randn(nt, NDIM)
     sp.run("mkdir -p img", shell=True, check=True)
-    plot_time_colormap(dat, "img/tmp.png", None, None, "test")
+    plot_time_colormap(dat, "img/tmp.pdf", None, None, "test")
 
 def zero_out_off_diag_blocks(cov):
     assert cov.shape == (NDIM, NDIM)
@@ -108,21 +108,21 @@ def __sample_read_files():
     freerun = freerun.load(freerun_file)
     sp.run("mkdir -p img", shell=True, check=True)
     plot_time_colormap(freerun.getTrajectory() - nature.getTrajectory(),
-                       "img/error_free_run.png", *vlim_diff, "error free run", "RdBu_r", True)
+                       "img/error_free_run.pdf", *vlim_diff, "error free run", "RdBu_r", True)
     plot_time_colormap(freerun.getTrajectory(),
-                       "img/freerun.png", *vlim_raw, "freerun", "viridis")
+                       "img/freerun.pdf", *vlim_raw, "freerun", "viridis")
     plot_time_colormap(nature.getTrajectory(),
-                       "img/nature.png", *vlim_raw, "nature", "viridis")
+                       "img/nature.pdf", *vlim_raw, "nature", "viridis")
     for method in ["ETKF", "hybrid", "3DVar"]:
         analysis_file = 'x_analysis_{method}.pkl'.format(method=method)
         das = da_system()
         das = das.load(analysis_file)
         analysis = das.getStateVector()
         plot_time_colormap(analysis.getTrajectory() - nature.getTrajectory(),
-                           "img/error_analysis_%s.png" % method, *vlim_diff,
+                           "img/error_analysis_%s.pdf" % method, *vlim_diff,
                            "error analysis %s" % method, "RdBu_r", True)
         plot_time_colormap(analysis.getTrajectory(),
-                           "img/analysis_%s.png" % method, *vlim_raw,
+                           "img/analysis_%s.pdf" % method, *vlim_raw,
                            "analysis %s" % method, "viridis")
 
 def read_and_plot_bcov():
