@@ -55,6 +55,7 @@ def plot_eig_bcov(bcov, img_name_eigval, img_name_eigvec):
     cm = plt.imshow(eigvec, cmap="RdBu_r", extent=get_extent_square())
     cm.set_clim(-1, 1)
     plt.colorbar(cm)
+    plt.title("eigenvectors of B")
     plt.xlabel("eigenvector index")
     plt.ylabel("model variable")
     plt.savefig(img_name_eigvec)
