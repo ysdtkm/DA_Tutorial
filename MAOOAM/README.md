@@ -1,15 +1,7 @@
 # DA Tutorial with MAOOAM
 ## Usage
 ```bash
-cd maooam_fortran; make; cd ../; cp maooam_fortran/step_maooam.so .
-# prepare truth, freerun, and obs
-sh clean.sh
-sh runall_tutorial_1.sh
-# execute ETKF
-sh runall_tutorial_3.sh ETKF
-# plot (makes directory img/)
-python module_plot.py
-python plot_error.py ETKF
+sh runall.sh
 ```
 
 ## Key points to be edited often
@@ -24,39 +16,19 @@ python plot_error.py ETKF
     * **module_obs_network.py** provides static H operator with gridpoint obs of U and T. It can be changed.
 
 * To calculate CLVs:
-    * I haven't tried with this python version. Should be asked to other students.
+    * Included in runall_tutorial_1.sh (this uses pure python and is slow)
 
 * Analysis core programs for ETKF:
     * **generate_analysis_3dEns.py**
     * **class_da_system.py**
 
-## Todo and Wishlist (feel free to edit me)
-### Todo
-* Limit B to projection of some modes
-    * [ ] BV-like mode separation of slower modes
-    * [ ] CLV-based mode separation
-        * CLVs are, in practice, difficult to obtain in real applications because it uses future dynamics. But it worth examined from theoretical perspective.
-    * [ ] Static and dynamic B
-
-### Wishlist
-* More plots
-    * [ ] L2 norm error and spread (ordinate) vs time (abscissa), separately for each component {atm-psi, atm-theta, ocn-psi, ocn-theta}
-    * [ ] CLVs and B (raw matrix and its eigenvectors)
-* [x] Parallelization of ensemble integration by multiprocessing.pool (**generate_analysis_3dEns.py** line 100)
-    * Tested with branch "parallel". Not substantial speedup.
-* [ ] Rough estimation of necessary experiment length
-* [ ] Ens members should start from initial conditions independent from truth
-    * **analysis_init.py** line 72
-    * **generate_analysis_3dEns.py** lines 24-26
-
 ## Tested environment
+* gfortran 5.4.0
 * Anaconda3-5.1.0
     * Python 3.6.4
     * numpy 1.14.0
     * matplotlib 2.1.2
     * scipy 1.0.0
-* Part of the program may fail to run with < Python 3.5
-    * subprocess.run in **module_plot.py** is a new feature. You can comment them out and execute mkdir manually.
 * On Windows Subsystem for Linux
 
 ## Original README from https://github.com/UMD-AOSC/DA_Tutorial

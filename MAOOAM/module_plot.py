@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-import subprocess as sp
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
@@ -87,7 +86,6 @@ def get_bv_dim(cov):
 def __test_plot_time_colormap():
     nt = 100
     dat = np.random.randn(nt, NDIM)
-    sp.run("mkdir -p img", shell=True, check=True)
     plot_time_colormap(dat, "img/tmp.pdf", None, None, "test")
 
 def zero_out_off_diag_blocks(cov):
@@ -107,7 +105,6 @@ def __sample_read_files():
     freerun_file = 'x_freerun.pkl'
     freerun = state_vector()
     freerun = freerun.load(freerun_file)
-    sp.run("mkdir -p img", shell=True, check=True)
     plot_time_colormap(freerun.getTrajectory() - nature.getTrajectory(),
                        "img/error_free_run.pdf", *vlim_diff, "error free run", "RdBu_r", True)
     plot_time_colormap(freerun.getTrajectory(),
@@ -115,7 +112,6 @@ def __sample_read_files():
     plot_time_colormap(nature.getTrajectory(),
                        "img/nature.pdf", *vlim_raw, "nature", "viridis")
     for method in ["ETKF", "hybrid", "3DVar"]:
-        sp.run("mkdir -p img/%s" % method, shell=True, check=True)
         analysis_file = 'x_analysis_{method}.pkl'.format(method=method)
         das = da_system()
         das = das.load(analysis_file)

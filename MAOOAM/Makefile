@@ -12,7 +12,7 @@ STEP_ALL = compile prep 3DVar ETKF hybrid plot tex
 src_compile =
 dep_compile =
 out_compile = step_maooam.so
-cmd_compile = cd maooam_fortran && make && cd ../ && cp maooam_fortran/step_maooam.so .
+cmd_compile = cd maooam_fortran && make clean && make && cd ../ && cp maooam_fortran/step_maooam.so .
 
 src_prep = generate_observations.py generate_nature_run.py runall_tutorial_1.sh \
            module_obs_network.py params_maooam.py tl_ad.py
@@ -47,7 +47,7 @@ cmd_hybrid = sh runall_tutorial_3.sh hybrid
 src_plot = module_plot.py plot_error.py
 dep_plot = ETKF hybrid 3DVar
 out_plot = img
-cmd_plot = python module_plot.py && python plot_error.py 3DVar && python plot_error.py ETKF && python plot_error.py hybrid
+cmd_plot = mkdir -p img/3DVar img/ETKF img/hybrid && python module_plot.py && python plot_error.py 3DVar && python plot_error.py ETKF && python plot_error.py hybrid
 
 src_tex =
 dep_tex = plot
