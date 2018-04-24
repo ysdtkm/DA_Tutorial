@@ -16,10 +16,11 @@ git commit -a --allow-empty -m "MAOOAM/fortran exec.sh auto commit: experiment $
 
 echo "preparing files at ${wdir}"
 rm -rf ${wdir}
-mkdir -p ${wdir}/template
+mkdir -p ${wdir}
 cd ${wdir}
 
-cp -rf ${modeldir}/* ./template
+# cp -rf ${modeldir}/* ./template
+cp -rf ${modeldir}/* .
 
 echo "#!/bin/bash"                                    > tmp.sh
 echo "#SBATCH -n 20"                                 >> tmp.sh
