@@ -113,7 +113,7 @@ def __sample_read_files():
                        "img/freerun.png", *vlim_raw, "freerun", "viridis")
     plot_time_colormap(nature.getTrajectory(),
                        "img/nature.png", *vlim_raw, "nature", "viridis")
-    for method in ["ETKF"]:
+    for method in ["ETKF", "hybrid", "3DVar"]:
         analysis_file = 'x_analysis_{method}.pkl'.format(method=method)
         das = da_system()
         das = das.load(analysis_file)

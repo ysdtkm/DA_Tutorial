@@ -7,7 +7,7 @@
 #   cmd_*: Command to be executed
 #================================
 
-STEP_ALL = compile prep ETKF hybrid plot tex
+STEP_ALL = compile prep 3DVar ETKF hybrid plot tex
 
 src_compile =
 dep_compile =
@@ -26,6 +26,12 @@ dep_nudging = prep
 out_nudging = x_analysis_init.pkl
 cmd_nudging = sh runall_tutorial_2.sh nudging
 
+src_3DVar = runall_tutorial_2.sh analysis_init.py class_da_system.py module_constants.py \
+              generate_analysis_3dDet.py
+dep_3DVar = prep
+out_3DVar = x_analysis_init.pkl
+cmd_3DVar = sh runall_tutorial_2.sh 3DVar
+
 src_ETKF = runall_tutorial_3.sh analysis_init.py class_da_system.py module_constants.py \
            generate_analysis_3dEns.py
 dep_ETKF = prep
@@ -39,9 +45,9 @@ out_hybrid = x_analysis_init.pkl Pb_hist.npy x_analysis_hybrid.pkl hybrid_vs_nat
 cmd_hybrid = sh runall_tutorial_3.sh hybrid
 
 src_plot = module_plot.py plot_error.py
-dep_plot = ETKF hybrid
+dep_plot = ETKF hybrid 3DVar
 out_plot = img
-cmd_plot = python module_plot.py && python plot_error.py ETKF && python plot_error.py hybrid
+cmd_plot = python module_plot.py && python plot_error.py 3DVar && python plot_error.py ETKF && python plot_error.py hybrid
 
 src_tex =
 dep_tex = plot
