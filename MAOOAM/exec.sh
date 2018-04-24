@@ -16,7 +16,7 @@ git commit -a --allow-empty -m "MAOOAM/fortran exec.sh auto commit: experiment $
 
 echo "preparing files at ${wdir}"
 rm -rf ${wdir}
-mkdir -p ${wdir}
+mkdir -p ${wdir}/template
 cd ${wdir}
 
 cp -rf ${modeldir}/* ./template
