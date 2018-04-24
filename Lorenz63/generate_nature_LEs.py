@@ -70,7 +70,7 @@ print(sv)
 print('Lyapunov Exponents:')
 print(lyap_avg)
 
-print('The sum of the LE\'s should equal the trace of the Jacobian (−13.6666).')
+print('The sum of the LE\'s should equal the trace of the Jacobian (-13.6666).')
 print('Sum(LEs) = ', np.sum(lyap_avg))
 
 #------------------------------------------------------------------
