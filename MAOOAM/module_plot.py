@@ -89,6 +89,14 @@ def __test_plot_time_colormap():
     sp.run("mkdir -p img", shell=True, check=True)
     plot_time_colormap(dat, "img/tmp.png", None, None, "test")
 
+def zero_out_off_diag_blocks(cov):
+    assert cov.shape == (NDIM, NDIM)
+    NATM = 20
+    cov2 = np.copy(cov)
+    cov2[:NATM, NATM:] = 0.0
+    cov2[NATM:, :NATM] = 0.0
+    return cov2
+
 def __sample_read_files():
     vlim_raw = [-0.05, 0.1]
     vlim_diff = [-0.15, 0.15]
@@ -122,7 +130,7 @@ def read_and_plot_bcov():
     assert len(Pb_hist.shape) == 3
     assert Pb_hist.shape[1] == Pb_hist.shape[2]
     counter = Pb_hist.shape[0]
-    mean_cov = np.mean(Pb_hist[counter // 2:, :, :], axis=0)
+    mean_cov = np.mean(Pb_hist[counter // 2:, :, :], axis=0)  # discard formar half as spinup
     title = "mean B cov (sample = %d, BV dim = %f)" % (counter, get_bv_dim(mean_cov))
     plot_mean_bcov(mean_cov, "img/bcov.pdf", title, True)
     plot_eig_bcov(mean_cov, "img/bcov_eigval.pdf", "img/bcov_eigvec.pdf")
