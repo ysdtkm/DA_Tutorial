@@ -115,15 +115,16 @@ def __sample_read_files():
     plot_time_colormap(nature.getTrajectory(),
                        "img/nature.pdf", *vlim_raw, "nature", "viridis")
     for method in ["ETKF", "hybrid", "3DVar"]:
+        sp.run("mkdir -p img/%s" % method, shell=True, check=True)
         analysis_file = 'x_analysis_{method}.pkl'.format(method=method)
         das = da_system()
         das = das.load(analysis_file)
         analysis = das.getStateVector()
         plot_time_colormap(analysis.getTrajectory() - nature.getTrajectory(),
-                           "img/error_analysis_%s.pdf" % method, *vlim_diff,
+                           "img/%s/error_analysis.pdf" % method, *vlim_diff,
                            "error analysis %s" % method, "RdBu_r", True)
         plot_time_colormap(analysis.getTrajectory(),
-                           "img/analysis_%s.pdf" % method, *vlim_raw,
+                           "img/%s/analysis.pdf" % method, *vlim_raw,
                            "analysis %s" % method, "viridis")
 
 def read_and_plot_bcov():
