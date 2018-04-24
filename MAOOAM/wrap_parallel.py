@@ -9,8 +9,8 @@ import numpy as np
 
 class GlobalParams:
     wdir_base = "/home/tak/shrt/parallel_exp"
-    params1 = [0.1 ** i for i in range(0, 4)]
-    params2 = [10 ** i for i in range(0, 4)]
+    params1 = [0.1 ** i for i in range(0, 2)]
+    params2 = [10 ** i for i in range(1, 3)]
 
     def get_wdir_absolute_path(p1, p2):
         assert p1 in GlobalParams.params1
@@ -56,11 +56,14 @@ def exec_single_job(param):
     rewrite_file("analysis_init.py", 137, "acyc_step", "acyc_step = %d" % p2)
     rewrite_file("analysis_init.py", 104, "sigma_r", "sigma_r = %f" % p1)
     rewrite_file("generate_observations.py", 14, "sigma", "sigma = %f" % p1)
-    shell("make")
+    sout, serr = shell("make")
+    with open("stdout", "w") as f:
+        f.write(sout)
+    with open("stderr", "w") as f:
+        f.write(serr)
     shell("cp -f out.pdf %s/out/%s.pdf" %
         (GlobalParams.wdir_base, GlobalParams.get_relative_file_name(p1, p2)))
     print("%s done" % dname)
-    return None
 
 def rewrite_file(filename, linenum, txt_from, txt_to):
     with open(filename, "r") as f:
