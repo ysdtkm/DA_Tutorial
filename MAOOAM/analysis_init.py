@@ -134,7 +134,7 @@ print(das.getH())
 # Initialize the timesteps
 #-----------------------------------------------------------------------
 t_nature = sv.getTimes()
-acyc_step = 10 ** 3                         # (how frequently to perform an analysis)
+acyc_step = 10 ** 4                         # (how frequently to perform an analysis)
 dtau = (t_nature[acyc_step] - t_nature[0])
 fcst_step = acyc_step                      # (may need to change for 4D DA methods)
 fcst_dt = dtau / fcst_step
