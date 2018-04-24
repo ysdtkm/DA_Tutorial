@@ -75,6 +75,7 @@ def main():
     global _wdir_base
     if len(sys.argv) > 1:
         _wdir_base = sys.argv[1]
+    shell("mkdir -p %s/out" % _wdir_base)
 
     params1 = [0.1 ** i for i in range(0, 2)]
     params2 = [10 ** i for i in range(0, 2)]
