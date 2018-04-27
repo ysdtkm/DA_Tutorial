@@ -12,11 +12,10 @@ sh runall.sh
     * Edit both of:
         * **generate_observations.py** (line 46) for generation of observations from truth
         * **analysis_init.py** (line 108) for R and H used in DA
-    * Current observation error is very small. It should be enlarged for more nonlinearity
-    * **module_obs_network.py** provides static H operator with gridpoint obs of U and T. It can be changed.
+    * **module_obs_network.py** provides static H operator with gridpoint obs of U and T.
 
 * To calculate CLVs:
-    * Included in runall_tutorial_1.sh (this uses pure python and is slow)
+    * Included in **runall_tutorial_1.sh** (this uses pure python and is slow)
 
 * Analysis core programs for ETKF:
     * **generate_analysis_3dEns.py**
