@@ -12,17 +12,13 @@ class GlobalParams:
     params1 = [0.1 ** i for i in range(4, 5)]  # oerr
     params2 = list(range(2, 38, 2))  # ens
 
-    def get_wdir_absolute_path(p1, p2):
-        assert p1 in GlobalParams.params1
-        assert p2 in GlobalParams.params2
-        dn = "%s/oerr_%.05f/ens_%05d" % (GlobalParams.wdir_base, p1, p2)
-        dn = dn.replace(".", "_")
-        return dn
+    def str_param1(p1):
+        res = "oerr_%.05f" % p1
+        return res.replace(".", "_")
 
-    def get_relative_file_name(p1, p2):
-        dn = "oerr_%.05f_ens_%05d" % (p1, p2)
-        dn = dn.replace(".", "_")
-        return dn
+    def str_param2(p2):
+        res = "ens_%05d" % p2
+        return res
 
     def rewrite_files(p1, p2):
         rewrite_line("analysis_init.py", 104, "sigma_r", "sigma_r = %f" % p1)
@@ -54,7 +50,7 @@ def shell(cmd):
 
 def exec_single_job(param):
     p1, p2 = param
-    dname = GlobalParams.get_wdir_absolute_path(p1, p2)
+    dname = "%s/%s/%s" % (GlobalParams.wdir_base, GlobalParams.str_param1(p1), GlobalParams.str_param2(p2))
     shell("mkdir -p %s" % dname)
     os.chdir(dname)
     shell("cp -r %s/template/* ." % GlobalParams.wdir_base)
@@ -64,8 +60,8 @@ def exec_single_job(param):
         f.write(sout)
     with open("stderr", "w") as f:
         f.write(serr)
-    shell("cp -f out.pdf %s/out/%s.pdf" %
-        (GlobalParams.wdir_base, GlobalParams.get_relative_file_name(p1, p2)))
+    shell("cp -f out.pdf %s/out/%s_%s.pdf" %
+        (GlobalParams.wdir_base, GlobalParams.str_param1(p1), GlobalParams.str_param2(p2)))
     print("%s done" % dname)
 
 def rewrite_line(filename, linenum, txt_from, txt_to):
