@@ -219,7 +219,7 @@ def get_h_full_coverage():
             else:
                 raise Exception("__get_h_full_coverage overflow")
             h_mat[j, i] = get_grid_val(state_unit, xgrid.flatten()[k], ygrid.flatten()[k], is_atm, elem)
-    return h_mat[:20, :]
+    return h_mat
 
 def __test_h_matrix_conditional_number():
     h = get_h_full_coverage()
