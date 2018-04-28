@@ -10,7 +10,7 @@ import numpy as np
 class GlobalParams:
     wdir_base = "/lustre/tyoshida/shrt/exec/parallel_exp"
     params1 = [0.1 ** i for i in range(4, 5)]
-    params2 = list(range(2, 38))
+    params2 = list(range(2, 38, 2))
 
     def get_wdir_absolute_path(p1, p2):
         assert p1 in GlobalParams.params1
