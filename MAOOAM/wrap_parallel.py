@@ -15,12 +15,12 @@ class GlobalParams:
     def get_wdir_absolute_path(p1, p2):
         assert p1 in GlobalParams.params1
         assert p2 in GlobalParams.params2
-        dn = "%s/oerr_%.05f/aint_%05d" % (GlobalParams.wdir_base, p1, p2)
+        dn = "%s/oerr_%.05f/ens_%05d" % (GlobalParams.wdir_base, p1, p2)
         dn = dn.replace(".", "_")
         return dn
 
     def get_relative_file_name(p1, p2):
-        dn = "oerr_%.05f_aint_%05d" % (p1, p2)
+        dn = "oerr_%.05f_ens_%05d" % (p1, p2)
         dn = dn.replace(".", "_")
         return dn
 
