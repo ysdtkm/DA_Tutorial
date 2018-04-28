@@ -100,18 +100,19 @@ B = I * sigma_b**2
 #     [ 0.03319132,  0.05441897,  0.00074236],
 #     [-0.02400967,  0.00074236,  0.03891405]]
 
-# Set observation error covariance
-sigma_r = 0.0001  # this should match with generate_observations.py
-R = I * (sigma_r ** 2)
-
 # Set the linear observation operator matrix as the identity by default 
 # H = I
 H = get_h_full_coverage()
 
+# Set observation error covariance
+nobs = H.shape[0]
+sigma_r = 0.0001  # this should match with generate_observations.py
+R = np.identity(nobs) * (sigma_r ** 2)
+
 # Set constant matrix for nudging
 const = 0.00003
 # C = I * const
-C = np.linalg.inv(H) * const
+C = np.linalg.pinv(H) * const
 
 das.setB(B)
 das.setR(R)

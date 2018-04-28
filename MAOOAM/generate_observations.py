@@ -39,12 +39,13 @@ for i in range(nc):
 #--------------------------------------------------------------------------------
 # Sample the nature run and apply noise
 #--------------------------------------------------------------------------------
-yo = np.zeros_like(x_nature)
-eta = np.zeros_like(x_nature)
-hx = np.zeros_like(x_nature)
 # H = np.identity(nc)
 H = get_h_full_coverage()
-for i in range(nc):
+nobs = H.shape[0]
+yo = np.zeros((nr, nobs))
+eta = np.zeros((nr, nobs))
+hx = np.zeros((nr, nobs))
+for i in range(nobs):
   # Compute error as a percentage of climatological variance
   eta[:, i] = np.random.normal(mu, sigma, nr)
 for j in range(nr):
@@ -55,7 +56,7 @@ for j in range(nr):
 
 pos = np.zeros_like(yo)
 for i in range(nr):
-  pos[i,:] = list(range(0,nc)) #[0,1,2]
+  pos[i, :] = list(range(0, nobs)) #[0,1,2]
 
 obs.setVal(yo)
 obs.setErr(eta)
