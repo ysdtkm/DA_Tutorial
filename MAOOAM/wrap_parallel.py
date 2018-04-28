@@ -21,7 +21,7 @@ class GlobalParams:
         return res
 
     def rewrite_files(p1, p2):
-        rewrite_line("class_da_system.py", 420, "rho", "rho = %f" % p1)
+        rewrite_line("class_da_system.py", 420, "rho", "    rho = %f" % p1)
         rewrite_line("analysis_init.py", 79, "das.edim", "das.edim = %d" % p2)
 
     def get_params_prod():
