@@ -9,8 +9,8 @@ import numpy as np
 
 class GlobalParams:
     wdir_base = "/lustre/tyoshida/shrt/exec/parallel_exp"
-    params1 = [0.1 ** i for i in range(4, 5)]
-    params2 = list(range(2, 38, 2))
+    params1 = [0.1 ** i for i in range(4, 5)]  # oerr
+    params2 = list(range(2, 38, 2))  # ens
 
     def get_wdir_absolute_path(p1, p2):
         assert p1 in GlobalParams.params1
@@ -23,6 +23,11 @@ class GlobalParams:
         dn = "oerr_%.05f_ens_%05d" % (p1, p2)
         dn = dn.replace(".", "_")
         return dn
+
+    def rewrite_files(p1, p2):
+        rewrite_line("analysis_init.py", 104, "sigma_r", "sigma_r = %f" % p1)
+        rewrite_line("generate_observations.py", 14, "sigma", "sigma = %f" % p1)
+        rewrite_line("analysis_init.py", 79, "das.edim", "das.edim = %d" % p2)
 
     def get_params_prod():
         return itertools.product(GlobalParams.params1, GlobalParams.params2)
@@ -53,9 +58,7 @@ def exec_single_job(param):
     shell("mkdir -p %s" % dname)
     os.chdir(dname)
     shell("cp -r %s/template/* ." % GlobalParams.wdir_base)
-    rewrite_file("analysis_init.py", 79, "das.edim", "das.edim = %d" % p2)
-    rewrite_file("analysis_init.py", 104, "sigma_r", "sigma_r = %f" % p1)
-    rewrite_file("generate_observations.py", 14, "sigma", "sigma = %f" % p1)
+    GlobalParams.rewrite_files(p1, p2)
     sout, serr = shell("make")
     with open("stdout", "w") as f:
         f.write(sout)
@@ -65,7 +68,7 @@ def exec_single_job(param):
         (GlobalParams.wdir_base, GlobalParams.get_relative_file_name(p1, p2)))
     print("%s done" % dname)
 
-def rewrite_file(filename, linenum, txt_from, txt_to):
+def rewrite_line(filename, linenum, txt_from, txt_to):
     with open(filename, "r") as f:
         lines = f.readlines()
     with open(filename, "w") as f:
