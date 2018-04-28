@@ -7,7 +7,7 @@ def main():
     wdir_base = sys.argv[1]
     params1 = [1.0 + 0.01 * i for i in range(2)]
     params2 = list(range(8, 38, 15))
-    changes1 = [Change("class_da_system.py", 420, "rho", "rho = %f")]
+    changes1 = [Change("class_da_system.py", 420, "rho", "    rho = %f")]
     changes2 = [Change("analysis_init.py", 79, "das.edim", "das.edim = %d")]
     shell("mkdir -p %s/out" % wdir_base)
     exec_parallel(wdir_base, "template", params1, params2, "infl_%.02f", "ens_%02d",
