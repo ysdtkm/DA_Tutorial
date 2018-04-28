@@ -7,7 +7,7 @@ from multiprocessing import Pool, cpu_count
 import numpy as np
 
 class Change:
-    def __init__(file_name, line_num, match, replace_fmt):
+    def __init__(self, file_name, line_num, match, replace_fmt):
         assert isinstance(file_name, str)
         assert isinstance(line_num, int)
         assert isinstance(match, str)
