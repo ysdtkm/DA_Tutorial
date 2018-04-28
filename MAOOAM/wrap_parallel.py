@@ -9,11 +9,11 @@ import numpy as np
 
 class GlobalParams:
     wdir_base = "/lustre/tyoshida/shrt/exec/parallel_exp"
-    params1 = [0.1 ** i for i in range(4, 5)]  # oerr
-    params2 = list(range(2, 38, 2))  # ens
+    params1 = [1.0 + 0.01 * i for i in range(11)]
+    params2 = list(range(2, 38, 6))  # ens
 
     def str_param1(p1):
-        res = "oerr_%.05f" % p1
+        res = "rho_%.03f" % p1
         return res.replace(".", "_")
 
     def str_param2(p2):
@@ -21,8 +21,7 @@ class GlobalParams:
         return res
 
     def rewrite_files(p1, p2):
-        rewrite_line("analysis_init.py", 104, "sigma_r", "sigma_r = %f" % p1)
-        rewrite_line("generate_observations.py", 14, "sigma", "sigma = %f" % p1)
+        rewrite_line("class_da_system.py", 420, "rho", "rho = %f" % p1)
         rewrite_line("analysis_init.py", 79, "das.edim", "das.edim = %d" % p2)
 
     def get_params_prod():
