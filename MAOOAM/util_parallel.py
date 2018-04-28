@@ -57,8 +57,8 @@ def exec_parallel(dir_template, wdir_base, params1, params2, p1_fmt, p2_fmt,
 def exec_single_job(wdir_base, dir_template, p1_fmt, p2_fmt, p1_changes, p2_changes,
                     command, out_file, param):
     p1, p2 = param
-    s1 = p1_fmt % p1
-    s2 = p2_fmt % p2
+    s1 = (p1_fmt % p1).replace(".", "_")
+    s2 = (p2_fmt % p2).replace(".", "_")
     dname = "%s/%s/%s" % (wdir_base, s1, s2)
     shell("mkdir -p %s" % dname)
     os.chdir(dname)
