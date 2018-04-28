@@ -8,9 +8,9 @@ from multiprocessing import Pool, cpu_count
 import numpy as np
 
 class GlobalParams:
-    wdir_base = "/home/tak/shrt/parallel_exp"
-    params1 = [0.1 ** i for i in range(-2, 3)]
-    params2 = [10 ** i for i in range(0, 3)]
+    wdir_base = "/lustre/tyoshida/shrt/exec/parallel_exp"
+    params1 = [0.1 ** i for i in range(4, 5)]
+    params2 = list(range(2, 38))
 
     def get_wdir_absolute_path(p1, p2):
         assert p1 in GlobalParams.params1
@@ -53,7 +53,7 @@ def exec_single_job(param):
     shell("mkdir -p %s" % dname)
     os.chdir(dname)
     shell("cp -r %s/template/* ." % GlobalParams.wdir_base)
-    rewrite_file("analysis_init.py", 137, "acyc_step", "acyc_step = %d" % p2)
+    rewrite_file("analysis_init.py", 79, "das.edim", "das.edim = %d" % p2)
     rewrite_file("analysis_init.py", 104, "sigma_r", "sigma_r = %f" % p1)
     rewrite_file("generate_observations.py", 14, "sigma", "sigma = %f" % p1)
     sout, serr = shell("make")
