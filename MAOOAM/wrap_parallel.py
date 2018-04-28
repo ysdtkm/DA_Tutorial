@@ -10,7 +10,7 @@ import numpy as np
 class GlobalParams:
     wdir_base = "/lustre/tyoshida/shrt/exec/parallel_exp"
     params1 = [1.0 + 0.01 * i for i in range(11)]
-    params2 = list(range(2, 38, 6))  # ens
+    params2 = list(range(8, 38, 6))  # ens
 
     def str_param1(p1):
         res = "rho_%.03f" % p1
