@@ -13,6 +13,7 @@ parallel=true
 
 cd ${modeldir}
 make clean
+rm *.pkl *.npy *.html
 git commit -a --allow-empty -m "DA_Tutorial/MAOOAM exec.sh auto commit: experiment ${word}"
 
 echo "preparing files at ${wdir}"
