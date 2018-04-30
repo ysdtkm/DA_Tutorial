@@ -2,6 +2,7 @@
 
 import sys
 from util_parallel import Change, shell, exec_parallel
+import numpy as np
 import matplotlib
 matplotlib.use("PDF")
 import matplotlib.pyplot as plt
