@@ -27,11 +27,16 @@ def plot_reduced_rmse(params1, params2, res):
         for i2 in range(n2):
             res_npy[:, i1, i2] = res[i1][i2]
     for ir in range(nr):
+        fig, ax = plt.subplots()
         cm = plt.imshow(res_npy[ir, :, :])
         plt.colorbar(cm)
         plt.xlabel("inflation rho")
+        ax.set_xticks(range(n2))
+        ax.set_xticklabels(params2)
         plt.ylabel("ensemble member")
-        plt.savefig("rmse_%s.pdf" % names[ir])
+        ax.set_yticks(range(n1))
+        ax.set_yticklabels(params1)
+        plt.savefig("out/rmse_%s.pdf" % names[ir])
         plt.close()
 
 if __name__ == "__main__":
