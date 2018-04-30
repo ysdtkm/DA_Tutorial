@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 def main():
     wdir_base = sys.argv[1]
-    params1 = list(reversed(range(3, 38, 2)))
+    params1 = list(reversed(range(7, 38, 6)))
     params2 = [1.0 + 0.02 * i for i in range(6)]
     changes1 = [Change("analysis_init.py", 79, "das.edim", "das.edim = %d")]
     changes2 = [Change("class_da_system.py", 420, "rho", "    rho = %f")]
