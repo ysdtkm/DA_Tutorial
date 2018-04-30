@@ -75,4 +75,5 @@ def exec_single_job(wdir_base, dir_template, p1_fmt, p2_fmt, p1_changes, p2_chan
     _, ext = os.path.splitext(out_file)
     shell("cp -f %s %s/out/%s_%s%s" % (out_file, wdir_base, s1, s2, ext))
     print("%s done" % dname)
+    return np.load("rmse_ETKF.npy")
 

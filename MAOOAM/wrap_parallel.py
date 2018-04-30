@@ -10,8 +10,9 @@ def main():
     changes1 = [Change("analysis_init.py", 79, "das.edim", "das.edim = %d")]
     changes2 = [Change("class_da_system.py", 420, "rho", "    rho = %f")]
     shell("mkdir -p %s/out" % wdir_base)
-    exec_parallel(wdir_base, "template", params1, params2, "ens_%02d", "infl_%.02f",
+    res = exec_parallel(wdir_base, "template", params1, params2, "ens_%02d", "infl_%.02f",
                   changes1, changes2, "make", "out.pdf")
+    print(list(les))
 
 if __name__ == "__main__":
     main()

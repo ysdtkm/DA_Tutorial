@@ -46,7 +46,7 @@ cmd_hybrid = sh runall_tutorial_3.sh hybrid
 
 src_plot = module_plot.py plot_error.py
 dep_plot = ETKF
-out_plot = img
+out_plot = img rmse_*.npy
 cmd_plot = mkdir -p img/ETKF && python module_plot.py && python plot_error.py ETKF
 # cmd_plot = mkdir -p img/3DVar img/ETKF img/hybrid && python module_plot.py && python plot_error.py 3DVar && python plot_error.py ETKF && python plot_error.py hybrid
 

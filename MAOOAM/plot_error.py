@@ -22,10 +22,11 @@ def main():
               "rmse_ocean_psi": np.s_[:, 20:28],
               "rmse_ocean_temp": np.s_[:, 28:36],
               "rmse_all": np.s_[:, :]}
-    for name in slices:
-        print_time_averaged_rmse(nature, analysis, slices[name], name)
-        plot_rmse_all(nature, freerun, analysis, method, slices[name],
-            "img/%s/%s.pdf" % (method, name))
+    rmses = np.empty(5)
+    for i, name in enumerate(slices):
+        rmses[i] = print_time_averaged_rmse(nature, analysis, slices[name], name)
+        plot_rmse_all(nature, freerun, analysis, method, slices[name], "img/%s/%s.pdf" % (method, name))
+    np.save("rmse_%s.npy" % method, rmses)
 
 def plot_rmse_all(nature, freerun, analysis, method, slice, img_name):
     plt.plot(nature.getTimes(),
@@ -54,5 +55,6 @@ def print_time_averaged_rmse(nature, analysis, slice, name):
     ntime = rmse_time.shape[0]
     rmse_reduced = np.nanmean(rmse_time[ntime // 2:] ** 2) ** 0.5
     print(Bcolors.YELLOW + "RMSE (%s): %f" % (name, rmse_reduced) + Bcolors.END)
+    return rmse_reduced
 
 main()
