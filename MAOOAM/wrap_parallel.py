@@ -12,7 +12,7 @@ def main():
     shell("mkdir -p %s/out" % wdir_base)
     res = exec_parallel(wdir_base, "template", params1, params2, "ens_%02d", "infl_%.02f",
                   changes1, changes2, "make", "out.pdf")
-    print(list(les))
+    print(list(res))
 
 if __name__ == "__main__":
     main()
