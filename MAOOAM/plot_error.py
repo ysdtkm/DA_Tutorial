@@ -3,6 +3,7 @@ from class_da_system import da_system
 import numpy as np
 from sys import argv
 import matplotlib.pyplot as plt
+from mydebug import Bcolors, dump_array
 
 def main():
     nature_file ='x_nature.pkl'
@@ -16,16 +17,15 @@ def main():
     das = da_system()
     das = das.load(analysis_file)
     analysis = das.getStateVector()
-    plot_rmse_all(nature, freerun, analysis, method, np.s_[:, :],
-        "img/%s/rmse_all.pdf" % method)
-    plot_rmse_all(nature, freerun, analysis, method, np.s_[:, 0:10],
-        "img/%s/rmse_atmos_psi.pdf" % method)
-    plot_rmse_all(nature, freerun, analysis, method, np.s_[:, 10:20],
-        "img/%s/rmse_atmos_temp.pdf" % method)
-    plot_rmse_all(nature, freerun, analysis, method, np.s_[:, 20:28],
-        "img/%s/rmse_ocean_psi.pdf" % method)
-    plot_rmse_all(nature, freerun, analysis, method, np.s_[:, 28:36],
-        "img/%s/rmse_ocean_temp.pdf" % method)
+    slices = {"rmse_atmos_psi": np.s_[:, 0:10],
+              "rmse_atmos_temp": np.s_[:, 10:20],
+              "rmse_ocean_psi": np.s_[:, 20:28],
+              "rmse_ocean_temp": np.s_[:, 28:36],
+              "rmse_all": np.s_[:, :]}
+    for name in slices:
+        print_time_averaged_rmse(nature, analysis, slices[name], name)
+        plot_rmse_all(nature, freerun, analysis, method, slices[name],
+            "img/%s/%s.pdf" % (method, name))
 
 def plot_rmse_all(nature, freerun, analysis, method, slice, img_name):
     plt.plot(nature.getTimes(),
@@ -48,5 +48,11 @@ def plot_rmse_all(nature, freerun, analysis, method, slice, img_name):
     plt.tight_layout()
     plt.savefig(img_name)
     plt.close()
+
+def print_time_averaged_rmse(nature, analysis, slice, name):
+    rmse_time = np.linalg.norm(analysis.getTrajectory()[slice] - nature.getTrajectory()[slice], axis=1)
+    ntime = rmse_time.shape[0]
+    rmse_reduced = np.nanmean(rmse_time[ntime // 2:] ** 2) ** 0.5
+    print(Bcolors.YELLOW + "RMSE (%s): %f" % (name, rmse_reduced) + Bcolors.END)
 
 main()

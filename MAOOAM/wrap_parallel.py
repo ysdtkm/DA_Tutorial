@@ -5,8 +5,8 @@ from util_parallel import Change, shell, exec_parallel
 
 def main():
     wdir_base = sys.argv[1]
-    params1 = list(reversed(range(3, 38, 2)))
-    params2 = [1.0 + 0.01 * i for i in range(6)]
+    params1 = list(reversed(range(3, 38, 17)))
+    params2 = [1.0 + 0.05 * i for i in range(3)]
     changes1 = [Change("analysis_init.py", 79, "das.edim", "das.edim = %d")]
     changes2 = [Change("class_da_system.py", 420, "rho", "    rho = %f")]
     shell("mkdir -p %s/out" % wdir_base)
