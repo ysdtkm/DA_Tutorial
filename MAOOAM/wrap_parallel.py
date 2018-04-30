@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 
 def main():
     wdir_base = sys.argv[1]
-    params1 = list(reversed(range(3, 38, 17)))
-    params2 = [1.0 + 0.05 * i for i in range(3)]
+    params1 = list(reversed(range(3, 38, 2)))
+    params2 = [1.0 + 0.02 * i for i in range(6)]
     changes1 = [Change("analysis_init.py", 79, "das.edim", "das.edim = %d")]
     changes2 = [Change("class_da_system.py", 420, "rho", "    rho = %f")]
     shell("mkdir -p %s/out" % wdir_base)
@@ -33,7 +33,7 @@ def plot_reduced_rmse(params1, params2, res):
         plt.xlabel("inflation rho")
         ax.set_xticks(range(n2))
         ax.set_xticklabels(params2)
-        plt.ylabel("ensemble member")
+        plt.ylabel("ensemble size")
         ax.set_yticks(range(n1))
         ax.set_yticklabels(params1)
         plt.savefig("out/rmse_%s.pdf" % names[ir])
