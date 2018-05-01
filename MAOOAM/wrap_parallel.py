@@ -33,7 +33,7 @@ def plot_reduced_rmse(params1, params2, res):
         plt.colorbar(cm)
         plt.xlabel("inflation rho")
         ax.set_xticks(range(n2))
-        ax.set_xticklabels(params2)
+        ax.set_xticklabels(params2, rotation=90)
         plt.ylabel("ensemble size")
         ax.set_yticks(range(n1))
         ax.set_yticklabels(params1)
