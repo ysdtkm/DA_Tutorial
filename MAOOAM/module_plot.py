@@ -39,7 +39,7 @@ def plot_mean_bcov(bcov, img_name, title, log=False):
     plt.close()
 
 def plot_eig_bcov(bcov, img_name_eigval, img_name_eigvec):
-    eigval, eigvec = np.linalg.eig(bcov)
+    eigval, eigvec = np.linalg.eigh(bcov)
     idx = eigval.argsort()[::-1]
     eigval = eigval[idx]
     eigvec = eigvec[:,idx]
