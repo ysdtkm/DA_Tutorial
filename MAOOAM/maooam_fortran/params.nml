@@ -16,7 +16,6 @@
 
 !  Scale parameters for the ocean and the atmosphere
 &AOSCALE
-  COUPLE = 1.000000
   SCALE = 5.D6       !  the characteristic space scale, L*pi
   F0 = 1.032D-4      !  Coriolis parameter at 45 degrees latitude	
   N = 1.5D0          !  aspect ratio (n = 2Ly/Lx ; Lx = 2*pi*L/n; Ly = pi*L)
@@ -63,3 +62,9 @@
 &END
 
 ! End of parameters Namelist
+
+  
+
+
+
+  

@@ -7,7 +7,7 @@ subroutine step_maooam(x0, dt)
 
   real(8), intent(inout) :: x0(ndim)
   real(8), intent(in) :: dt
-  real(8) :: t_dummy
+  real(8), save :: t_dummy
   real(8), save, allocatable :: y0(:), y1(:)
   logical, save :: first_time = .true.
   integer :: stat
