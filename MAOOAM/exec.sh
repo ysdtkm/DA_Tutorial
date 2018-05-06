@@ -22,7 +22,7 @@ cp -rf ${modeldir}/* .
 
 echo "#!/bin/bash"                                    > tmp.sh
 echo "#SBATCH -n 20"                                 >> tmp.sh
-echo "#SBATCH -t 22:15:00"                           >> tmp.sh
+echo "#SBATCH -t 03:15:00"                           >> tmp.sh
 echo "#SBATCH -J ${word}"                            >> tmp.sh
 echo "set -e"                                        >> tmp.sh
 echo "make clean all"                                >> tmp.sh
