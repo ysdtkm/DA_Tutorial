@@ -7,6 +7,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from class_state_vector import state_vector
 from class_da_system import da_system
+from exp_params import SEED
 
 NDIM = 36
 
@@ -84,6 +85,7 @@ def get_bv_dim(cov):
     return bv_dim
 
 def __test_plot_time_colormap():
+    np.random.seed(SEED * 6)
     nt = 100
     dat = np.random.randn(nt, NDIM)
     plot_time_colormap(dat, "img/tmp.pdf", None, None, "test")

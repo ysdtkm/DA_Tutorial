@@ -6,6 +6,7 @@ from class_da_system import da_system
 from module_obs_network import get_h_full_coverage
 from module_constants import get_x_std
 from sys import argv
+from exp_params import SEED
 
 #-----------------------------------------------------------------------
 # Usage:
@@ -24,6 +25,7 @@ from sys import argv
 #-----------------------------------------------------------------------
 # Read the MAOOAM nature run
 #-----------------------------------------------------------------------
+np.random.seed(SEED * 3)
 infile = 'x_nature.pkl'
 sv = state_vector()
 sv = sv.load(infile)

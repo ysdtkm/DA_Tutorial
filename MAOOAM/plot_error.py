@@ -3,7 +3,6 @@ from class_da_system import da_system
 import numpy as np
 from sys import argv
 import matplotlib.pyplot as plt
-from mydebug import Bcolors, dump_array
 
 def main():
     nature_file ='x_nature.pkl'
@@ -54,7 +53,7 @@ def print_time_averaged_rmse(nature, analysis, slice, name):
     rmse_time = np.linalg.norm(analysis.getTrajectory()[slice] - nature.getTrajectory()[slice], axis=1)
     ntime = rmse_time.shape[0]
     rmse_reduced = np.nanmean(rmse_time[ntime // 2:] ** 2) ** 0.5
-    print(Bcolors.YELLOW + "RMSE (%s): %f" % (name, rmse_reduced) + Bcolors.END)
+    print("RMSE (%s): %f" % (name, rmse_reduced))
     return rmse_reduced
 
 main()
