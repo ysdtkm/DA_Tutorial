@@ -29,7 +29,8 @@ cd ${wdir}
 
 echo "#!/bin/bash"                                    > tmp.sh
 echo "#SBATCH -n 20"                                 >> tmp.sh
-echo "#SBATCH -t 11:15:00"                           >> tmp.sh
+echo "#SBATCH -t 00:15:00"                           >> tmp.sh
+echo "#SBATCH -p debug"                              >> tmp.sh
 echo "#SBATCH -J ${word}"                            >> tmp.sh
 echo "set -e"                                        >> tmp.sh
 if [ ${parallel} = "true" ]; then
