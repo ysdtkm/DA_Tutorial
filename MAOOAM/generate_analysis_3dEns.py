@@ -7,10 +7,12 @@ from class_state_vector import state_vector
 from class_obs_data import obs_data
 from class_da_system import da_system
 from copy import deepcopy
+from exp_params import SEED
 
 #-----------------------------------------------------------------------
 # Read the da system object
 #-----------------------------------------------------------------------
+np.random.seed(SEED * 4)
 name = 'x_analysis'
 infile = name+'_init.pkl'
 das = da_system()

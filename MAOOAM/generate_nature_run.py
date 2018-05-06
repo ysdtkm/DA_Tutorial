@@ -4,6 +4,7 @@ from class_state_vector import state_vector
 
 import params_maooam
 from params_maooam import ndim, tw, t_run, t_trans, dt
+from exp_params import SEED
 #from maooam import params_maooam
 #from maooam.params_maooam import ndim, tw, t_run, t_trans, dt
 from maooam import integrator
@@ -15,6 +16,7 @@ import sys
 #------------------------------------------------------------------
 ic_file='x0.dat'
 name = 'x_nature'
+np.random.seed(SEED * 1)
 
 # Get definition of time from params_maooam.py file:
 t0=0.0

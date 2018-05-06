@@ -4,6 +4,7 @@ import pickle
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from exp_params import SEED
 
 NDIM = 36
 
@@ -95,6 +96,7 @@ def __test_get_grid_val():
     __test_difference_u_v(n, state)
 
 def __test_difference_u_v(n, state):
+    np.random.seed(SEED * 5)
     eps = 1.0e-8
     for is_atm in [True, False]:
         for i in range(1000):

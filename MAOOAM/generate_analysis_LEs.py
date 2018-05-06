@@ -8,6 +8,7 @@ from class_obs_data import obs_data
 from class_da_system import da_system
 from sys import argv
 from copy import deepcopy
+from exp_params import SEED
 
 #-----------------------------------------------------------------------
 # Usage:

@@ -2,6 +2,7 @@ import numpy as np
 from class_state_vector import state_vector
 from class_obs_data import obs_data
 from module_obs_network import get_h_full_coverage, NDIM
+from exp_params import SEED
 
 infile = 'x_nature.pkl'
 outfile = 'y_obs.pkl'
@@ -12,6 +13,7 @@ outfile = 'y_obs.pkl'
 #--------------------------------------------------------------------------------
 mu = 0
 sigma = 1.0
+np.random.seed(SEED * 2)
 
 #--------------------------------------------------------------------------------
 # Create observation object

@@ -3,6 +3,7 @@
 import numpy as np
 import maooam.aotensor as aotensor_mod
 from maooam import integrator
+from exp_params import SEED
 
 def jacobi_mat(eta):
     assert len(eta.shape) == 1
@@ -52,6 +53,7 @@ def jacobi_mat(eta):
 #     return np.identity(n)+ (j1 + j2) * 0.5 * dt + np.dot(j2, j1) * 0.5 * dt ** 2
 #
 # def tlm_validation(eta,dt,tlm):
+#     np.random.seed(SEED * 7)
 #     ndim = np.shape(eta)[0]
 #     err = 0.1*np.random.randn(ndim)
 #     eta_new = integrator.step(eta,0,dt)
