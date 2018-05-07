@@ -4,7 +4,7 @@ from class_state_vector import state_vector
 from class_obs_data import obs_data
 from class_da_system import da_system
 from module_obs_network import get_h_full_coverage
-from module_constants import get_x_std
+from module_constants import get_x_std, get_static_b
 from sys import argv
 from exp_params import SEED
 
@@ -96,8 +96,8 @@ das.outer_loops = 3
 I = np.identity(xdim)
 
 # Set background error covariance
-sigma_b = 0.01
-B = I * sigma_b ** 2
+sigma_b = 0.001
+B = get_static_b() * sigma_b ** 2
 #B = [[ 0.03562653,  0.03319132, -0.02400967],
 #     [ 0.03319132,  0.05441897,  0.00074236],
 #     [-0.02400967,  0.00074236,  0.03891405]]
