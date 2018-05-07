@@ -144,5 +144,7 @@ def read_and_plot_bcov():
 
 if __name__ == "__main__":
     np.set_printoptions(formatter={'float': '{: 10.6g}'.format}, threshold=2000, linewidth=150)
-    __sample_read_files(sys.argv[1:])
-    read_and_plot_bcov()
+    methods = sys.argv[1:]
+    __sample_read_files(methods)
+    if "ETKF" in methods or "hybrid" in methods:
+        read_and_plot_bcov()
