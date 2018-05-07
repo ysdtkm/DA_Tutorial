@@ -17,3 +17,12 @@ def get_x_std():
          4.12804966e-04, 6.92212257e-05, 3.46594115e-04, 8.34432052e-06,
          6.98347756e-04, 1.35828889e-04, 1.21582441e-07, 2.24123574e-08])
     return x_std
+
+def get_static_b():
+    bcov = np.load("binary_const/mean_b_cov_0d8c560.npy")
+    eigs = np.linalg.eigvals(bcov)
+    assert np.all(eigs > 0.0)
+    srad = np.max(eigs)
+    bcov /= srad
+    return bcov
+
