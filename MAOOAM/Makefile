@@ -7,7 +7,7 @@
 #   cmd_*: Command to be executed
 #================================
 
-STEP_ALL = compile prep hybrid plot tex
+STEP_ALL = compile prep ETKF plot tex
 
 src_compile =
 dep_compile =
@@ -45,9 +45,9 @@ out_hybrid = x_analysis_init.pkl Pb_hist.npy x_analysis_hybrid.pkl hybrid_vs_nat
 cmd_hybrid = sh runall_tutorial_3.sh hybrid
 
 src_plot = module_plot.py plot_error.py
-dep_plot = hybrid
+dep_plot = ETKF
 out_plot = img rmse_*.npy
-cmd_plot = mkdir -p img/hybrid && python module_plot.py hybrid && python plot_error.py hybrid
+cmd_plot = mkdir -p img/ETKF && python module_plot.py ETKF && python plot_error.py ETKF
 # cmd_plot = mkdir -p img/3DVar img/ETKF img/hybrid && python module_plot.py ETKF hybrid 3DVar \
 #            && python plot_error.py 3DVar && python plot_error.py ETKF && python plot_error.py hybrid
 
