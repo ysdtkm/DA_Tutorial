@@ -4,12 +4,12 @@ import sys
 from util_parallel import Change, shell, exec_parallel
 import numpy as np
 import matplotlib
-matplotlib.use("PDF")
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 def main():
     wdir_base = sys.argv[1]
-    params1 = [0.001 * 10 ** (x / 20.0) for x in range(0, 21)]
+    params1 = [0.001 * 10 ** (x / 20.0) for x in range(-4, 21)]
     params2 = [1]
     changes1 = [Change("analysis_init.py", 99, "sigma_b", "sigma_b = %f")]
     changes2 = []
@@ -27,6 +27,7 @@ def plot_reduced_rmse(params1, params2, res):
         for i2 in range(n2):
             res_npy[:, i1, i2] = res[i1][i2]
     for ir in range(nr):
+        plt.tight_layout()
         fig, ax = plt.subplots()
         cm = plt.imshow(res_npy[ir, :, :])
         # cm.set_clim(0, 0.05)
@@ -42,8 +43,10 @@ def plot_reduced_rmse(params1, params2, res):
 
         if n2 >= 2:
             continue
-        plt.loglog(params1, res_npy[ir, :, 0])
+        plt.tight_layout()
+        plt.semilogx(params1, res_npy[ir, :, 0])
         plt.xlabel("sigma_b")
+        plt.ylim([0, 0.01])
         plt.ylabel("RMS error")
         plt.savefig("out/rmse_onedim_%s.pdf" % names[ir])
         plt.close()
