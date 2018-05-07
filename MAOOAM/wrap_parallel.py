@@ -12,7 +12,7 @@ def main():
     params1 = [0.01 * 10 ** (x / 5.0) for x in range(-5, 6)]
     params2 = [1]
     changes1 = [Change("analysis_init.py", 99, "sigma_b", "sigma_b = %f")]
-    changes2 = [Change("class_da_system.py", 1, "", "")]
+    changes2 = []
     shell("mkdir -p %s/out" % wdir_base)
     res = exec_parallel(wdir_base, "template", params1, params2, "sigma_b_%.04f", "none_%d",
                         changes1, changes2, "make", "out.pdf")
