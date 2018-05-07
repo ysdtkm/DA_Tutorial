@@ -9,13 +9,13 @@ import matplotlib.pyplot as plt
 
 def main():
     wdir_base = sys.argv[1]
-    params1 = list(reversed(range(3, 38, 2)))
-    params2 = [1.0 + 0.01 * i for i in range(11)]
-    changes1 = [Change("analysis_init.py", 79, "das.edim", "das.edim = %d")]
-    changes2 = [Change("class_da_system.py", 420, "rho", "    rho = %f")]
+    params1 = [0.01 * 10 ** (x / 5.0) for x in range(-5, 6)]
+    params2 = [1]
+    changes1 = [Change("analysis_init.py", 99, "sigma_b", "sigma_b = %f")]
+    changes2 = [Change("class_da_system.py", 1, "", "")]
     shell("mkdir -p %s/out" % wdir_base)
-    res = exec_parallel(wdir_base, "template", params1, params2, "ens_%02d", "infl_%.02f",
-                  changes1, changes2, "make", "out.pdf")
+    res = exec_parallel(wdir_base, "template", params1, params2, "sigma_b_%.04f", "none",
+                        changes1, changes2, "make", "out.pdf")
     plot_reduced_rmse(params1, params2, res)
 
 def plot_reduced_rmse(params1, params2, res):
@@ -31,10 +31,10 @@ def plot_reduced_rmse(params1, params2, res):
         cm = plt.imshow(res_npy[ir, :, :])
         # cm.set_clim(0, 0.05)
         plt.colorbar(cm)
-        plt.xlabel("inflation rho")
+        plt.xlabel("none")
         ax.set_xticks(range(n2))
         ax.set_xticklabels(params2, rotation=90)
-        plt.ylabel("ensemble size")
+        plt.ylabel("sigma_b")
         ax.set_yticks(range(n1))
         ax.set_yticklabels(params1)
         plt.savefig("out/rmse_%s.pdf" % names[ir])
