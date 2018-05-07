@@ -96,7 +96,7 @@ das.outer_loops = 3
 I = np.identity(xdim)
 
 # Set background error covariance
-sigma_b = 0.002
+sigma_b = 0.001 * 10 ** (4 / 5.0)
 B = get_static_b() * sigma_b ** 2
 #B = [[ 0.03562653,  0.03319132, -0.02400967],
 #     [ 0.03319132,  0.05441897,  0.00074236],
