@@ -134,6 +134,7 @@ def read_and_plot_bcov():
     title = "mean B cov (sample = %d, BV dim = %f)" % (counter, get_bv_dim(mean_cov))
     plot_mean_bcov(mean_cov, "img/bcov.pdf", title, True)
     plot_eig_bcov(mean_cov, "img/bcov_eigval.pdf", "img/bcov_eigvec.pdf")
+    np.save("mean_b_cov.npy", mean_cov)
 
     n = Pb_hist.shape[1]
     mean_corr = np.zeros((n, n))
