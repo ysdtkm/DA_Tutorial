@@ -98,7 +98,7 @@ def zero_out_off_diag_blocks(cov):
     cov2[NATM:, :NATM] = 0.0
     return cov2
 
-def __sample_read_files():
+def __sample_read_files(methods):
     vlim_raw = [-0.05, 0.1]
     vlim_diff = [-0.15, 0.15]
     nature_file ='x_nature.pkl'
@@ -113,7 +113,7 @@ def __sample_read_files():
                        "img/freerun.pdf", *vlim_raw, "freerun", "viridis")
     plot_time_colormap(nature.getTrajectory(),
                        "img/nature.pdf", *vlim_raw, "nature", "viridis")
-    for method in ["ETKF"]:
+    for method in methods:
         analysis_file = 'x_analysis_{method}.pkl'.format(method=method)
         das = da_system()
         das = das.load(analysis_file)
@@ -144,5 +144,5 @@ def read_and_plot_bcov():
 
 if __name__ == "__main__":
     np.set_printoptions(formatter={'float': '{: 10.6g}'.format}, threshold=2000, linewidth=150)
-    __sample_read_files()
+    __sample_read_files(sys.argv[1:])
     read_and_plot_bcov()

@@ -7,7 +7,7 @@
 #   cmd_*: Command to be executed
 #================================
 
-STEP_ALL = compile prep ETKF plot tex
+STEP_ALL = compile prep ETKF 3DVar hybrid plot tex
 
 src_compile =
 dep_compile =
@@ -27,7 +27,7 @@ out_nudging = x_analysis_init.pkl
 cmd_nudging = sh runall_tutorial_2.sh nudging
 
 src_3DVar = runall_tutorial_2.sh analysis_init.py class_da_system.py module_constants.py \
-              generate_analysis_3dDet.py
+            generate_analysis_3dDet.py
 dep_3DVar = prep
 out_3DVar = x_analysis_init.pkl
 cmd_3DVar = sh runall_tutorial_2.sh 3DVar
@@ -39,16 +39,16 @@ out_ETKF = x_analysis_init.pkl Pb_hist.npy x_analysis_ETKF.pkl ETKF_vs_nature.ht
 cmd_ETKF = sh runall_tutorial_3.sh ETKF
 
 src_hybrid = runall_tutorial_3.sh analysis_init.py class_da_system.py module_constants.py \
-           generate_analysis_3dEns.py
+             generate_analysis_3dEns.py
 dep_hybrid = prep
 out_hybrid = x_analysis_init.pkl Pb_hist.npy x_analysis_hybrid.pkl hybrid_vs_nature.html
 cmd_hybrid = sh runall_tutorial_3.sh hybrid
 
 src_plot = module_plot.py plot_error.py
-dep_plot = ETKF
+dep_plot = ETKF hybrid 3DVar
 out_plot = img rmse_*.npy
-cmd_plot = mkdir -p img/ETKF && python module_plot.py && python plot_error.py ETKF
-# cmd_plot = mkdir -p img/3DVar img/ETKF img/hybrid && python module_plot.py && python plot_error.py 3DVar && python plot_error.py ETKF && python plot_error.py hybrid
+cmd_plot = mkdir -p img/3DVar img/ETKF img/hybrid && python module_plot.py ETKF hybrid 3DVar \
+           && python plot_error.py 3DVar && python plot_error.py ETKF && python plot_error.py hybrid
 
 src_tex =
 dep_tex = plot
