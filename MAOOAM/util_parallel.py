@@ -55,7 +55,7 @@ def exec_parallel(dir_template, wdir_base, params1, params2, p1_fmt, p2_fmt,
     return inverse_itertools_2d_product(params1, params2, res)
 
 def exec_single_job(wdir_base, dir_template, p1_fmt, p2_fmt, p1_changes, p2_changes,
-                    command, out_file, param):
+                    command, out_file, param, method):
     p1, p2 = param
     s1 = (p1_fmt % p1).replace(".", "_")
     s2 = (p2_fmt % p2).replace(".", "_")
@@ -75,5 +75,5 @@ def exec_single_job(wdir_base, dir_template, p1_fmt, p2_fmt, p1_changes, p2_chan
     _, ext = os.path.splitext(out_file)
     shell("cp -f %s %s/out/%s_%s%s" % (out_file, wdir_base, s1, s2, ext))
     print("%s done" % dname)
-    return np.load("rmse_hybrid.npy")
+    return np.load("rmse_3DVar.npy")
 
