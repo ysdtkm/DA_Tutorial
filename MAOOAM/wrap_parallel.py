@@ -42,7 +42,7 @@ def plot_reduced_rmse(params1, params2, res):
 
         if n2 >= 2:
             continue
-        plt.plot(params1, res_npy[ir, :, 0])
+        plt.loglog(params1, res_npy[ir, :, 0])
         plt.xlabel("sigma_b")
         plt.ylabel("RMS error")
         plt.savefig("out/rmse_onedim_%s.pdf" % names[ir])
