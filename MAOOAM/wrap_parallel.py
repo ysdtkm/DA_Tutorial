@@ -14,7 +14,7 @@ def main():
     changes1 = [Change("analysis_init.py", 99, "sigma_b", "sigma_b = %f")]
     changes2 = []
     shell("mkdir -p %s/out" % wdir_base)
-    res = exec_parallel(wdir_base, "template", params1, params2, "sigma_b_%.04f", "none_%d",
+    res = exec_parallel(wdir_base, "template", params1, params2, "sigma_b_%.06f", "none_%d",
                         changes1, changes2, "make", "out.pdf")
     plot_reduced_rmse(params1, params2, res)
 
