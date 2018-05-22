@@ -30,7 +30,7 @@ def plot_time_colormap(dat, img_name, vmin=None, vmax=None, title="", cmap="RdBu
 def plot_mean_bcov(bcov, img_name, title, log=False):
     plt.tight_layout()
     plt.rcParams["font.size"] = 16
-    vmax = np.max(bcov)
+    vmax = 1.0
     norm = matplotlib.colors.SymLogNorm(linthresh=0.001 * vmax) if log else None
     cm = plt.imshow(bcov, cmap="RdBu_r", norm=norm, extent=get_extent_square())
     cm.set_clim(-vmax, vmax)
@@ -41,7 +41,7 @@ def plot_mean_bcov(bcov, img_name, title, log=False):
     plt.savefig(img_name, bbox_inches="tight")
     plt.close()
 
-def plot_eig_bcov(bcov, img_name_eigval, img_name_eigvec):
+def plot_eig_bcov(bcov, img_name_eigval, img_name_eigvec, intvl):
     plt.tight_layout()
     plt.rcParams["font.size"] = 16
     eigval, eigvec = np.linalg.eigh(bcov)
@@ -52,15 +52,17 @@ def plot_eig_bcov(bcov, img_name_eigval, img_name_eigvec):
     xs = np.arange(1, len(eigval) + 1)
     plt.plot(xs, eigval)
     plt.yscale("log")
-    plt.title("eigenvalues of B")
+    plt.title(r"eigenvalues of $B_0$ ($\tau$ = %d)" % intvl)
+    plt.ylim(10 ** (-15), 10 ** (-3))
     plt.xlabel("eigenvector index")
+    plt.ylabel("eigenvalues")
     plt.savefig(img_name_eigval, bbox_inches="tight")
     plt.close()
 
     cm = plt.imshow(eigvec, cmap="RdBu_r", extent=get_extent_square())
     cm.set_clim(-1, 1)
     plt.colorbar(cm)
-    plt.title("eigenvectors of B")
+    plt.title(r"eigenvectors of $B$ ($\tau$ = %d)" % intvl)
     plt.xlabel("eigenvector index")
     plt.ylabel("model variable")
     plt.savefig(img_name_eigvec, bbox_inches="tight")
@@ -136,7 +138,7 @@ def read_and_plot_bcov():
     assert Pb_hist.shape[1] == Pb_hist.shape[2]
     counter = Pb_hist.shape[0]
     mean_cov = np.mean(Pb_hist[counter // 2:, :, :], axis=0)  # discard formar half as spinup
-    title = "mean B cov (sample = %d, BV dim = %f)" % (counter, get_bv_dim(mean_cov))
+    title = "temporal mean B (sample = %d, BV dim = %f)" % (counter, get_bv_dim(mean_cov))
     plot_mean_bcov(mean_cov, "img/bcov.pdf", title, True)
     plot_eig_bcov(mean_cov, "img/bcov_eigval.pdf", "img/bcov_eigvec.pdf")
     np.save("mean_b_cov.npy", mean_cov)
@@ -145,7 +147,7 @@ def read_and_plot_bcov():
     mean_corr = np.zeros((n, n))
     for t in range(counter):
         mean_corr += cov_to_corr(Pb_hist[t, :, :]) / counter
-    title = "mean B corr (sample = %d, BV dim = %f)" % (counter, get_bv_dim(mean_corr))
+    title = "temporal mean B corr (sample = %d, BV dim = %f)" % (counter, get_bv_dim(mean_corr))
     plot_mean_bcov(mean_corr, "img/bcorr.pdf", title)
 
 def read_and_plot_mean_bcov():
@@ -153,9 +155,9 @@ def read_and_plot_mean_bcov():
         mean_cov = np.load("binary_const/mean_b_cov_%s.npy" % name)
         assert len(mean_cov.shape) == 2
         assert mean_cov.shape[0] == mean_cov.shape[1] == NDIM
-        title = "mean B cov (tau = %d)" % intvl
-        plot_mean_bcov(mean_cov, "img/bcov_%05d.pdf" % intvl, title, True)
-        plot_eig_bcov(mean_cov, "img/bcov_%05d_eigval.pdf" % intvl, "img/bcov_%05d_eigvec.pdf" % intvl)
+        title = r"normalized $B$ ($\tau$ = %d)" % intvl
+        plot_mean_bcov(mean_cov / np.max(np.linalg.eigvalsh(mean_cov)), "img/bcov_%05d.pdf" % intvl, title, True)
+        plot_eig_bcov(mean_cov, "img/bcov_%05d_eigval.pdf" % intvl, "img/bcov_%05d_eigvec.pdf" % intvl, intvl)
 
 if __name__ == "__main__":
     np.set_printoptions(formatter={'float': '{: 10.6g}'.format}, threshold=2000, linewidth=150)
