@@ -28,6 +28,8 @@ def plot_time_colormap(dat, img_name, vmin=None, vmax=None, title="", cmap="RdBu
     plt.close()
 
 def plot_mean_bcov(bcov, img_name, title, log=False):
+    plt.rcParams["font.size"] = 14
+    plt.tight_layout()
     vmax = np.max(bcov)
     norm = matplotlib.colors.SymLogNorm(linthresh=0.001 * vmax) if log else None
     cm = plt.imshow(bcov, cmap="RdBu_r", norm=norm, extent=get_extent_square())
@@ -40,6 +42,8 @@ def plot_mean_bcov(bcov, img_name, title, log=False):
     plt.close()
 
 def plot_eig_bcov(bcov, img_name_eigval, img_name_eigvec):
+    plt.rcParams["font.size"] = 14
+    plt.tight_layout()
     eigval, eigvec = np.linalg.eigh(bcov)
     idx = eigval.argsort()[::-1]
     eigval = eigval[idx]
