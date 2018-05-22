@@ -1,6 +1,6 @@
 import numpy as np
 
-files = [
+files = [  # see a50p61
     "mean_b_cov_0d8c560.npy",
     "mean_b_cov_6682eed.npy",
     "mean_b_cov_c2c7c0f.npy",

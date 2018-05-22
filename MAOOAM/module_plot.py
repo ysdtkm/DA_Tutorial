@@ -143,9 +143,19 @@ def read_and_plot_bcov():
     title = "mean B corr (sample = %d, BV dim = %f)" % (counter, get_bv_dim(mean_corr))
     plot_mean_bcov(mean_corr, "img/bcorr.pdf", title)
 
+def read_and_plot_mean_bcov():
+    for intvl, name in [(1, "0d8c560"), (10, "6682eed"), (100, "c2c7c0f"), (1000, "b0b2d64")]:
+        mean_cov = np.load("binary_const/mean_b_cov_%s.npy" % name)
+        assert len(mean_cov.shape) == 2
+        assert mean_cov.shape[0] == mean_cov.shape[1] == NDIM
+        title = "mean B cov (tau = %d)" % intvl
+        plot_mean_bcov(mean_cov, "img/bcov_%05d.pdf" % intvl, title, True)
+        plot_eig_bcov(mean_cov, "img/bcov_%05d_eigval.pdf" % intvl, "img/bcov_%05d_eigvec.pdf" % intvl)
+
 if __name__ == "__main__":
     np.set_printoptions(formatter={'float': '{: 10.6g}'.format}, threshold=2000, linewidth=150)
-    methods = sys.argv[1:]
-    __sample_read_files(methods)
-    if "ETKF" in methods or "hybrid" in methods:
-        read_and_plot_bcov()
+    # methods = sys.argv[1:]
+    # __sample_read_files(methods)
+    # if "ETKF" in methods or "hybrid" in methods:
+    #     read_and_plot_bcov()
+    read_and_plot_mean_bcov()
