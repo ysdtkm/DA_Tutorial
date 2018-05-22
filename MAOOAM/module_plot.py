@@ -15,6 +15,8 @@ def plot_time_colormap(dat, img_name, vmin=None, vmax=None, title="", cmap="RdBu
     assert dat.__class__ == np.ndarray
     assert len(dat.shape) == 2
     assert dat.shape[1] == NDIM
+    plt.tight_layout()
+    plt.rcParams["font.size"] = 16
     norm = matplotlib.colors.SymLogNorm(linthresh=0.001 * vmax) if log else None
     cm = plt.imshow(dat, aspect="auto", cmap=cmap, origin="bottom", norm=norm,
         extent=get_extent_bottom_origin(dat))
@@ -138,16 +140,16 @@ def read_and_plot_bcov():
     assert Pb_hist.shape[1] == Pb_hist.shape[2]
     counter = Pb_hist.shape[0]
     mean_cov = np.mean(Pb_hist[counter // 2:, :, :], axis=0)  # discard formar half as spinup
-    title = "temporal mean B (sample = %d, BV dim = %f)" % (counter, get_bv_dim(mean_cov))
-    plot_mean_bcov(mean_cov, "img/bcov.pdf", title, True)
-    plot_eig_bcov(mean_cov, "img/bcov_eigval.pdf", "img/bcov_eigvec.pdf")
+    title = "B cov (sample = %d)" % (counter // 2)
+    plot_mean_bcov(mean_cov / np.max(np.linalg.eigvalsh(mean_cov)), "img/bcov.pdf", title, True)
+    plot_eig_bcov(mean_cov, "img/bcov_eigval.pdf", "img/bcov_eigvec.pdf", 0)
     np.save("mean_b_cov.npy", mean_cov)
 
     n = Pb_hist.shape[1]
     mean_corr = np.zeros((n, n))
     for t in range(counter):
         mean_corr += cov_to_corr(Pb_hist[t, :, :]) / counter
-    title = "temporal mean B corr (sample = %d, BV dim = %f)" % (counter, get_bv_dim(mean_corr))
+    title = "B corr (sample = %d)" % (counter // 2)
     plot_mean_bcov(mean_corr, "img/bcorr.pdf", title)
 
 def read_and_plot_mean_bcov():

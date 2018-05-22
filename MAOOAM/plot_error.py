@@ -28,6 +28,8 @@ def main():
     np.save("rmse_%s.npy" % method, rmses)
 
 def plot_rmse_all(nature, freerun, analysis, method, slice, img_name):
+    plt.tight_layout()
+    plt.rcParams["font.size"] = 16
     plt.plot(nature.getTimes(),
              np.linalg.norm(freerun.getTrajectory()[slice] - nature.getTrajectory()[slice],
                             axis=1), label='Free run')
@@ -45,8 +47,7 @@ def plot_rmse_all(nature, freerun, analysis, method, slice, img_name):
     plt.xlabel('Time')
     plt.ylabel('Error', rotation='horizontal', labelpad=20)
     plt.title(img_name)
-    plt.tight_layout()
-    plt.savefig(img_name)
+    plt.savefig(img_name, bbox_inches="tight")
     plt.close()
 
 def print_time_averaged_rmse(nature, analysis, slice, name):
