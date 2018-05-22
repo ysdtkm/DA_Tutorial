@@ -24,12 +24,12 @@ def plot_time_colormap(dat, img_name, vmin=None, vmax=None, title="", cmap="RdBu
     plt.xlabel("model variable")
     plt.ylabel("time")
     plt.title(title)
-    plt.savefig(img_name)
+    plt.savefig(img_name, bbox_inches="tight")
     plt.close()
 
 def plot_mean_bcov(bcov, img_name, title, log=False):
-    plt.rcParams["font.size"] = 14
     plt.tight_layout()
+    plt.rcParams["font.size"] = 16
     vmax = np.max(bcov)
     norm = matplotlib.colors.SymLogNorm(linthresh=0.001 * vmax) if log else None
     cm = plt.imshow(bcov, cmap="RdBu_r", norm=norm, extent=get_extent_square())
@@ -38,12 +38,12 @@ def plot_mean_bcov(bcov, img_name, title, log=False):
     plt.xlabel("model variable")
     plt.ylabel("model variable")
     plt.title(title)
-    plt.savefig(img_name)
+    plt.savefig(img_name, bbox_inches="tight")
     plt.close()
 
 def plot_eig_bcov(bcov, img_name_eigval, img_name_eigvec):
-    plt.rcParams["font.size"] = 14
     plt.tight_layout()
+    plt.rcParams["font.size"] = 16
     eigval, eigvec = np.linalg.eigh(bcov)
     idx = eigval.argsort()[::-1]
     eigval = eigval[idx]
@@ -53,7 +53,7 @@ def plot_eig_bcov(bcov, img_name_eigval, img_name_eigvec):
     plt.yscale("log")
     plt.title("eigenvalues of B")
     plt.xlabel("eigenvector index")
-    plt.savefig(img_name_eigval)
+    plt.savefig(img_name_eigval, bbox_inches="tight")
     plt.close()
 
     cm = plt.imshow(eigvec, cmap="RdBu_r", extent=get_extent_square())
@@ -62,7 +62,7 @@ def plot_eig_bcov(bcov, img_name_eigval, img_name_eigvec):
     plt.title("eigenvectors of B")
     plt.xlabel("eigenvector index")
     plt.ylabel("model variable")
-    plt.savefig(img_name_eigvec)
+    plt.savefig(img_name_eigvec, bbox_inches="tight")
     plt.close()
 
 def get_extent_square():
@@ -158,6 +158,7 @@ def read_and_plot_mean_bcov():
 
 if __name__ == "__main__":
     np.set_printoptions(formatter={'float': '{: 10.6g}'.format}, threshold=2000, linewidth=150)
+    plt.tight_layout()
     # methods = sys.argv[1:]
     # __sample_read_files(methods)
     # if "ETKF" in methods or "hybrid" in methods:
