@@ -57,9 +57,6 @@ def exec_parallel(dir_template, wdir_base, params1, params2, p1_fmt, p2_fmt,
 def exec_single_job(wdir_base, dir_template, p1_fmt, p2_fmt, p1_changes, p2_changes,
                     command, out_file, param):
     p1, p2 = param
-    # ttk
-    if p1 < 0.001:
-        raise Exception("util_parallel ttk")
     s1 = (p1_fmt % p1).replace(".", "_")
     s2 = (p2_fmt % p2).replace(".", "_")
     dname = "%s/%s/%s" % (wdir_base, s1, s2)
@@ -77,6 +74,9 @@ def exec_single_job(wdir_base, dir_template, p1_fmt, p2_fmt, p1_changes, p2_chan
         f.write(serr)
     _, ext = os.path.splitext(out_file)
     try:
+        # ttk
+        if p1 < 0.001:
+            raise Exception("util_parallel ttk")
         shell("cp -f %s %s/out/%s_%s%s" % (out_file, wdir_base, s1, s2, ext))
         res = np.load("rmse_hybrid.npy")
         print("%s done" % dname)
