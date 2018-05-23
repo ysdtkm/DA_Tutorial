@@ -78,7 +78,8 @@ def exec_single_job(wdir_base, dir_template, p1_fmt, p2_fmt, p1_changes, p2_chan
         res = np.load("rmse_hybrid.npy")
         print("%s done" % dname)
     except:
-        res = np.ones(5) * np.nan
+        res = np.empty(5)
+        res[:] = np.nan
         print("%s failed" % dname)
     return res
 
