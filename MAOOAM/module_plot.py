@@ -147,10 +147,10 @@ def read_and_plot_bcov():
 
     n = Pb_hist.shape[1]
     mean_corr = np.zeros((n, n))
-    for t in range(counter):
-        mean_corr += cov_to_corr(Pb_hist[t, :, :]) / counter
+    for t in range(counter // 2, counter):
+        mean_corr += cov_to_corr(Pb_hist[t, :, :])
     title = "B corr (sample = %d)" % (counter // 2)
-    plot_mean_bcov(mean_corr, "img/bcorr.pdf", title)
+    plot_mean_bcov(mean_corr / (counter / 2), "img/bcorr.pdf", title)
 
 def read_and_plot_mean_bcov():
     for intvl, name in [(1, "0d8c560"), (10, "6682eed"), (100, "c2c7c0f"), (1000, "b0b2d64")]:
