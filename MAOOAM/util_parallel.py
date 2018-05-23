@@ -35,10 +35,10 @@ def inverse_itertools_2d_product(params1, params2, map_result):
     res = [[map_result[i1 * n2 + i2] for i2 in range(n2)] for i1 in range(n1)]
     return res
 
-def shell(cmd):
+def shell(cmd, check=True):
     assert isinstance(cmd, str)
     p = sp.run(cmd, shell=True, encoding="utf8", stderr=sp.PIPE, stdout=sp.PIPE)
-    if p.returncode != 0:
+    if check and p.returncode != 0:
         print(p.stdout)
         print(p.stderr)
         raise Exception("shell %s failed" % cmd)
@@ -73,7 +73,12 @@ def exec_single_job(wdir_base, dir_template, p1_fmt, p2_fmt, p1_changes, p2_chan
     with open("stderr", "w") as f:
         f.write(serr)
     _, ext = os.path.splitext(out_file)
-    shell("cp -f %s %s/out/%s_%s%s" % (out_file, wdir_base, s1, s2, ext))
-    print("%s done" % dname)
-    return np.load("rmse_hybrid.npy")
+    try:
+        shell("cp -f %s %s/out/%s_%s%s" % (out_file, wdir_base, s1, s2, ext))
+        res = np.load("rmse_hybrid.npy")
+        print("%s done" % dname)
+    except:
+        res = np.ones(5) * np.nan
+        print("%s failed" % dname)
+    return res
 
