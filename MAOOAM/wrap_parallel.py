@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 def main():
     wdir_base = sys.argv[1]
-    params1 = [0.001 * 10 ** (x / 20.0) for x in range(-9, 11)]
+    params1 = [0.001 * 10 ** (x / 10.0) for x in range(-4, 6)]
     params2 = [1]
     changes1 = [Change("analysis_init.py", 99, "sigma_b", "sigma_b = %f")]
     changes2 = []

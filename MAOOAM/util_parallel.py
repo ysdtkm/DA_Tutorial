@@ -50,7 +50,7 @@ def exec_parallel(dir_template, wdir_base, params1, params2, p1_fmt, p2_fmt,
     params_prod = itertools.product(params1, params2)
     job = functools.partial(exec_single_job, dir_template, wdir_base, p1_fmt, p2_fmt,
                             p1_changes, p2_changes, command, out_file)
-    with Pool(10) as p:
+    with Pool(5) as p:
         res = p.map(job, params_prod)
     return inverse_itertools_2d_product(params1, params2, res)
 
