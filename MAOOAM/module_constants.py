@@ -19,8 +19,8 @@ def get_x_std():
     return x_std
 
 def get_static_b():
-    bcov = np.load("binary_const/mean_b_cov_t0644_0001tu.npy")
-    # mean_b_cov_t0645_0010tu.npy
+    # bcov = np.load("binary_const/mean_b_cov_t0644_0001tu.npy")
+    bcov = np.load("binary_const/mean_b_cov_t0645_0010tu.npy")
     eigs = np.linalg.eigvals(bcov)
     assert np.all(eigs > 0.0)
     srad = np.max(eigs)
