@@ -10,9 +10,9 @@ import matplotlib.pyplot as plt
 def main():
     wdir_base = sys.argv[1]
     params1 = [0.001 * 10 ** (x / 10.0) for x in range(-4, 6)]
-    params2 = [1]
+    params2 = list(range(1, 6))
     changes1 = [Change("analysis_init.py", 99, "sigma_b", "sigma_b = %f")]
-    changes2 = []
+    changes2 = [Change("exp_params.py", 4, "SEED", "SEED = PRIME * %d")]
     shell("mkdir -p %s/out" % wdir_base)
     res = exec_parallel(wdir_base, "template", params1, params2, "sigma_b_%.06f", "none_%d",
                         changes1, changes2, "make", "out.pdf")
