@@ -3,7 +3,7 @@
 import sys
 import numpy as np
 import matplotlib
-matplotlib.use("Agg")
+matplotlib.use("pdf")
 import matplotlib.pyplot as plt
 import subprocess as sp
 import itertools, functools
@@ -25,17 +25,24 @@ def plot_rmse(res, exp, params1, params2, fmt1):
     names = {"t0674":"tau = 10", "t0675":"tau = 1", "t0676":"tau = 100", "t0677":"tau = 1000"}
 
     for ic, c in enumerate(cmps):
+        # plt.tight_layout()
         plt.rcParams["font.size"] = 16
-        plt.tight_layout()
+        fig, ax = plt.subplots()
+        fig.subplots_adjust(bottom=0.16, top=0.9, left=0.16, right=0.95)
         plt.xscale("log")
         plt.yscale("log")
-        plt.xlim(0.0003, 0.005)
-        plt.ylim(0.001, 0.3)
+        plt.xlim(0.0003, 0.004)
+        plt.ylim(0.0008, 0.4)
         for ip2, p2 in enumerate(params2):
-            plt.scatter(params1, res[:, ip2, ic], color="k", marker="x", alpha=0.5)
+            plt.scatter(params1, res[:, ip2, ic], color="k", marker="x", alpha=0.3)
         plt.plot(params1, np.mean(res[:, :, ic], axis=1), alpha=0.8)
+        ax.set_xticks([0.0003, 0.001, 0.003])
+        ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+        plt.title(names[exp])
+        plt.xlabel("sqrt(a) = sqrt(spectral radius of B)")
+        plt.ylabel("RMS error (nondimensional)")
         plt.savefig(f"out/{c}_{exp}.pdf", bb_inches="tight")
-        plt.close()
+        plt.close("all")
 
 def get_rmses(wdir_base, params1, params2, p1_fmt, p2_fmt):
     job = functools.partial(get_rmse, wdir_base, p1_fmt, p2_fmt)
