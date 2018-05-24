@@ -9,6 +9,7 @@ import subprocess as sp
 import itertools, functools
 
 def main():
+    sp.run("rm -rf out && mkdir -p out", shell=True, check=True)
     params1 = [0.001 * 10 ** (x / 10.0) for x in range(-4, 6)]
     params2 = list(range(1, 11))
     basedir = "/lustre/tyoshida/shrt/exec"
