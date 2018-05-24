@@ -11,14 +11,16 @@ import itertools, functools
 def main():
     params1 = [0.001 * 10 ** (x / 20.0) for x in range(-9, 11)]
     params2 = [1]
+    basedir = "/lustre/tyoshida/shrt/exec"
     exps = ["t0658", "t0659", "t0660", "t0661"]
     names = {"t0658": "tau = 1000", "t0659": "tau = 100", "t0660": "tau = 10", "t0661": "tau = 1"}
     ress = {}
     for exp in exps:
-        ress[exp] = exec_parallel(f"../{exp}", params1, params2, "sigma_b_%.06f", "none_%d")
+        ress[exp] = exec_parallel(f"{basedir}/{exp}", params1, params2, "sigma_b_%.06f", "none_%d")
     plot_reduced_rmse(params1, params2, ress, names)
 
 def plot_reduced_rmse(params1, params2, ress, taus):
+    sp.run("mkdir -p out", shell=True, check=True)
     n1, n2 = len(params1), len(params2)
     nr = 5
     names = ["atmos_psi", "atmos_temp", "ocean_psi", "ocean_temp", "all"]
