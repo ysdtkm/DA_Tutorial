@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 def main():
     wdir_base = sys.argv[1]
     params1 = [0.001 * 10 ** (x / 10.0) for x in range(-4, 6)]
-    params2 = list(range(1, 6))
+    params2 = list(range(1, 11))
     changes1 = [Change("analysis_init.py", 99, "sigma_b", "sigma_b = %f")]
     changes2 = [Change("exp_params.py", 4, "SEED", "SEED = PRIME * %d")]
     shell("mkdir -p %s/out" % wdir_base)
