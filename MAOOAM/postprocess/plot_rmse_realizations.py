@@ -20,9 +20,18 @@ def main():
         plot_rmse(ress[exp], exp, params1, params2, "sigma_b_%.06f")
 
 def plot_rmse(res, exp, params1, params2, fmt1):
-    assert res.shape == (len(params1), len(params2), 5)
+    cmps = ["atmos_psi", "atmos_temp", "ocean_psi", "ocean_temp", "all"]
+    assert res.shape == (len(params1), len(params2), len(cmps))
     names = {"t0674":"tau = 10", "t0675":"tau = 1", "t0676":"tau = 100", "t0677":"tau = 1000"}
-    print(exp, names[exp])
+
+    for ic, c in enumerate(cmps):
+        plt.rcParams["font.size"] = 16
+        plt.tight_layout()
+        plt.yscale("log")
+        for ip2, p2 in enumerate(params2):
+            plt.scatter(params1, res[:, ip2, ic])
+        plt.savefig(f"out/{c}_{exp}.pdf", bb_inches="tight")
+        plt.close()
 
 def get_rmses(wdir_base, params1, params2, p1_fmt, p2_fmt):
     job = functools.partial(get_rmse, wdir_base, p1_fmt, p2_fmt)
