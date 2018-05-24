@@ -27,9 +27,13 @@ def plot_rmse(res, exp, params1, params2, fmt1):
     for ic, c in enumerate(cmps):
         plt.rcParams["font.size"] = 16
         plt.tight_layout()
+        plt.xscale("log")
         plt.yscale("log")
+        plt.xlim(0.0003, 0.005)
+        plt.ylim(0.001, 0.3)
         for ip2, p2 in enumerate(params2):
-            plt.scatter(params1, res[:, ip2, ic])
+            plt.scatter(params1, res[:, ip2, ic], color="k", marker="x", alpha=0.5)
+        plt.plot(params1, np.mean(res[:, :, ic], axis=1), alpha=0.8)
         plt.savefig(f"out/{c}_{exp}.pdf", bb_inches="tight")
         plt.close()
 
