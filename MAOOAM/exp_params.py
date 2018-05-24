@@ -1,3 +1,4 @@
 #!/usr/bin/env python3
 
-SEED = 10 ** 8 + 7
+PRIME = 10 ** 6 + 3
+SEED = PRIME * 1
