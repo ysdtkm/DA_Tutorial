@@ -417,7 +417,7 @@ class da_system:
     # Pa = [(k-1)I/rho + C*Yb]^(-1)
     #----
     I = np.identity(edim)
-    rho = 1.05
+    rho = 1.02
     eigArg = (edim-1)*I/rho + np.dot(C,Yb)
 
     lamda,P = np.linalg.eigh(eigArg)

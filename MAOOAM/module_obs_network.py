@@ -124,7 +124,7 @@ def __get_obs_grid_atmos():
     n = 1.5
     xmax = 2.0 * np.pi / n
     ymax = np.pi
-    nxobs = 5
+    nxobs = 2
     nyobs = 2
     x1d = np.linspace(0, xmax, nxobs, endpoint=False)
     y1d = np.linspace(0, ymax, nyobs, endpoint=False) + ymax / nyobs * 0.25
@@ -136,7 +136,7 @@ def __get_obs_grid_ocean():
     xmax = 2.0 * np.pi / n
     ymax = np.pi
     nxobs = 2
-    nyobs = 4
+    nyobs = 2
     x1d = np.linspace(0, xmax, nxobs, endpoint=False) + xmax / nxobs * 0.5
     y1d = np.linspace(0, ymax, nyobs, endpoint=False) + ymax / nyobs * 0.25
     x2d, y2d = np.meshgrid(x1d, y1d)
@@ -183,12 +183,12 @@ def __model_state_example():
     return xini
 
 def get_h_full_coverage():
-    nobs = NDIM
+    nobs = 16
     h_mat = np.empty((nobs, NDIM))
     xgrid_atm, ygrid_atm = __get_obs_grid_atmos()
     xgrid_ocn, ygrid_ocn = __get_obs_grid_ocean()
-    nobs_atm = xgrid_atm.size
-    nobs_ocn = xgrid_ocn.size
+    nobs_atm = 4
+    nobs_ocn = 4
     assert nobs_atm * 2 + nobs_ocn * 2 == nobs
     for i in range(NDIM):
         state_unit = np.zeros(NDIM)
