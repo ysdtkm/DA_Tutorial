@@ -153,8 +153,8 @@ def read_and_plot_bcov():
     plot_mean_bcov(mean_corr / (counter / 2), "img/bcorr.pdf", title)
 
 def read_and_plot_mean_bcov():
-    for intvl, name in [(1, "0d8c560"), (10, "6682eed"), (100, "c2c7c0f"), (1000, "b0b2d64")]:
-        mean_cov = np.load("binary_const/mean_b_cov_%s.npy" % name)
+    for intvl, name in [(1, "t0644"), (10, "t0645"), (100, "t0646"), (1000, "t0647")]:
+        mean_cov = np.load(f"binary_const/mean_b_cov_{name}_{intvl:04d}tu.npy")
         assert len(mean_cov.shape) == 2
         assert mean_cov.shape[0] == mean_cov.shape[1] == NDIM
         title = r"normalized $B$ ($\tau$ = %d)" % intvl
@@ -163,7 +163,8 @@ def read_and_plot_mean_bcov():
 
 if __name__ == "__main__":
     np.set_printoptions(formatter={'float': '{: 10.6g}'.format}, threshold=2000, linewidth=150)
-    methods = sys.argv[1:]
-    __sample_read_files(methods)
-    if "ETKF" in methods or "hybrid" in methods:
-        read_and_plot_bcov()
+    # methods = sys.argv[1:]
+    # __sample_read_files(methods)
+    # if "ETKF" in methods or "hybrid" in methods:
+    #     read_and_plot_bcov()
+    read_and_plot_mean_bcov()
