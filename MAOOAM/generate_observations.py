@@ -47,7 +47,7 @@ H = np.identity(nc)
 #     H[i, i] = 0.0
 # H = get_h_full_coverage()
 nobs = H.shape[0]
-R = get_r_luyu()
+R = get_r_luyu("Kriti")
 assert R.shape == (nobs, nobs)
 yo = np.zeros((nr, nobs))
 eta = np.zeros((nr, nobs))
