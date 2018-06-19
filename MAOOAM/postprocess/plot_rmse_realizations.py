@@ -41,7 +41,7 @@ def plot_rmse(res, exp, params1, params2, fmt1):
         plt.title(names[exp])
         plt.xlabel("sqrt(a) = sqrt(spectral radius of B)")
         plt.ylabel("RMS error (nondimensional)")
-        plt.savefig(f"out/{c}_{exp}.pdf", bb_inches="tight")
+        plt.savefig(f"out/{c}_{exp}.pdf", bbox_inches="tight")
         plt.close("all")
 
 def get_rmses(wdir_base, params1, params2, p1_fmt, p2_fmt):
