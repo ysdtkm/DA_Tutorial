@@ -79,7 +79,7 @@ das.t0 = das.t[0]
 #-----------------------------------------------------------------------
 # Initialize the ensemble
 #-----------------------------------------------------------------------
-das.edim = 22
+das.edim = 6
 das.ens_bias_init = 0
 das.ens_sigma_init = 0.01
 das.x0 += np.random.randn(xdim) * das.ens_sigma_init  # truth is like an ensemble member
