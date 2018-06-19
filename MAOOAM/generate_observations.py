@@ -3,6 +3,7 @@ from class_state_vector import state_vector
 from class_obs_data import obs_data
 from module_obs_network import get_h_full_coverage, NDIM
 from exp_params import SEED
+from read_r_matrix import get_r_luyu
 
 infile = 'x_nature.pkl'
 outfile = 'y_obs.pkl'
@@ -42,16 +43,18 @@ for i in range(nc):
 # Sample the nature run and apply noise
 #--------------------------------------------------------------------------------
 H = np.identity(nc)
-for i in range(20):  # takuma
-    H[i, i] = 0.0
+# for i in range(20):  # takuma
+#     H[i, i] = 0.0
 # H = get_h_full_coverage()
 nobs = H.shape[0]
+R = get_r_luyu()
+assert R.shape == (nobs, nobs)
 yo = np.zeros((nr, nobs))
 eta = np.zeros((nr, nobs))
 hx = np.zeros((nr, nobs))
 for i in range(nobs):
-  # Compute error as a percentage of climatological variance
-  eta[:, i] = np.random.normal(mu, sigma, nr)
+  # eta[:, i] = np.random.normal(mu, sigma, nr)
+  eta[:, i] = np.random.normal(mu, R[i, i] ** 0.5, nr)
 for j in range(nr):
   # (Could apply H(x_nature) here):
   hx[j, :] = H @ x_nature[j, :]

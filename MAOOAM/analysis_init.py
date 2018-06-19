@@ -7,6 +7,7 @@ from module_obs_network import get_h_full_coverage
 from module_constants import get_x_std, get_static_b
 from sys import argv
 from exp_params import SEED
+from read_r_matrix import get_r_luyu
 
 #-----------------------------------------------------------------------
 # Usage:
@@ -81,7 +82,6 @@ das.t0 = das.t[0]
 das.edim = 6
 das.ens_bias_init = 0
 das.ens_sigma_init = 0.01
-import pdb; pdb.set_trace()
 das.x0 += np.random.randn(xdim) * das.ens_sigma_init  # truth is like an ensemble member
 
 #-----------------------------------------------------------------------
@@ -105,14 +105,15 @@ B = get_static_b() * sigma_b ** 2
 
 # Set the linear observation operator matrix as the identity by default 
 H = I
-for i in range(20):  # takuma
-    H[i, i] = 0.0
+# for i in range(20):  # takuma
+#     H[i, i] = 0.0
 # H = get_h_full_coverage()
 
 # Set observation error covariance
 nobs = H.shape[0]
 sigma_r = 0.001  # this should match with generate_observations.py
-R = np.identity(nobs) * (sigma_r ** 2)
+R = get_r_luyu()
+# R = np.identity(nobs) * (sigma_r ** 2)
 
 # Set constant matrix for nudging
 const = 0.00003
