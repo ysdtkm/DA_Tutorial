@@ -5,7 +5,7 @@ import numpy as np
 def get_r_luyu():
     n = 36
     r = np.zeros((n, n))
-    with open("binary_const/R_matrix_Luyu_20180619.txt", "r") as f:
+    with open("binary_const/clim_std_Luyu_20180619.txt", "r") as f:
         for i in range(n):
             t = f.readline().strip().replace("D", "E")
             r[i, i] = (float(t) * 0.1) ** 2
