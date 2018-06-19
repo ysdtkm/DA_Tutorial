@@ -54,7 +54,7 @@ eta = np.zeros((nr, nobs))
 hx = np.zeros((nr, nobs))
 for i in range(nobs):
   # eta[:, i] = np.random.normal(mu, sigma, nr)
-  eta[:, i] = np.random.normal(mu, R[i, i] ** 0.5, nr)
+  eta[:, i] = np.random.normal(mu, R[i, i] ** 0.5, nr) * 0
 for j in range(nr):
   # (Could apply H(x_nature) here):
   hx[j, :] = H @ x_nature[j, :]

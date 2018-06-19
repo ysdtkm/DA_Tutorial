@@ -9,7 +9,7 @@ def get_r_luyu(name):
     with open(f"binary_const/clim_std_{name}_20180619.txt", "r") as f:
         for i in range(n):
             t = f.readline().strip().replace("D", "E")
-            r[i, i] = float(t) ** 2
+            r[i, i] = (float(t) * 0.1) ** 2
     return r
 
 if __name__ == "__main__":
