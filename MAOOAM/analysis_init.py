@@ -112,8 +112,8 @@ H = I
 # Set observation error covariance
 nobs = H.shape[0]
 sigma_r = 0.001  # this should match with generate_observations.py
-# R = get_r_luyu()
-R = np.identity(nobs) * (sigma_r ** 2)
+R = get_r_luyu()
+# R = np.identity(nobs) * (sigma_r ** 2)
 
 # Set constant matrix for nudging
 const = 0.00003
