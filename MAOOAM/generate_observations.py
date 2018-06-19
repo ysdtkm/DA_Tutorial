@@ -12,7 +12,7 @@ outfile = 'y_obs.pkl'
 # Note: sigma will be multiplied by nature run climatological standard deviation
 #--------------------------------------------------------------------------------
 mu = 0
-sigma = 1.0
+sigma = 0.001
 np.random.seed(SEED * 2)
 
 #--------------------------------------------------------------------------------
@@ -41,8 +41,10 @@ for i in range(nc):
 #--------------------------------------------------------------------------------
 # Sample the nature run and apply noise
 #--------------------------------------------------------------------------------
-# H = np.identity(nc)
-H = get_h_full_coverage()
+H = np.identity(nc)
+# for i in range(20):  # takuma
+#     H[i, i] = 0.0
+# H = get_h_full_coverage()
 nobs = H.shape[0]
 yo = np.zeros((nr, nobs))
 eta = np.zeros((nr, nobs))
