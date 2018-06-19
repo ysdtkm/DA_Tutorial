@@ -3,4 +3,4 @@ with open("R_matrix_Luyu_20180619.txt", "r") as f:
         t = f.readline()
         if not t:
             break
-        print(t, end="")
+        print(float(t.strip().replace("D", "E")))
