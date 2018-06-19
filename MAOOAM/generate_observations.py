@@ -42,8 +42,8 @@ for i in range(nc):
 # Sample the nature run and apply noise
 #--------------------------------------------------------------------------------
 H = np.identity(nc)
-# for i in range(20):  # takuma
-#     H[i, i] = 0.0
+for i in range(20):  # takuma
+    H[i, i] = 0.0
 # H = get_h_full_coverage()
 nobs = H.shape[0]
 yo = np.zeros((nr, nobs))
