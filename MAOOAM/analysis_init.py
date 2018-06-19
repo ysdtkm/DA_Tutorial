@@ -79,7 +79,7 @@ das.t0 = das.t[0]
 #-----------------------------------------------------------------------
 # Initialize the ensemble
 #-----------------------------------------------------------------------
-das.edim = 22
+das.edim = 37
 das.ens_bias_init = 0
 das.ens_sigma_init = 0.01
 das.x0 += np.random.randn(xdim) * das.ens_sigma_init  # truth is like an ensemble member
@@ -112,8 +112,8 @@ H = I
 # Set observation error covariance
 nobs = H.shape[0]
 sigma_r = 0.001  # this should match with generate_observations.py
-R = get_r_luyu()
-# R = np.identity(nobs) * (sigma_r ** 2)
+# R = get_r_luyu()
+R = np.identity(nobs) * (sigma_r ** 2)
 
 # Set constant matrix for nudging
 const = 0.00003
