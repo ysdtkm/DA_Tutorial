@@ -105,8 +105,8 @@ B = get_static_b() * sigma_b ** 2
 
 # Set the linear observation operator matrix as the identity by default 
 H = I
-for i in range(20):  # takuma
-    H[i, i] = 0.0
+# for i in range(20):  # takuma
+#     H[i, i] = 0.0
 # H = get_h_full_coverage()
 
 # Set observation error covariance
