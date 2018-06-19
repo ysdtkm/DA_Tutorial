@@ -5,7 +5,7 @@ import numpy as np
 def get_r_luyu(name):
     n = 36
     r = np.zeros((n, n))
-    return np.identity(n)
+    return np.identity(n) * 0.1 ** 6
     assert name in ["Luyu", "Kriti"]
     with open(f"binary_const/clim_std_{name}_20180619.txt", "r") as f:
         for i in range(n):
