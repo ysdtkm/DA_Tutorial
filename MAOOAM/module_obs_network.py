@@ -1,5 +1,6 @@
 import sys
 import unittest
+from functools import lru_cache
 import numpy as np
 import pickle
 import matplotlib
@@ -100,6 +101,7 @@ def __get_obs_grid_ocean():
     x2d, y2d = np.meshgrid(x1d, y1d)
     return x2d, y2d
 
+@lru_cache(maxsize=1)
 def __model_state_example():
     xini = np.array([
         4.695340259215241E-002,
