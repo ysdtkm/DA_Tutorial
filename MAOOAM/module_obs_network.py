@@ -76,26 +76,6 @@ def get_grid_val(waves, x, y, is_atm, elem):
         gridval *= L * f0
     return gridval
 
-def __test_get_grid_val():
-    state = __model_state_example()
-    n = 1.5
-    x = 1.2 * np.pi / n  # 0.0 <= x <= 2.0 * pi / n
-    y = 0.8 * np.pi      # 0.0 <= y <= pi
-
-    # get_grid_val() returns one of four variables
-    # {atmosphere|ocean} x {streamfunction|temperature} at point (x, y)
-    # unit: [m^2/s] for streamfunction and [K] for temperature
-    a_psi = get_grid_val(state, x, y, True, "psi")
-    a_tmp = get_grid_val(state, x, y, True, "tmp")
-    o_psi = get_grid_val(state, x, y, False, "psi")
-    o_tmp = get_grid_val(state, x, y, False, "tmp")
-    print(a_psi, a_tmp, o_psi, o_tmp)
-    assert np.isclose(-28390877.979826435, a_psi)
-    assert np.isclose(-6.915992899895785, a_tmp)
-    assert np.isclose(-16019.881464394632, o_psi)
-    assert np.isclose(-39.234272164275836, o_tmp)
-    __test_difference_u_v(n, state)
-
 def __get_obs_grid_atmos():
     n = 1.5
     xmax = 2.0 * np.pi / n
@@ -216,12 +196,6 @@ def get_h_comparison():
             h_mat[j, i] = get_grid_val(state_unit, x, y, is_atms[j], elems[j])
     return h_mat
 
-def __test_h_matrix_conditional_number():
-    h = get_h_full_coverage()
-    print(np.linalg.svd(h)[1])
-    print(np.linalg.cond(h))
-    plot_mat(h)
-
 def plot_mat(mat):
     # plt.imshow(mat, cmap="RdBu_r")
     plt.imshow(mat, norm=matplotlib.colors.SymLogNorm(linthresh=0.1),
@@ -244,19 +218,37 @@ class TestObsNetwork(unittest.TestCase):
                 ptb_x = pivot_x + eps
                 ptb_y = pivot_y + eps
                 if ptb_x < 0.0 or ptb_x > 2.0 * np.pi / n or ptb_y < 0.0 or ptb_y > np.pi:
-                    print("out of range. skip")
                     continue
                 psi_pivot = get_grid_val(state, pivot_x, pivot_y, is_atm, "psi")
                 psi_ptb_x = get_grid_val(state, ptb_x, pivot_y, is_atm, "psi")
                 psi_ptb_y = get_grid_val(state, pivot_x, ptb_y, is_atm, "psi")
                 u = get_grid_val(state, pivot_x, pivot_y, is_atm, "u")
                 v = get_grid_val(state, pivot_x, pivot_y, is_atm, "v")
-                try:
-                    assert np.isclose((psi_ptb_x - psi_pivot) / eps / L, v, atol=1e-6)
-                    assert np.isclose(- (psi_ptb_y - psi_pivot) / eps / L, u, atol=1e-6)
-                except:
-                    cmp = "atm" if is_atm else "ocn"
-                    print("assertion error at %s, i = %d" % (cmp, i))
+                self.assertTrue(np.isclose((psi_ptb_x - psi_pivot) / eps / L, v, atol=1e-6))
+                self.assertTrue(np.isclose(- (psi_ptb_y - psi_pivot) / eps / L, u, atol=1e-6))
+
+    def test_h_matrix_conditional_number(self):
+        h = get_h_full_coverage()
+        plot_mat(h)
+
+    def test_get_grid_val(self):
+        state = model_state_example()
+        n = 1.5
+        x = 1.2 * np.pi / n  # 0.0 <= x <= 2.0 * pi / n
+        y = 0.8 * np.pi      # 0.0 <= y <= pi
+
+        # get_grid_val() returns one of four variables
+        # {atmosphere|ocean} x {streamfunction|temperature} at point (x, y)
+        # unit: [m^2/s] for streamfunction and [K] for temperature
+        a_psi = get_grid_val(state, x, y, True, "psi")
+        a_tmp = get_grid_val(state, x, y, True, "tmp")
+        o_psi = get_grid_val(state, x, y, False, "psi")
+        o_tmp = get_grid_val(state, x, y, False, "tmp")
+        self.assertTrue(np.isclose(-28390877.979826435, a_psi))
+        self.assertTrue(np.isclose(-6.915992899895785, a_tmp))
+        self.assertTrue(np.isclose(-16019.881464394632, o_psi))
+        self.assertTrue(np.isclose(-39.234272164275836, o_tmp))
+
 
 if __name__ == "__main__":
     plot_mat(get_h_comparison())
