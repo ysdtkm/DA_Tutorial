@@ -1,4 +1,5 @@
 import sys
+import unittest
 import numpy as np
 import pickle
 import matplotlib
@@ -95,31 +96,6 @@ def __test_get_grid_val():
     assert np.isclose(-39.234272164275836, o_tmp)
     __test_difference_u_v(n, state)
 
-def __test_difference_u_v(n, state):
-    np.random.seed(SEED * 5)
-    eps = 1.0e-8
-    for is_atm in [True, False]:
-        for i in range(1000):
-            L = 5000000.0 / np.pi
-            pivot_x = np.random.uniform(0, 2.0 * np.pi / n)
-            pivot_y = np.random.uniform(0, np.pi)
-            ptb_x = pivot_x + eps
-            ptb_y = pivot_y + eps
-            if ptb_x < 0.0 or ptb_x > 2.0 * np.pi / n or ptb_y < 0.0 or ptb_y > np.pi:
-                print("out of range. skip")
-                continue
-            psi_pivot = get_grid_val(state, pivot_x, pivot_y, is_atm, "psi")
-            psi_ptb_x = get_grid_val(state, ptb_x, pivot_y, is_atm, "psi")
-            psi_ptb_y = get_grid_val(state, pivot_x, ptb_y, is_atm, "psi")
-            u = get_grid_val(state, pivot_x, pivot_y, is_atm, "u")
-            v = get_grid_val(state, pivot_x, pivot_y, is_atm, "v")
-            try:
-                assert np.isclose((psi_ptb_x - psi_pivot) / eps / L, v, atol=1e-6)
-                assert np.isclose(- (psi_ptb_y - psi_pivot) / eps / L, u, atol=1e-6)
-            except:
-                cmp = "atm" if is_atm else "ocn"
-                print("assertion error at %s, i = %d" % (cmp, i))
-
 def __get_obs_grid_atmos():
     n = 1.5
     xmax = 2.0 * np.pi / n
@@ -181,6 +157,9 @@ def __model_state_example():
         -3.900412687995408E-005,
         -1.753655087903711E-007])
     return xini
+
+def model_state_example():
+    return __model_state_example()
 
 def get_h_full_coverage():
     nobs = 16
@@ -250,6 +229,34 @@ def plot_mat(mat):
     plt.colorbar()
     plt.savefig("tmp.png")
     plt.close()
+
+class TestObsNetwork(unittest.TestCase):
+    def test_difference_u_v(self):
+        n = 1.5
+        state = model_state_example()
+        np.random.seed(SEED * 5)
+        eps = 1.0e-8
+        for is_atm in [True, False]:
+            for i in range(1000):
+                L = 5000000.0 / np.pi
+                pivot_x = np.random.uniform(0, 2.0 * np.pi / n)
+                pivot_y = np.random.uniform(0, np.pi)
+                ptb_x = pivot_x + eps
+                ptb_y = pivot_y + eps
+                if ptb_x < 0.0 or ptb_x > 2.0 * np.pi / n or ptb_y < 0.0 or ptb_y > np.pi:
+                    print("out of range. skip")
+                    continue
+                psi_pivot = get_grid_val(state, pivot_x, pivot_y, is_atm, "psi")
+                psi_ptb_x = get_grid_val(state, ptb_x, pivot_y, is_atm, "psi")
+                psi_ptb_y = get_grid_val(state, pivot_x, ptb_y, is_atm, "psi")
+                u = get_grid_val(state, pivot_x, pivot_y, is_atm, "u")
+                v = get_grid_val(state, pivot_x, pivot_y, is_atm, "v")
+                try:
+                    assert np.isclose((psi_ptb_x - psi_pivot) / eps / L, v, atol=1e-6)
+                    assert np.isclose(- (psi_ptb_y - psi_pivot) / eps / L, u, atol=1e-6)
+                except:
+                    cmp = "atm" if is_atm else "ocn"
+                    print("assertion error at %s, i = %d" % (cmp, i))
 
 if __name__ == "__main__":
     plot_mat(get_h_comparison())
