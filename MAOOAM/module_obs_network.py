@@ -70,6 +70,8 @@ def get_grid_val(waves, x, y, is_atm, elem):
                 gridval += waves[j_all] * 2.0 * np.sin(0.5 * hos[j] * n * x) * np.sin(pos[j] * y)
     if elem == "tmp":
         gridval *= (f0 ** 2 * L ** 2) / R
+        if is_atm:
+            gridval *= 2
     elif elem == "psi":
         gridval *= L ** 2 * f0
     else:
@@ -245,10 +247,9 @@ class TestObsNetwork(unittest.TestCase):
         o_psi = get_grid_val(state, x, y, False, "psi")
         o_tmp = get_grid_val(state, x, y, False, "tmp")
         self.assertTrue(np.isclose(-28390877.979826435, a_psi))
-        self.assertTrue(np.isclose(-6.915992899895785, a_tmp))
+        self.assertTrue(np.isclose(-6.915992899895785 * 2.0, a_tmp))
         self.assertTrue(np.isclose(-16019.881464394632, o_psi))
         self.assertTrue(np.isclose(-39.234272164275836, o_tmp))
-
 
 if __name__ == "__main__":
     plot_mat(get_h_comparison())
