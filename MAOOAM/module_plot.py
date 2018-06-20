@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import unittest
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
@@ -93,12 +94,6 @@ def get_bv_dim(cov):
     bv_dim = np.sum(singvals) ** 2 / np.sum(singvals ** 2)
     return bv_dim
 
-def __test_plot_time_colormap():
-    np.random.seed(SEED * 6)
-    nt = 100
-    dat = np.random.randn(nt, NDIM)
-    plot_time_colormap(dat, "img/tmp.pdf", None, None, "test")
-
 def zero_out_off_diag_blocks(cov):
     assert cov.shape == (NDIM, NDIM)
     NATM = 20
@@ -161,10 +156,13 @@ def read_and_plot_mean_bcov():
         plot_mean_bcov(mean_cov / np.max(np.linalg.eigvalsh(mean_cov)), "img/bcov_%05d.pdf" % intvl, title, True)
         plot_eig_bcov(mean_cov, "img/bcov_%05d_eigval.pdf" % intvl, "img/bcov_%05d_eigvec.pdf" % intvl, intvl)
 
+class TestPlot(unittest.TestCase):
+    def test_plot_time_colormap(self):
+        np.random.seed(SEED * 6)
+        nt = 100
+        dat = np.random.randn(nt, NDIM)
+        plot_time_colormap(dat, "tmp.pdf", None, None, "test")
+
 if __name__ == "__main__":
     np.set_printoptions(formatter={'float': '{: 10.6g}'.format}, threshold=2000, linewidth=150)
-    # methods = sys.argv[1:]
-    # __sample_read_files(methods)
-    # if "ETKF" in methods or "hybrid" in methods:
-    #     read_and_plot_bcov()
     read_and_plot_mean_bcov()
