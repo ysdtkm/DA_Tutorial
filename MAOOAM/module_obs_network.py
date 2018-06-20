@@ -223,6 +223,20 @@ def get_h_full_coverage():
             h_mat[j, i] = get_grid_val(state_unit, xgrid.flatten()[k], ygrid.flatten()[k], is_atm, elem)
     return h_mat
 
+def get_h_comparison():
+    nobs = 8
+    h_mat = np.empty((nobs, NDIM))
+    x = 2.2988646295052755
+    y = 2.246833659321132
+    for i in range(NDIM):
+        state_unit = np.zeros(NDIM)
+        state_unit[i] = 1.0
+        elems = ["u", "v", "psi", "tmp", "u", "v", "psi", "tmp"]
+        is_atms = [True] * 4 + [False] * 4
+        for j in range(nobs):
+            h_mat[j, i] = get_grid_val(state_unit, x, y, is_atms[j], elems[j])
+    return h_mat
+
 def __test_h_matrix_conditional_number():
     h = get_h_full_coverage()
     print(np.linalg.svd(h)[1])
@@ -230,13 +244,14 @@ def __test_h_matrix_conditional_number():
     plot_mat(h)
 
 def plot_mat(mat):
-    plt.imshow(mat, cmap="RdBu_r")
-    # plt.imshow(mat, norm=matplotlib.colors.SymLogNorm(linthresh=0.1),
-    #            cmap="RdBu_r")
+    # plt.imshow(mat, cmap="RdBu_r")
+    plt.imshow(mat, norm=matplotlib.colors.SymLogNorm(linthresh=0.1),
+               cmap="RdBu_r")
     plt.colorbar()
     plt.savefig("tmp.png")
     plt.close()
 
 if __name__ == "__main__":
-    __test_h_matrix_conditional_number()
+    plot_mat(get_h_comparison())
+    print(get_h_comparison())
 
