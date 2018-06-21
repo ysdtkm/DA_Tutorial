@@ -4,7 +4,7 @@ import sys
 from util_parallel import Change, shell, exec_parallel
 import numpy as np
 import matplotlib
-matplotlib.use("Agg")
+matplotlib.use("pdf")
 import matplotlib.pyplot as plt
 
 def main():
@@ -27,7 +27,6 @@ def plot_reduced_rmse(params1, params2, res):
         for i2 in range(n2):
             res_npy[:, i1, i2] = res[i1][i2]
     for ir in range(nr):
-        plt.tight_layout()
         fig, ax = plt.subplots()
         cm = plt.imshow(res_npy[ir, :, :])
         # cm.set_clim(0, 0.05)
@@ -43,7 +42,6 @@ def plot_reduced_rmse(params1, params2, res):
 
         if n2 >= 2:
             continue
-        plt.tight_layout()
         plt.semilogx(params1, res_npy[ir, :, 0])
         plt.xlabel("sigma_b")
         plt.ylim([0, 0.01])

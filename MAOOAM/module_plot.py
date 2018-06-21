@@ -4,7 +4,7 @@ import sys
 import unittest
 import numpy as np
 import matplotlib
-matplotlib.use("Agg")
+matplotlib.use("pdf")
 import matplotlib.pyplot as plt
 from class_state_vector import state_vector
 from class_da_system import da_system
@@ -16,7 +16,6 @@ def plot_time_colormap(dat, img_name, vmin=None, vmax=None, title="", cmap="RdBu
     assert dat.__class__ == np.ndarray
     assert len(dat.shape) == 2
     assert dat.shape[1] == NDIM
-    plt.tight_layout()
     plt.rcParams["font.size"] = 16
     norm = matplotlib.colors.SymLogNorm(linthresh=0.001 * vmax) if log else None
     cm = plt.imshow(dat, aspect="auto", cmap=cmap, origin="bottom", norm=norm,
@@ -31,7 +30,6 @@ def plot_time_colormap(dat, img_name, vmin=None, vmax=None, title="", cmap="RdBu
     plt.close()
 
 def plot_mean_bcov(bcov, img_name, title, log=False):
-    plt.tight_layout()
     plt.rcParams["font.size"] = 16
     vmax = 1.0
     norm = matplotlib.colors.SymLogNorm(linthresh=0.001 * vmax) if log else None
@@ -45,7 +43,6 @@ def plot_mean_bcov(bcov, img_name, title, log=False):
     plt.close()
 
 def plot_eig_bcov(bcov, img_name_eigval, img_name_eigvec, intvl):
-    plt.tight_layout()
     plt.rcParams["font.size"] = 16
     eigval, eigvec = np.linalg.eigh(bcov)
     idx = eigval.argsort()[::-1]
@@ -102,7 +99,7 @@ def zero_out_off_diag_blocks(cov):
     cov2[NATM:, :NATM] = 0.0
     return cov2
 
-def __sample_read_files(methods):
+def plot_all(methods):
     vlim_raw = [-0.05, 0.1]
     vlim_diff = [-0.15, 0.15]
     nature_file ='x_nature.pkl'
@@ -165,4 +162,5 @@ class TestPlot(unittest.TestCase):
 
 if __name__ == "__main__":
     np.set_printoptions(formatter={'float': '{: 10.6g}'.format}, threshold=2000, linewidth=150)
-    read_and_plot_mean_bcov()
+    plot_all(sys.argv[1:])
+    # read_and_plot_mean_bcov()
