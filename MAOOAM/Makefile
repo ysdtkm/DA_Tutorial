@@ -49,7 +49,7 @@ dep_plot = ETKF
 out_plot = img rmse_*.npy
 cmd_plot = mkdir -p img/ETKF && python module_plot.py ETKF && python plot_error.py ETKF
 # cmd_plot = mkdir -p img/3DVar img/ETKF img/hybrid && python module_plot.py ETKF hybrid 3DVar \
-#            && python plot_error.py 3DVar && python plot_error.py ETKF && python plot_error.py hybrid
+#           && python plot_error.py 3DVar && python plot_error.py ETKF && python plot_error.py hybrid
 
 src_tex =
 dep_tex = plot

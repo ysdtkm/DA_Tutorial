@@ -163,4 +163,4 @@ class TestPlot(unittest.TestCase):
 if __name__ == "__main__":
     np.set_printoptions(formatter={'float': '{: 10.6g}'.format}, threshold=2000, linewidth=150)
     plot_all(sys.argv[1:])
-    # read_and_plot_mean_bcov()
+    read_and_plot_bcov()
