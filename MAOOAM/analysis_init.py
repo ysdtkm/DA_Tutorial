@@ -7,7 +7,7 @@ from module_obs_network import get_h_full_coverage
 from module_constants import get_x_std, get_static_b
 from sys import argv
 from exp_params import SEED
-from read_r_matrix import get_r_luyu
+from read_r_matrix import get_r_luyu, get_h_b_ht
 
 #-----------------------------------------------------------------------
 # Usage:
@@ -79,7 +79,7 @@ das.t0 = das.t[0]
 #-----------------------------------------------------------------------
 # Initialize the ensemble
 #-----------------------------------------------------------------------
-das.edim = 6
+das.edim = 37
 das.ens_bias_init = 0
 das.ens_sigma_init = 0.01
 das.x0 += np.random.randn(xdim) * das.ens_sigma_init  # truth is like an ensemble member
@@ -104,15 +104,15 @@ B = get_static_b() * sigma_b ** 2
 #     [-0.02400967,  0.00074236,  0.03891405]]
 
 # Set the linear observation operator matrix as the identity by default 
-H = I
+# H = I
 # for i in range(20):  # takuma
 #     H[i, i] = 0.0
-# H = get_h_full_coverage()
+H = get_h_full_coverage()
 
 # Set observation error covariance
 nobs = H.shape[0]
-sigma_r = 0.001  # this should match with generate_observations.py
-R = get_r_luyu("Kriti")
+# sigma_r = 0.001  # this should match with generate_observations.py
+R = get_h_b_ht()
 # R = np.identity(nobs) * (sigma_r ** 2)
 
 # Set constant matrix for nudging
@@ -141,7 +141,7 @@ print(das.getH())
 # Initialize the timesteps
 #-----------------------------------------------------------------------
 t_nature = sv.getTimes()
-acyc_step = 10                        # (how frequently to perform an analysis)
+acyc_step = 250                        # (how frequently to perform an analysis)
 dtau = (t_nature[acyc_step] - t_nature[0])
 fcst_step = acyc_step                      # (may need to change for 4D DA methods)
 fcst_dt = dtau / fcst_step

@@ -3,7 +3,7 @@ from class_state_vector import state_vector
 from class_obs_data import obs_data
 from module_obs_network import get_h_full_coverage, NDIM
 from exp_params import SEED
-from read_r_matrix import get_r_luyu
+from read_r_matrix import get_r_luyu, get_h_b_ht
 
 infile = 'x_nature.pkl'
 outfile = 'y_obs.pkl'
@@ -42,12 +42,12 @@ for i in range(nc):
 #--------------------------------------------------------------------------------
 # Sample the nature run and apply noise
 #--------------------------------------------------------------------------------
-H = np.identity(nc)
+# H = np.identity(nc)
 # for i in range(20):  # takuma
 #     H[i, i] = 0.0
-# H = get_h_full_coverage()
+H = get_h_full_coverage()
 nobs = H.shape[0]
-R = get_r_luyu("Kriti")
+R = get_h_b_ht()
 assert R.shape == (nobs, nobs)
 yo = np.zeros((nr, nobs))
 eta = np.zeros((nr, nobs))
