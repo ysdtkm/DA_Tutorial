@@ -31,7 +31,6 @@ def plot_reduced_rmse(params1, params2, ress, taus):
                 res_npy[ie, :, i1, i2] = ress[exp][i1][i2]
     for ir in range(nr):
         plt.rcParams["font.size"] = 16
-        plt.tight_layout()
         for ie, exp in enumerate(ress):
             plt.loglog(params1, res_npy[ie, ir, :, 0], label=taus[exp])
         plt.xlabel("sqrt(a) = sqrt(spectral radius of B)")

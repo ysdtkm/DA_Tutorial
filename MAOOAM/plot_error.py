@@ -28,7 +28,6 @@ def main():
     np.save("rmse_%s.npy" % method, rmses)
 
 def plot_rmse_all(nature, freerun, analysis, method, slice, img_name):
-    plt.tight_layout()
     plt.rcParams["font.size"] = 16
     plt.plot(nature.getTimes(),
              np.linalg.norm(freerun.getTrajectory()[slice] - nature.getTrajectory()[slice],
