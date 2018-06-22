@@ -75,7 +75,7 @@ def exec_single_job(wdir_base, dir_template, p1_fmt, p2_fmt, p1_changes, p2_chan
     _, ext = os.path.splitext(out_file)
     try:
         shell("cp -f %s %s/out/%s_%s%s" % (out_file, wdir_base, s1, s2, ext))
-        res = np.load("rmse_3DVar.npy")
+        res = np.load("rmse_hybrid.npy")
         print("%s done" % dname)
     except:
         res = np.empty(5)
