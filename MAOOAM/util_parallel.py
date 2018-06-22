@@ -67,7 +67,7 @@ def exec_single_job(wdir_base, dir_template, p1_fmt, p2_fmt, p1_changes, p2_chan
         c1.rewrite_file_with_param(p1)
     for c2 in p2_changes:
         c2.rewrite_file_with_param(p2)
-    sout, serr = shell(command)
+    sout, serr = shell(command, check=False)
     with open("stdout", "w") as f:
         f.write(sout)
     with open("stderr", "w") as f:
