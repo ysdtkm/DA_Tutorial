@@ -10,7 +10,7 @@ from util_parallel import Change, shell, exec_parallel
 
 def main():
     wdir_base = sys.argv[1]
-    params1 = list(np.geomspace(0.0001, 0.003, 10))
+    params1 = list(np.geomspace(0.0005, 0.005, 10))
     params2 = [1]
     changes1 = [Change("analysis_init.py", 100, "sigma_b", "sigma_b = %f")]
     changes2 = []
@@ -49,9 +49,9 @@ def plot_reduced_rmse(params1, params2, res):
 
         if n2 >= 2:
             continue
-        plt.semilogx(params1, res_npy[ir, :, 0])
+        plt.loglog(params1, res_npy[ir, :, 0])
         plt.xlabel("sigma_b")
-        plt.ylim([0, 0.01])
+        # plt.ylim([0, 0.01])
         plt.ylabel("RMS error")
         plt.savefig("out/rmse_onedim_%s.pdf" % names[ir])
         plt.close()
