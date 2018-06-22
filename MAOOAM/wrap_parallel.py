@@ -19,6 +19,8 @@ def main():
     plot_reduced_rmse(params1, params2, res)
 
 def plot_reduced_rmse(params1, params2, res):
+    with open("plot_reduced_rmse.pkl", "wb" as f:
+        pickle.dump([params1, params2, res], f)
     n1, n2 = len(params1), len(params2)
     nr = len(res[0][0])
     res_npy = np.empty((nr, n1, n2))
