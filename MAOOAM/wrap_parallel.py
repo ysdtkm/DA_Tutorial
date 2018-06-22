@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 def main():
     wdir_base = sys.argv[1]
     params1 = list(np.geomspace(0.0001, 0.003, 10))
-    params2 = [None]
+    params2 = [1]
     changes1 = [Change("analysis_init.py", 100, "sigma_b", "sigma_b = %f")]
     changes2 = []
     shell("mkdir -p %s/out" % wdir_base)
