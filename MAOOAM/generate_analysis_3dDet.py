@@ -95,7 +95,6 @@ for i in range(0,maxit-acyc_step,acyc_step):
   # Compute analysis
   #----------------------------------------------
   xa, KH = das.compute_analysis(xf,yo)
-  import pdb; pdb.set_trace()
   assert not np.any(np.isnan(xa)), f"analysis step caused np.nan at step {i // acyc_step}"
 
   # Fill in the missing timesteps with the forecast from the previous analysis IC's
