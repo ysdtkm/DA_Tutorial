@@ -54,7 +54,7 @@ cmd_plot = mkdir -p img/3DVar && python module_plot.py 3DVar && python plot_erro
 src_tex =
 dep_tex = plot
 out_tex = out.pdf
-cmd_tex = ~/repos/works/2018/dir_to_latex/main.py img 9
+cmd_tex = ~/repos/works/2018/dir_to_latex/main.py img 9 && mv out.pdf /lustre/tyoshida/shrt/sync/out.pdf
 
 # ===============================================
 # end of settings
