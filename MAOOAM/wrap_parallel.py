@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
 import sys
-from util_parallel import Change, shell, exec_parallel
+import pickle
 import numpy as np
 import matplotlib
 matplotlib.use("pdf")
 import matplotlib.pyplot as plt
+from util_parallel import Change, shell, exec_parallel
 
 def main():
     wdir_base = sys.argv[1]
