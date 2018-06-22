@@ -10,7 +10,7 @@ from util_parallel import Change, shell, exec_parallel
 
 def main():
     wdir_base = sys.argv[1]
-    params1 = list(np.geomspace(0.0005, 0.005, 10))
+    params1 = list(np.geomspace(0.001, 0.03, 10))
     params2 = [1]
     changes1 = [Change("analysis_init.py", 100, "sigma_b", "sigma_b = %f")]
     changes2 = []
