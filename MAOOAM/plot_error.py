@@ -15,7 +15,6 @@ def main():
     analysis_file = 'x_analysis_{method}.pkl'.format(method=method)
     das = da_system()
     das = das.load(analysis_file)
-    import pdb; pdb.set_trace()
     analysis = das.getStateVector()
     slices = {"rmse_atmos_psi": np.s_[:, 0:10],
               "rmse_atmos_temp": np.s_[:, 10:20],

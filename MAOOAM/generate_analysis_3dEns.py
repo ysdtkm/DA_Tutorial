@@ -91,7 +91,7 @@ n_cyc_step = int(np.ceil((maxit - acyc_step) / acyc_step))
 Pb_hist = np.empty((n_cyc_step, xdim, xdim))
 for j, i in enumerate(range(0,maxit-acyc_step,acyc_step)):
 
-  assert not np.any(np.isnan(Xa))
+  assert not np.any(np.isnan(Xa)), "analysis includes np.nan"
   #----------------------------------------------
   # Run forecast model for this analysis cycle:
   #----------------------------------------------
@@ -108,7 +108,7 @@ for j, i in enumerate(range(0,maxit-acyc_step,acyc_step)):
     # Run model run for ensemble member k
     assert len(t) == acyc_step + 1
     xf_4d_k =  model.run(Xa[:,k].A1,t)
-    assert not np.any(np.isnan(xf_4d_k))
+    assert not np.any(np.isnan(xf_4d_k)), "forecast step caused np.nan"
     # Get last timestep of the forecast
     Xf[:,k] = np.transpose(np.matrix(xf_4d_k[-1,:]))
     # Compute forecast ensemble mean

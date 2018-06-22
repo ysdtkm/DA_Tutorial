@@ -81,7 +81,7 @@ for i in range(0,maxit-acyc_step,acyc_step):
 
   # Run the model
   xf_4d =  model.run(xa,t)
-  assert not np.any(np.isnan(xf_4d))
+  assert not np.any(np.isnan(xf_4d)), "forecast step caused np.nan"
   # Get last timestep of the forecast
   xf = xf_4d[-1,:]
 
@@ -95,7 +95,7 @@ for i in range(0,maxit-acyc_step,acyc_step):
   # Compute analysis
   #----------------------------------------------
   xa, KH = das.compute_analysis(xf,yo)
-  assert not np.any(np.isnan(xa))
+  assert not np.any(np.isnan(xa)), "analysis step caused np.nan"
 
   # Fill in the missing timesteps with the forecast from the previous analysis IC's
   xa_history[i:i+acyc_step,:] = xf_4d[0:acyc_step,:]
