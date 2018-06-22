@@ -160,7 +160,11 @@ class TestPlot(unittest.TestCase):
         dat = np.random.randn(nt, NDIM)
         plot_time_colormap(dat, "tmp.pdf", None, None, "test")
 
-if __name__ == "__main__":
+def main():
     np.set_printoptions(formatter={'float': '{: 10.6g}'.format}, threshold=2000, linewidth=150)
     plot_all(sys.argv[1:])
-    read_and_plot_bcov()
+    if sys.argv[1] in ["ETKF", "hybrid"]:
+        read_and_plot_bcov()
+
+if __name__ == "__main__":
+    main()
