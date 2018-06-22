@@ -82,7 +82,7 @@ das.t0 = das.t[0]
 das.edim = 15
 das.ens_bias_init = 0
 das.ens_sigma_init = 0.01
-# das.x0 += np.random.randn(xdim) * das.ens_sigma_init  # truth is like an ensemble member
+das.x0 += np.random.randn(xdim) * das.ens_sigma_init  # truth is like an ensemble member
 
 #-----------------------------------------------------------------------
 # Initialize 4D-Var parameters
@@ -97,7 +97,7 @@ das.outer_loops = 3
 I = np.identity(xdim)
 
 # Set background error covariance
-sigma_b = 0.1
+sigma_b = 0.0001
 B = get_static_b() * sigma_b ** 2
 #B = [[ 0.03562653,  0.03319132, -0.02400967],
 #     [ 0.03319132,  0.05441897,  0.00074236],
