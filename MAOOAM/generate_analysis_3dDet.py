@@ -71,7 +71,7 @@ xa_history[:] = np.nan
 KH_history = []
 KH_idx = []
 for i in range(0,maxit-acyc_step,acyc_step):
- 
+
   #----------------------------------------------
   # Run forecast model for this analysis cycle:
   #----------------------------------------------
@@ -80,9 +80,10 @@ for i in range(0,maxit-acyc_step,acyc_step):
 # print('t_nature[i+acyc_step] = ', t_nature[i+acyc_step])
 
   # Run the model
-  xf_4d =  model.run(xa,t) 
+  xf_4d =  model.run(xa,t)
+  assert not np.any(np.isnan(xf_4d))
   # Get last timestep of the forecast
-  xf = xf_4d[-1,:] 
+  xf = xf_4d[-1,:]
 
   #----------------------------------------------
   # Get the observations for this analysis cycle
@@ -94,6 +95,7 @@ for i in range(0,maxit-acyc_step,acyc_step):
   # Compute analysis
   #----------------------------------------------
   xa, KH = das.compute_analysis(xf,yo)
+  assert not np.any(np.isnan(xa))
 
   # Fill in the missing timesteps with the forecast from the previous analysis IC's
   xa_history[i:i+acyc_step,:] = xf_4d[0:acyc_step,:]
@@ -105,7 +107,7 @@ for i in range(0,maxit-acyc_step,acyc_step):
   # Archive the KH matrix
   KH_history.append(deepcopy(KH))
   KH_idx.append(i+acyc_step)
- 
+
 das.setKH(KH_history,KH_idx)
 
 print('Last background error covariance matrix B = ')
