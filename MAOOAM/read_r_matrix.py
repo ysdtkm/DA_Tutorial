@@ -20,7 +20,6 @@ def get_h_b_ht():
     h = get_h_full_coverage()
     diag_b_10_percent = get_r_luyu("Luyu")
     hbht = h @ diag_b_10_percent @ h.T
-    # ttk diag_r = np.array([1.0] * 10 + [1.0] * 10 + [0.01] * 8 + [0.1] * 8) ** 2
     return np.diag(np.diag(hbht))
 
 def print_h_b_ht():
