@@ -35,8 +35,8 @@ def plot_reduced_rmse(params1, params2, res):
             res_npy[:, i1, i2] = res[i1][i2]
     for ir in range(nr):
         fig, ax = plt.subplots()
-        cm = plt.imshow(res_npy[ir, :, :])
-        # cm.set_clim(0, 0.05)
+        cm = plt.imshow(res_npy[ir, :, :], cmap="Reds")
+        cm.set_clim(0, 0.2)
         plt.colorbar(cm)
         plt.xlabel("Ensemble size")
         ax.set_xticks(range(n2))
