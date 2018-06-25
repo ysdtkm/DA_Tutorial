@@ -67,7 +67,8 @@ _,ydim = np.shape(y_obs)
 #-----------------------------------------------------------------------
 # Initialize the da system
 #-----------------------------------------------------------------------
-das = da_system()
+alpha = 0.1
+das = da_system(alpha=alpha)
 das.setStateVector(sv)
 das.setObsData(obs)
 das.xdim = xdim
@@ -97,7 +98,7 @@ das.outer_loops = 3
 I = np.identity(xdim)
 
 # Set background error covariance
-sigma_b = 0.0003
+sigma_b = 0.002
 B = get_static_b() * sigma_b ** 2
 #B = [[ 0.03562653,  0.03319132, -0.02400967],
 #     [ 0.03319132,  0.05441897,  0.00074236],

@@ -10,12 +10,12 @@ from util_parallel import Change, shell, exec_parallel
 
 def main():
     wdir_base = sys.argv[1]
-    params1 = list(np.geomspace(0.0001, 0.001, 20))
-    params2 = [1]
-    changes1 = [Change("analysis_init.py", 100, "sigma_b", "sigma_b = %f")]
-    changes2 = []
+    params1 = [0.0, 0.1, 0.2, 0.5]
+    params2 = list(range(2, 38))
+    changes1 = [Change("analysis_init.py", 70, "alpha", "alpha = %f")]
+    changes2 = [Change("analysis_init.py", 83, "edim", "edim = %d")]
     shell("mkdir -p %s/out" % wdir_base)
-    res = exec_parallel(wdir_base, "template", params1, params2, "sigma_b_%.06f", "none_%d",
+    res = exec_parallel(wdir_base, "template", params1, params2, "alpha_%.02f", "ens_%d",
                         changes1, changes2, "make", "out.pdf")
     plot_reduced_rmse(params1, params2, res)
 
