@@ -11,7 +11,8 @@ from util_parallel import Change, shell, exec_parallel
 def main():
     wdir_base = sys.argv[1]
     params1 = [0.0, 0.1, 0.2, 0.5]
-    params2 = list(range(2, 38))
+    # params2 = list(range(2, 38))
+    params2 = [2, 5, 10, 20, 37]
     changes1 = [Change("analysis_init.py", 70, "alpha", "alpha = %f")]
     changes2 = [Change("analysis_init.py", 83, "das.edim", "das.edim = %d")]
     shell("mkdir -p %s/out" % wdir_base)
