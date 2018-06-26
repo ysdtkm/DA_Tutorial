@@ -184,7 +184,17 @@ def get_h_full_coverage():
             else:
                 raise Exception("__get_h_full_coverage overflow")
             h_mat[j, i] = get_grid_val(state_unit, xgrid.flatten()[k], ygrid.flatten()[k], is_atm, elem)
-    return h_mat
+    return mask_h_mat(h_mat, mask="ocn")
+
+def mask_h_mat(h, mask):
+    nobs = h.shape[0]
+    assert nobs == 36
+    assert mask in ["atm", "ocn", None]
+    if mask == "atm":
+        return h[20:, :]
+    elif mask == "ocn":
+        return h[:20, :]
+    return h
 
 def get_h_comparison():
     nobs = 8
