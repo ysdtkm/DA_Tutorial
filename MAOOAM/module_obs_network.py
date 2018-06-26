@@ -184,7 +184,7 @@ def get_h_full_coverage():
             else:
                 raise Exception("__get_h_full_coverage overflow")
             h_mat[j, i] = get_grid_val(state_unit, xgrid.flatten()[k], ygrid.flatten()[k], is_atm, elem)
-    return mask_h_mat(h_mat, mask="ocn")
+    return mask_h_mat(h_mat, mask="ocn")  # ttk
 
 def mask_h_mat(h, mask):
     nobs = h.shape[0]
