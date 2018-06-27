@@ -21,7 +21,7 @@ def main_hybrid():
 
 def main_3dvar():
     wdir_base = sys.argv[1]
-    params1 = list(np.geomspace(0.0003, 0.01, 20))
+    params1 = list(np.geomspace(0.001, 0.1, 20))
     params2 = [1]
     changes1 = [Change("analysis_init.py", 101, "sigma_b", "sigma_b = %f")]
     changes2 = []
