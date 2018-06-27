@@ -8,7 +8,7 @@ matplotlib.use("pdf")
 import matplotlib.pyplot as plt
 from util_parallel import Change, shell, exec_parallel
 
-def main():
+def main_hybrid():
     wdir_base = sys.argv[1]
     params1 = [0.0, 0.1, 0.2, 0.5]
     params2 = list(range(2, 38))
@@ -16,6 +16,17 @@ def main():
     changes2 = [Change("analysis_init.py", 83, "das.edim", "das.edim = %d")]
     shell("mkdir -p %s/out" % wdir_base)
     res = exec_parallel(wdir_base, "template", params1, params2, "alpha_%.02f", "ens_%02d",
+                        changes1, changes2, "make", "out.pdf")
+    plot_reduced_rmse(params1, params2, res)
+
+def main_3dvar():
+    wdir_base = sys.argv[1]
+    params1 = list(np.geomspace(0.0003, 0.01, 20))
+    params2 = [1]
+    changes1 = [Change("analysis_init.py", 101, "sigma_b", "sigma_b = %f")]
+    changes2 = []
+    shell("mkdir -p %s/out" % wdir_base)
+    res = exec_parallel(wdir_base, "template", params1, params2, "sigma_b_%.06f", "none_%d",
                         changes1, changes2, "make", "out.pdf")
     plot_reduced_rmse(params1, params2, res)
 
@@ -38,10 +49,10 @@ def plot_reduced_rmse(params1, params2, res):
         cm = plt.imshow(res_npy[ir, :, :], cmap="Reds")
         cm.set_clim(0, 0.2)
         plt.colorbar(cm)
-        plt.xlabel("Ensemble size")
+        plt.xlabel("none")
         ax.set_xticks(range(n2))
         ax.set_xticklabels(params2, rotation=90)
-        plt.ylabel("Alpha parameter")
+        plt.ylabel("sigma_b")
         ax.set_yticks(range(n1))
         ax.set_yticklabels(params1)
         plt.savefig("out/rmse_%s.pdf" % names[ir])
