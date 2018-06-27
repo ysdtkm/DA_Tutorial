@@ -98,7 +98,7 @@ das.outer_loops = 3
 I = np.identity(xdim)
 
 # Set background error covariance
-sigma_b = 0.002
+sigma_b = 0.0002
 B = get_static_b() * sigma_b ** 2
 
 # Set the linear observation operator matrix as the identity by default 
