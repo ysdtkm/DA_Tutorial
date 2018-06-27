@@ -68,5 +68,5 @@ def plot_reduced_rmse(params1, params2, res):
         plt.close()
 
 if __name__ == "__main__":
-    main()
+    main_3dvar()
 
