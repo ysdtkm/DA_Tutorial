@@ -137,12 +137,29 @@ def read_and_plot_bcov():
     plot_eig_bcov(mean_cov, "img/bcov_eigval.pdf", "img/bcov_eigvec.pdf", 0)
     np.save("mean_b_cov.npy", mean_cov)
 
-    n = Pb_hist.shape[1]
-    mean_corr = np.zeros((n, n))
-    for t in range(counter // 2, counter):
-        mean_corr += cov_to_corr(Pb_hist[t, :, :])
+    me, sd, fl = cov_to_mean_and_std_corr(Pb_hist)
     title = "B corr (sample = %d)" % (counter // 2)
-    plot_mean_bcov(mean_corr / (counter / 2), "img/bcorr.pdf", title)
+    plot_mean_bcov(me, "img/bcorr.pdf", title)
+
+    plot_mean_bcov(sd, "img/std_corr.pdf", "Stdv of ens corr")
+    plot_mean_bcov(fl, "img/flow_dependency.pdf", "Flow dependency of ens corr")
+
+def cov_to_mean_and_std_corr(pb_hist):
+    assert len(pb_hist.shape) == 3
+    nt = pb_hist.shape[0]
+    corr_hist = np.empty_like(pb_hist)
+    for i in range(nt):
+        corr_hist[i, :, :] = cov_to_corr(pb_hist[i, :, :])
+    corr_hist_cut = corr_hist[nt // 2:, :, :]
+    mean_corr = np.mean(corr_hist_cut, axis=0)
+    stdv_corr = np.std(corr_hist_cut, axis=0)
+    rms_corr = np.mean(corr_hist_cut ** 2, axis=0) ** 0.5
+    assert np.all(rms_corr >= mean_corr)
+    assert np.all(rms_corr >= stdv_corr)
+    assert np.all(rms_corr > 1.0e-8)
+    flow_dependence = stdv_corr / rms_corr
+    assert np.all(flow_dependence <= 1.0 + 1.0e-4)
+    return mean_corr, stdv_corr, flow_dependence
 
 def read_and_plot_mean_bcov():
     for intvl, name in [(1, "t0644"), (10, "t0645"), (100, "t0646"), (1000, "t0647")]:
