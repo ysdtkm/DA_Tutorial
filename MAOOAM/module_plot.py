@@ -154,11 +154,10 @@ def cov_to_mean_and_std_corr(pb_hist):
     mean_corr = np.mean(corr_hist_cut, axis=0)
     stdv_corr = np.std(corr_hist_cut, axis=0)
     rms_corr = np.mean(corr_hist_cut ** 2, axis=0) ** 0.5
-    assert np.all(rms_corr >= mean_corr)
-    assert np.all(rms_corr >= stdv_corr)
-    assert np.all(rms_corr > 1.0e-8)
+    eps = 1.0e-8
+    assert np.all(rms_corr > eps)
     flow_dependence = stdv_corr / rms_corr
-    assert np.all(flow_dependence <= 1.0 + 1.0e-4)
+    assert np.all(flow_dependence < 1.0 + eps)
     return mean_corr, stdv_corr, flow_dependence
 
 def read_and_plot_mean_bcov():
