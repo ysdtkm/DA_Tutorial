@@ -6,7 +6,7 @@ import numpy as np
 from tqdm import trange
 
 NX = 36
-NL = 10 ** 6  # 10 ** 8
+NL = 10 ** 8  # 10 ** 8
 MAX_VAL = 1.0
 SRC = "/lustre/kritib/AOSC658/MAOOAM-DAS/kriti_fortfiles/long_run/fort.200"
 
