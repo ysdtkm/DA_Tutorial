@@ -8,14 +8,14 @@ matplotlib.use("pdf")
 import matplotlib.pyplot as plt
 from util_parallel import Change, shell, exec_parallel
 
-def main_hybrid():
+def main_hybrid_etkf():
     wdir_base = sys.argv[1]
-    params1 = [0.0, 0.1, 0.2, 0.5]
-    params2 = list(range(2, 38))
-    changes1 = [Change("analysis_init.py", 70, "alpha", "alpha = %f")]
-    changes2 = [Change("analysis_init.py", 83, "das.edim", "das.edim = %d")]
+    params1 = list(range(2, 39, 2))
+    params2 = [0]
+    changes1 = [Change("analysis_init.py", 83, "das.edim", "das.edim = %d")]
+    changes2 = []
     shell("mkdir -p %s/out" % wdir_base)
-    res = exec_parallel(wdir_base, "template", params1, params2, "alpha_%.02f", "ens_%02d",
+    res = exec_parallel(wdir_base, "template", params1, params2, "ens_%02d", "none_%d",
                         changes1, changes2, "make", "out.pdf")
     plot_reduced_rmse(params1, params2, res)
 
@@ -68,5 +68,5 @@ def plot_reduced_rmse(params1, params2, res):
         plt.close()
 
 if __name__ == "__main__":
-    main_3dvar()
+    main_hybrid_etkf()
 
