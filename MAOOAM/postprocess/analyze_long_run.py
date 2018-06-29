@@ -12,6 +12,7 @@ MAX_VAL = 1.0
 SRC = "/lustre/kritib/AOSC658/MAOOAM-DAS/kriti_fortfiles/long_run/fort.200"
 
 def get_mean_and_cov(filepath):
+    # a51p7
     su = np.zeros(NX)
     dot = np.zeros((NX, NX))
     with open(filepath, "r") as f:
