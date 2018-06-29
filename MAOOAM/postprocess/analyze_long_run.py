@@ -25,6 +25,13 @@ def get_mean_and_cov(filepath):
     cov = dot / NL - me[:, None] @ me[None, :]
     return me, cov
 
+def save_mean_stdv_clim_cov():
+    me, cov = get_mean_and_cov(SRC)
+    np.save("mean.npy", me)
+    np.save("cov.npy", cov)
+    print("mean:\n", me)
+    print("stdv:\n", np.diag(cov) ** 0.5)
+
 class TestAll(unittest.TestCase):
     def test_get_mean_and_cov(self):
         import matplotlib
@@ -40,13 +47,5 @@ class TestAll(unittest.TestCase):
         plt.savefig("tmp.pdf", bbox_inches="tight")
         plt.close()
 
-def save_mean_stdv_clim_cov():
-    me, cov = get_mean_and_cov(SRC)
-    np.save("mean.npy", me)
-    np.save("cov.npy", cov)
-    print("mean:\n", me)
-    print("stdv:\n", np.diag(cov) ** 0.5)
-
 if __name__ == "__main__":
-    pass
-
+    save_mean_stdv_clim_cov()
