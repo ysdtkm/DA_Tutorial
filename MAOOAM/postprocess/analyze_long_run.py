@@ -11,28 +11,11 @@ NL = 10 ** 4  # 10 ** 8
 MAX_VAL = 1.0
 SRC = "/lustre/kritib/AOSC658/MAOOAM-DAS/kriti_fortfiles/long_run/fort.200"
 
-@lru_cache(maxsize=1)
-def get_mean_and_squared_mean(filepath):
-    su = np.zeros(NX)
-    ss = np.zeros(NX)
-    with open(filepath, "r") as f:
-        for i in trange(NL, desc="get_mean", ascii=True, disable=(not sys.stdout.isatty())):
-            li = f.readline()
-            na = np.fromstring(li.replace("D", "E"), dtype=float, sep=" ")
-            assert na.shape == (NX,)
-            su += na
-            ss += na ** 2
-    me = su / NL
-    ms = ss / NL
-    assert np.max(np.abs(me)) < MAX_VAL
-    assert np.max(ms) < MAX_VAL ** 2
-    return me, ms
-
-def get_mean_and_cov_efficient(filepath):
+def get_mean_and_cov(filepath):
     su = np.zeros(NX)
     dot = np.zeros((NX, NX))
     with open(filepath, "r") as f:
-        for i in trange(NL, desc="get_effi", ascii=True, disable=(not sys.stdout.isatty())):
+        for i in trange(NL, desc="get", ascii=True, disable=(not sys.stdout.isatty())):
             li = f.readline()
             na = np.fromstring(li.replace("D", "E"), dtype=float, sep=" ")
             assert na.shape == (NX,)
@@ -43,19 +26,12 @@ def get_mean_and_cov_efficient(filepath):
     return me, cov
 
 class TestAll(unittest.TestCase):
-    def test_get_mean_and_cov_efficient(self):
-        cov2 = get_clim_cov(SRC)
-        me1, cov1 = get_mean_and_cov_efficient(SRC)
-        self.assertTrue(np.allclose(cov1, cov2))
-
-    def test_get_clim_cov(self):
+    def test_get_mean_and_cov(self):
         import matplotlib
         matplotlib.use("pdf")
         import matplotlib.pyplot as plt
 
-        cov = get_clim_cov(SRC)
-        me, ms = get_mean_and_squared_mean(SRC)
-        self.assertTrue(np.allclose(np.diag(cov), ms - me ** 2))
+        me, cov = get_mean_and_cov(SRC)
 
         ma = np.max(np.abs(cov))
         norm = matplotlib.colors.SymLogNorm(linthresh=ma * 0.1 ** 6)
@@ -63,7 +39,6 @@ class TestAll(unittest.TestCase):
         plt.colorbar(cm)
         plt.savefig("tmp.pdf", bbox_inches="tight")
         plt.close()
-
 
 def get_clim_cov(filepath):
     me, ms = get_mean_and_squared_mean(filepath)
@@ -80,20 +55,11 @@ def get_clim_cov(filepath):
     return cov
 
 def save_mean_stdv_clim_cov():
-    me, ms = get_mean_and_squared_mean(SRC)
-    cov = get_clim_cov(SRC)
-    std = (ms - me ** 2) ** 0.5
-    assert np.allclose(np.diag(cov) ** 0.5, std)
+    me, cov = get_mean_and_cov(SRC)
     np.save("mean.npy", me)
-    np.save("stdv.npy", std)
     np.save("cov.npy", cov)
     print("mean:\n", me)
-    print("stdv:\n", std)
-
-def anom_to_cov(anom):
-    cov = anom[:, None] @ anom[None, :]
-    assert cov.shape == (NX, NX)
-    return cov
+    print("stdv:\n", np.diag(cov) ** 0.5)
 
 if __name__ == "__main__":
     pass
