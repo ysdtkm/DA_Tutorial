@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 
+from functools import lru_cache
 import sys
 import numpy as np
 from tqdm import trange
 
 NX = 36
 NL = 10 ** 5  # 10 ** 8
+MAX_VAL = 1.0
 SRC = "/lustre/kritib/AOSC658/MAOOAM-DAS/kriti_fortfiles/long_run/fort.200"
 
+@lru_cache(maxsize=1)
 def get_mean_and_squared_mean(filepath):
     su = np.zeros(NX)
     ss = np.zeros(NX)
@@ -20,6 +23,8 @@ def get_mean_and_squared_mean(filepath):
             ss += na ** 2
     me = su / NL
     ms = ss / NL
+    assert np.max(np.abs(me)) < MAX_VAL
+    assert np.max(ms) < MAX_VAL ** 2
     return me, ms
 
 def get_clim_cov(filepath):
@@ -33,6 +38,7 @@ def get_clim_cov(filepath):
             anom = na - me
             cov += anom_to_cov(anom)
     cov /= NL
+    assert np.max(cov) < MAX_VAL ** 2
     return cov
 
 def test_get_clim_cov():
@@ -51,12 +57,23 @@ def test_get_clim_cov():
     plt.savefig("tmp.pdf", bbox_inches="tight")
     plt.close()
 
+def save_mean_stdv_clim_cov():
+    me, ms = get_mean_and_squared_mean(SRC)
+    cov = get_clim_cov(SRC)
+    std = (ms - me ** 2) ** 0.5
+    assert np.allclose(np.diag(cov) ** 0.5, std)
+    np.save("mean.npy", me)
+    np.save("stdv.npy", std)
+    np.save("cov.npy", cov)
+    print("mean:\n", me)
+    print("stdv:\n", std)
+
 def anom_to_cov(anom):
     cov = anom[:, None] @ anom[None, :]
     assert cov.shape == (NX, NX)
     return cov
 
 if __name__ == "__main__":
-    test_get_clim_cov()
+    save_mean_stdv_clim_cov()
 
 
