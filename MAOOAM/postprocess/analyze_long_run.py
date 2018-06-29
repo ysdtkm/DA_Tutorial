@@ -6,7 +6,7 @@ import numpy as np
 from tqdm import trange
 
 NX = 36
-NL = 10 ** 8  # 10 ** 8
+NL = 10 ** 4  # 10 ** 8
 MAX_VAL = 1.0
 SRC = "/lustre/kritib/AOSC658/MAOOAM-DAS/kriti_fortfiles/long_run/fort.200"
 
@@ -26,6 +26,25 @@ def get_mean_and_squared_mean(filepath):
     assert np.max(np.abs(me)) < MAX_VAL
     assert np.max(ms) < MAX_VAL ** 2
     return me, ms
+
+def get_mean_and_cov_efficient(filepath):
+    su = np.zeros(NX)
+    dot = np.zeros((NX, NX))
+    with open(filepath, "r") as f:
+        for i in trange(NL, desc="get_effi", ascii=True, disable=(not sys.stdout.isatty())):
+            li = f.readline()
+            na = np.fromstring(li.replace("D", "E"), dtype=float, sep=" ")
+            assert na.shape == (NX,)
+            su += na
+            dot += na[:, None] @ na[None, :]
+    me = su / NL
+    cov = dot / NL - me[:, None] @ me[None, :]
+    return me, cov
+
+def test_get_mean_and_cov_efficient():
+    cov2 = get_clim_cov(SRC)
+    me1, cov1 = get_mean_and_cov_efficient(SRC)
+    assert np.allclose(cov1, cov2)
 
 def get_clim_cov(filepath):
     me, ms = get_mean_and_squared_mean(filepath)
@@ -74,6 +93,6 @@ def anom_to_cov(anom):
     return cov
 
 if __name__ == "__main__":
-    save_mean_stdv_clim_cov()
+    test_get_mean_and_cov_efficient()
 
 
