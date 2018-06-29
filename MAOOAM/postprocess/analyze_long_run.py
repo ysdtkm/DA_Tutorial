@@ -40,20 +40,6 @@ class TestAll(unittest.TestCase):
         plt.savefig("tmp.pdf", bbox_inches="tight")
         plt.close()
 
-def get_clim_cov(filepath):
-    me, ms = get_mean_and_squared_mean(filepath)
-    cov = np.zeros((NX, NX))
-    with open(filepath, "r") as f:
-        for i in trange(NL, desc="get_cov ", ascii=True, disable=(not sys.stdout.isatty())):
-            li = f.readline()
-            na = np.fromstring(li.replace("D", "E"), dtype=float, sep=" ")
-            assert na.shape == (NX,)
-            anom = na - me
-            cov += anom_to_cov(anom)
-    cov /= NL
-    assert np.max(cov) < MAX_VAL ** 2
-    return cov
-
 def save_mean_stdv_clim_cov():
     me, cov = get_mean_and_cov(SRC)
     np.save("mean.npy", me)
