@@ -32,14 +32,13 @@ def save_mean_stdv_clim_cov():
     print("mean:\n", me)
     print("stdv:\n", np.diag(cov) ** 0.5)
 
-class TestAll(unittest.TestCase):
+class TestAnalyzeLongRun(unittest.TestCase):
     def test_get_mean_and_cov(self):
         import matplotlib
         matplotlib.use("pdf")
         import matplotlib.pyplot as plt
 
         me, cov = get_mean_and_cov(SRC)
-
         ma = np.max(np.abs(cov))
         norm = matplotlib.colors.SymLogNorm(linthresh=ma * 0.1 ** 6)
         cm = plt.imshow(cov, norm=norm, cmap="RdBu_r")
