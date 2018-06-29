@@ -184,7 +184,10 @@ def get_h_full_coverage():
             else:
                 raise Exception("__get_h_full_coverage overflow")
             h_mat[j, i] = get_grid_val(state_unit, xgrid.flatten()[k], ygrid.flatten()[k], is_atm, elem)
-    return mask_h_mat(h_mat, mask=None)  # ttk
+    return h_mat
+
+def get_h():
+    return mask_h_mat(get_h_full_coverage(), mask=None)
 
 def mask_h_mat(h, mask):
     nobs = h.shape[0]
@@ -242,7 +245,7 @@ class TestObsNetwork(unittest.TestCase):
                 self.assertTrue(np.isclose(- (psi_ptb_y - psi_pivot) / eps / L, u, atol=1e-6))
 
     def test_h_matrix_conditional_number(self):
-        h = get_h_full_coverage()
+        h = get_h()
         plot_mat(h)
 
     def test_get_grid_val(self):

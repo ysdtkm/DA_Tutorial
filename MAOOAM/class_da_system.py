@@ -5,7 +5,6 @@ from class_obs_data import obs_data
 import numpy.matlib
 import pickle
 from copy import deepcopy
-from module_obs_network import get_h_full_coverage
 
 #===============================================================================
 class da_system:

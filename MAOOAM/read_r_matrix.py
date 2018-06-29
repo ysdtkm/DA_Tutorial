@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib
 matplotlib.use("pdf")
 import matplotlib.pyplot as plt
-from module_obs_network import get_h_full_coverage
+from module_obs_network import get_h
 
 def get_r_luyu(name):
     n = 36
@@ -17,7 +17,7 @@ def get_r_luyu(name):
     return r
 
 def get_h_b_ht():
-    h = get_h_full_coverage()
+    h = get_h()
     diag_b_10_percent = get_r_luyu("Luyu")
     hbht = h @ diag_b_10_percent @ h.T
     return np.diag(np.diag(hbht))
