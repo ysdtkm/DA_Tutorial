@@ -5,7 +5,7 @@ import numpy as np
 from tqdm import trange
 
 NX = 36
-NL = 10 ** 4  # 10 ** 8
+NL = 10 ** 5  # 10 ** 8
 SRC = "/lustre/kritib/AOSC658/MAOOAM-DAS/kriti_fortfiles/long_run/fort.200"
 
 def get_mean_and_squared_mean(filepath):
@@ -13,8 +13,8 @@ def get_mean_and_squared_mean(filepath):
     ss = np.zeros(NX)
     with open(filepath, "r") as f:
         for i in trange(NL, desc="get_mean", ascii=True, disable=(not sys.stdout.isatty())):
-            li = f.readline().split()
-            na = np.array([float(x.replace("D", "E")) for x in li])
+            li = f.readline()
+            na = np.fromstring(li.replace("D", "E"), dtype=float, sep=" ")
             assert na.shape == (NX,)
             su += na
             ss += na ** 2
@@ -27,8 +27,8 @@ def get_clim_cov(filepath):
     cov = np.zeros((NX, NX))
     with open(filepath, "r") as f:
         for i in trange(NL, desc="get_cov ", ascii=True, disable=(not sys.stdout.isatty())):
-            li = f.readline().split()
-            na = np.array([float(x.replace("D", "E")) for x in li])
+            li = f.readline()
+            na = np.fromstring(li.replace("D", "E"), dtype=float, sep=" ")
             assert na.shape == (NX,)
             anom = na - me
             cov += anom_to_cov(anom)
