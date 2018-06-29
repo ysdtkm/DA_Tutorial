@@ -2,6 +2,7 @@
 
 from functools import lru_cache
 import sys
+import unittest
 import numpy as np
 from tqdm import trange
 
@@ -41,10 +42,28 @@ def get_mean_and_cov_efficient(filepath):
     cov = dot / NL - me[:, None] @ me[None, :]
     return me, cov
 
-def test_get_mean_and_cov_efficient():
-    cov2 = get_clim_cov(SRC)
-    me1, cov1 = get_mean_and_cov_efficient(SRC)
-    assert np.allclose(cov1, cov2)
+class TestAll(unittest.TestCase):
+    def test_get_mean_and_cov_efficient(self):
+        cov2 = get_clim_cov(SRC)
+        me1, cov1 = get_mean_and_cov_efficient(SRC)
+        self.assertTrue(np.allclose(cov1, cov2))
+
+    def test_get_clim_cov(self):
+        import matplotlib
+        matplotlib.use("pdf")
+        import matplotlib.pyplot as plt
+
+        cov = get_clim_cov(SRC)
+        me, ms = get_mean_and_squared_mean(SRC)
+        self.assertTrue(np.allclose(np.diag(cov), ms - me ** 2))
+
+        ma = np.max(np.abs(cov))
+        norm = matplotlib.colors.SymLogNorm(linthresh=ma * 0.1 ** 6)
+        cm = plt.imshow(cov, norm=norm, cmap="RdBu_r")
+        plt.colorbar(cm)
+        plt.savefig("tmp.pdf", bbox_inches="tight")
+        plt.close()
+
 
 def get_clim_cov(filepath):
     me, ms = get_mean_and_squared_mean(filepath)
@@ -59,22 +78,6 @@ def get_clim_cov(filepath):
     cov /= NL
     assert np.max(cov) < MAX_VAL ** 2
     return cov
-
-def test_get_clim_cov():
-    import matplotlib
-    matplotlib.use("pdf")
-    import matplotlib.pyplot as plt
-
-    cov = get_clim_cov(SRC)
-    me, ms = get_mean_and_squared_mean(SRC)
-    assert np.allclose(np.diag(cov), ms - me ** 2)
-
-    ma = np.max(np.abs(cov))
-    norm = matplotlib.colors.SymLogNorm(linthresh=ma * 0.1 ** 6)
-    cm = plt.imshow(cov, norm=norm, cmap="RdBu_r")
-    plt.colorbar(cm)
-    plt.savefig("tmp.pdf", bbox_inches="tight")
-    plt.close()
 
 def save_mean_stdv_clim_cov():
     me, ms = get_mean_and_squared_mean(SRC)
@@ -93,6 +96,5 @@ def anom_to_cov(anom):
     return cov
 
 if __name__ == "__main__":
-    test_get_mean_and_cov_efficient()
-
+    pass
 
