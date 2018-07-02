@@ -152,7 +152,7 @@ import numpy as np
 # -----------------------------------------------------------
 
 t_trans = 0 #10  # transient period (e.g. 1.e7)
-t_run = 10 ** 5  # length of trajectory on the attractor (e.g. 5.e8)
+t_run = 10 ** 2  # length of trajectory on the attractor (e.g. 5.e8)
 dt = 0.5  # the time step
 writeout = True  # write out all variables every tw time units
 tw = 10.0  # the time step of writing

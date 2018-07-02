@@ -110,7 +110,7 @@ class maooam:
     tdim = len(t)
     xdim = len(state0) 
     states = np.zeros((tdim,xdim))
-    state = state0
+    state = np.copy(state0)
     mf = MaooamFortran(dt)
     for i in range(tdim):
       states[i,:] = state

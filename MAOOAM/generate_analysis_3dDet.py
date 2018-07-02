@@ -80,6 +80,7 @@ for i in range(0,maxit-acyc_step,acyc_step):
 # print('t_nature[i+acyc_step] = ', t_nature[i+acyc_step])
 
   # Run the model
+  assert not np.any(np.isnan(xa)), f"pre-forecast np.nan at step {i // acyc_step}"
   xf_4d =  model.run(xa,t)
   assert not np.any(np.isnan(xf_4d)), f"forecast step caused np.nan at step {i // acyc_step}"
   # Get last timestep of the forecast
@@ -95,6 +96,8 @@ for i in range(0,maxit-acyc_step,acyc_step):
   # Compute analysis
   #----------------------------------------------
   xa, KH = das.compute_analysis(xf,yo)
+  if i // acyc_step > 40:
+      import pdb; pdb.set_trace()
   assert not np.any(np.isnan(xa)), f"analysis step caused np.nan at step {i // acyc_step}"
 
   # Fill in the missing timesteps with the forecast from the previous analysis IC's
