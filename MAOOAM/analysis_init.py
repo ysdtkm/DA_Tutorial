@@ -82,7 +82,7 @@ das.t0 = das.t[0]
 #-----------------------------------------------------------------------
 das.edim = 37
 das.ens_bias_init = 0
-das.ens_sigma_init = 0.01
+das.ens_sigma_init = 0.0001
 das.x0 += np.random.randn(xdim) * das.ens_sigma_init  # truth is like an ensemble member
 
 #-----------------------------------------------------------------------
@@ -98,7 +98,7 @@ das.outer_loops = 3
 I = np.identity(xdim)
 
 # Set background error covariance
-sigma_b = 0.0002
+sigma_b = 0.002
 B = get_static_b() * sigma_b ** 2
 
 # Set the linear observation operator matrix as the identity by default 

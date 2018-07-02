@@ -187,9 +187,9 @@ def get_h_full_coverage():
     return h_mat
 
 def get_h():
-    h = mask_h_mat(get_h_full_coverage(), mask=None)
-    # h = np.identity(NDIM)
-    # h = h[:20, :]
+    # h = mask_h_mat(get_h_full_coverage(), mask=None)
+    h = np.identity(NDIM)
+    h = h[:20, :]
     return h
 
 def mask_h_mat(h, mask):
