@@ -1,6 +1,7 @@
 
 import unittest
 import numpy as np
+from class_da_system import da_system
 from module_constants import read_xb_yo_xa, get_static_b
 from module_obs_network import get_h, plot_mat, model_state_example, get_grid_val
 from read_r_matrix import get_r
@@ -78,5 +79,13 @@ class TestTdvar(unittest.TestCase):
         R = get_r()
         H = np.identity(n)
         assert R.shape == (p, p)
+        das = da_system(x0=xb, yo=yo)
+        das.setMethod("3DVar")
+        das.setB(B)
+        das.setR(R)
+        das.setH(H)
+        xa_das, KH = das.compute_analysis(xb, yo)
+        print(xa_das, xa_cheng)
+
 
 
