@@ -23,13 +23,12 @@ def read_diag_r(name):
 def get_b_clim_kriti():
     b = np.load("binary_const/20180629_cov_kriti_1e6tu.npy")
     assert b.shape == (36, 36)
-    b = np.identity(36)  # ttk
     return b
 
-def get_h_b_ht():
+def get_r():
     h = get_h()
     b = get_b_clim_kriti()
-    hbht = h @ b @ h.T * 0.001 ** 2
+    hbht = h @ b @ h.T * 0.01
     return np.diag(np.diag(hbht))
 
 def compare_h_b_ht_diag():
@@ -47,11 +46,11 @@ def compare_h_b_ht_diag():
     plt.close()
 
 def print_h_b_ht():
-    cm = plt.imshow(get_h_b_ht(), norm=matplotlib.colors.SymLogNorm(linthresh=0.1 ** 8), cmap="RdBu_r")
+    cm = plt.imshow(get_r(), norm=matplotlib.colors.SymLogNorm(linthresh=0.1 ** 8), cmap="RdBu_r")
     plt.colorbar(cm)
     plt.savefig("out.pdf")
     plt.close()
-    print(np.diag(get_h_b_ht()) ** 0.5)
+    print(np.diag(get_r()) ** 0.5)
 
 def compare_luyu_kriti():
     plt.semilogy(np.diag(read_diag_r("Luyu")), label="Luyu")

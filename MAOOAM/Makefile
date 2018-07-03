@@ -15,7 +15,7 @@ out_compile = step_maooam.so
 cmd_compile = cd maooam_fortran && make && cd ../ && cp maooam_fortran/step_maooam.so .
 
 src_prep = generate_observations.py generate_nature_run.py runall_tutorial_1.sh \
-           module_obs_network.py params_maooam.py tl_ad.py
+           module_obs_network.py params_maooam.py tl_ad.py read_r_matrix.py
 dep_prep = compile
 out_prep = x_nature.pkl x_freerun.pkl y_obs.pkl
 cmd_prep = sh runall_tutorial_1.sh

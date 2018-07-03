@@ -3,7 +3,7 @@ from class_state_vector import state_vector
 from class_obs_data import obs_data
 from module_obs_network import get_h, NDIM
 from exp_params import SEED
-from read_r_matrix import get_h_b_ht
+from read_r_matrix import get_r
 
 infile = 'x_nature.pkl'
 outfile = 'y_obs.pkl'
@@ -44,7 +44,7 @@ for i in range(nc):
 #--------------------------------------------------------------------------------
 H = get_h()
 nobs = H.shape[0]
-R = get_h_b_ht()
+R = get_r()
 assert R.shape == (nobs, nobs)
 yo = np.zeros((nr, nobs))
 eta = np.zeros((nr, nobs))

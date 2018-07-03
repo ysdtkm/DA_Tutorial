@@ -7,7 +7,7 @@ from module_obs_network import get_h
 from module_constants import get_x_std, get_static_b
 from sys import argv
 from exp_params import SEED
-from read_r_matrix import get_h_b_ht
+from read_r_matrix import get_r
 
 #-----------------------------------------------------------------------
 # Usage:
@@ -106,7 +106,7 @@ H = get_h()
 
 # Set observation error covariance
 nobs = H.shape[0]
-R = get_h_b_ht()
+R = get_r()
 
 # Set constant matrix for nudging
 const = 0.00003
