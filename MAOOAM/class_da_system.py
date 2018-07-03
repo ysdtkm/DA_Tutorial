@@ -1,5 +1,7 @@
+from functools import partial
 import numpy as np
 import scipy as sp
+from scipy.optimize import minimize
 from class_state_vector import state_vector
 from class_obs_data import obs_data
 import numpy.matlib
@@ -336,7 +338,7 @@ class da_system:
   # Use minimization algorithm to solve for the analysis
     assert xb.shape == (self.xdim,)
     assert yo.shape == (self.ydim,)
-    flag = "oi"
+    flag = "cvt"
     assert flag in ["cg", "anl", "oi", "cvt"]
     if flag in ["cg", "anl"]:
       # make inputs column vectors
@@ -367,17 +369,35 @@ class da_system:
         xa = xa.A[:, 0]
       HBHtPlusR_inv = np.linalg.inv(Hl*BHt + R)
       KH = BHt*HBHtPlusR_inv*Hl
-    elif flag == "oi":
+    elif flag in ["oi", "cvt"]:
       xb = xb[:, None]
       yo = yo[:, None]
       K = self.B @ self.H.T @ np.linalg.inv(self.R + self.H @ self.B @ self.H.T)
-      xa = xb + K @ (yo - self.H @ xb)
       KH = K @ self.H
-      xa = xa.A[:, 0]
+      if flag == "oi":
+        xa = xb + K @ (yo - self.H @ xb)
+        xa = xa.A[:, 0]
+      elif flag == "cvt":
+        d = yo - self.H @ xb
+        L = np.linalg.cholesky(self.B)
+        HL = self.H @ L
+        cost_func = partial(self.tdvar_cvt_2j, d=d, hl=HL, r_inv=np.linalg.inv(self.R))
+        opt = minimize(cost_func, np.zeros(self.xdim), method="bfgs")
+        xa = xb + L @ opt.x[:, None]
+        xa = xa.A[:, 0]
     assert xa.shape == (self.xdim,)
     assert KH.shape == (self.xdim, self.xdim)
     return xa, KH
 
+  def tdvar_cvt_2j(self, anl_v_in, d, hl, r_inv):
+    assert anl_v_in.shape == (self.xdim,)
+    assert d.shape == (self.ydim, 1)
+    assert hl.shape == (self.ydim, self.xdim)
+    assert r_inv.shape == (self.ydim, self.ydim)
+    anl_v = anl_v_in[:, None]
+    twoj = (anl_v.T @ anl_v) + (d - hl @ anl_v).T @ r_inv @ (d - hl @ anl_v)
+    assert twoj.shape == (1, 1)
+    return twoj[0, 0]
 
   #-------------------------------------------------------------------------------------------------
   def ETKF(self,Xb,yo):
