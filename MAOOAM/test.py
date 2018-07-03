@@ -75,10 +75,13 @@ class TestTdvar(unittest.TestCase):
     def test_tdvar_with_cheng(self):
         n = p = 36
         xb, yo, xa_cheng = read_xb_yo_xa()
-        B = get_static_b(normalize=False)
-        R = get_r()
-        H = np.identity(n)
+        # B = get_static_b(normalize=False) * 10
+        # R = get_r()
+        R, B = self.read_cheng_r_b()
+        B *= 10
+        H = get_h()
         assert R.shape == (p, p)
+        assert np.all(H == np.identity(n))
         das = da_system(x0=xb, yo=yo)
         das.setMethod("3DVar")
         das.setB(B)
@@ -87,6 +90,28 @@ class TestTdvar(unittest.TestCase):
         xa_das, KH = das.compute_analysis(xb, yo)
         di = xa_das - xa_cheng
         self.assertLess(np.max(np.abs(di)), 1.0e-5)
+
+    @classmethod
+    def read_cheng_r_b(cls):
+        dir = "/lustre/tyoshida/prgm/Cheng_MAOOAM"
+        n = 36
+
+        r = np.zeros((n, n))
+        with open(f"{dir}/fort.202", "r") as f:
+            for i in range(n):
+                r[i, i] = float(f.readline().replace("D", "E").strip())
+
+        b = np.empty((n, n))
+        with open(f"{dir}/fort.205", "r") as f:
+            for i in range(n):
+                bsli = f.readline().replace("D", "E").split()
+                bfli = list(map(float, bsli))
+                b[i, :] = np.array(bfli)
+        assert np.allclose(b, b.T)
+        return r, b
+
+
+
 
 
 
