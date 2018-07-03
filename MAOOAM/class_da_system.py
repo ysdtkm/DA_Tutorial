@@ -363,7 +363,7 @@ class da_system:
       if flag == "cg":
         # Use minimization algorithm to minimize cost function:
         xa,ierr = sp.sparse.linalg.cg(A,b1,x0=xb,tol=1e-05,maxiter=1000) 
-      else:
+      elif flag == "anl":
         xa = np.linalg.inv(A) @ b1
         assert xa.shape == (self.xdim, 1)
         xa = xa.A[:, 0]
@@ -383,6 +383,7 @@ class da_system:
         HL = self.H @ L
         cost_func = partial(self.tdvar_cvt_2j, d=d, hl=HL, r_inv=np.linalg.inv(self.R))
         opt = minimize(cost_func, np.zeros(self.xdim), method="bfgs")
+        import pdb; pdb.set_trace()
         xa = xb + L @ opt.x[:, None]
         xa = xa.A[:, 0]
     assert xa.shape == (self.xdim,)

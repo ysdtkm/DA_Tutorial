@@ -28,7 +28,7 @@ def get_b_clim_kriti():
 def get_r():
     h = get_h()
     p = h.shape[0]
-    flag = "identity"
+    flag = "Cheng"
     assert flag in ["hbht", "Luyu", "Kriti", "Cheng", "identity"]
     if flag == "hbht":
         b = get_b_clim_kriti()
