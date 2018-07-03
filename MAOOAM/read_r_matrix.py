@@ -26,14 +26,19 @@ def get_b_clim_kriti():
     return b
 
 def get_r():
-    flag = "hbht"
+    h = get_h()
+    p = h.shape[0]
+    flag = "identity"
     if flag == "hbht":
-        h = get_h()
         b = get_b_clim_kriti()
         hbht = h @ b @ h.T * 0.01
         r = np.diag(np.diag(hbht))
     elif flag in ["Luyu", "Kriti", "Cheng"]:
         r = read_diag_r(flag)
+        assert r.shape == (p, p)
+    elif flag == "identity":
+        sigma = 0.001
+        r = np.identity(p) * sigma ** 2
     else:
         raise ValueError
     return r
