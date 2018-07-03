@@ -1,8 +1,8 @@
 
 import unittest
 import numpy as np
-from inprod_analytic import *
-from params_maooam import natm, noc
+from .inprod_analytic import *
+from .params_maooam import natm, noc
 
 class TestInProd(unittest.TestCase):
     @unittest.skipIf(True, "skip model test")

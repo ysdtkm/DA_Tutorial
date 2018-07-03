@@ -36,8 +36,8 @@
 """
 
 import numpy as np
-import params_maooam
-from params_maooam import ndim, tw, t_run, t_trans, dt
+from . import params_maooam
+from .params_maooam import ndim, tw, t_run, t_trans, dt
 import integrator
 import time
 import ic_def

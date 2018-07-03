@@ -1,5 +1,5 @@
 import unittest
-import aotensor as aotensor_mod
+from . import aotensor as aotensor_mod
 
 class TestAoTensor(unittest.TestCase):
     @unittest.skipIf(True, "skip model test")

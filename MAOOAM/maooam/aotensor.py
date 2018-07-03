@@ -59,10 +59,10 @@ import numpy as np
 from scipy.sparse import dok_matrix
 from scipy.sparse import csr_matrix
 
-from params_maooam import *
-from inprod_analytic import init_inprod
-from inprod_analytic import atmos
-from inprod_analytic import ocean
+from .params_maooam import *
+from .inprod_analytic import init_inprod
+from .inprod_analytic import atmos
+from .inprod_analytic import ocean
 
 real_eps = 2.2204460492503131e-16
 
