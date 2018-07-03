@@ -3,7 +3,7 @@ from class_state_vector import state_vector
 from class_obs_data import obs_data
 from module_obs_network import get_h, NDIM
 from exp_params import SEED
-from read_r_matrix import get_r_luyu, get_h_b_ht
+from read_r_matrix import get_h_b_ht
 
 infile = 'x_nature.pkl'
 outfile = 'y_obs.pkl'

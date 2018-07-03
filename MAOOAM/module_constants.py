@@ -23,7 +23,8 @@ def get_static_b():
     # bcov = np.load("binary_const/mean_b_cov_t0645_0010tu.npy")
     # bcov = np.load("binary_const/mean_b_cov_t0646_0100tu.npy")
     # bcov = np.load("binary_const/mean_b_cov_t0647_1000tu.npy")
-    bcov = np.load("binary_const/mean_b_cov_t0800_6h.npy")
+    # bcov = np.load("binary_const/mean_b_cov_t0800_6h.npy")
+    bcov = read_text_b("binary_const/20180702_cheng_b.txt")
     # bcov = np.load("binary_const/mean_b_cov_t0829_6h_ocnobs.npy")
     # bcov = np.load("binary_const/mean_b_cov_t0830_6h_atmobs.npy")
     # bcov = np.identity(NDIM)
@@ -33,4 +34,14 @@ def get_static_b():
     srad = np.max(eigs)
     bcov /= srad
     return bcov
+
+def read_text_b(filename):
+    b = np.zeros((NDIM, NDIM))
+    with open(filename, "r") as f:
+        for i in range(NDIM):
+            ls = f.readline().replace("D", "E").split()
+            lf = list(map(float, ls))
+            assert len(lf) == NDIM
+            b[i, :] = np.array(lf)
+    return b
 

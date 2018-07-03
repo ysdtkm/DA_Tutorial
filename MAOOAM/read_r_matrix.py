@@ -6,11 +6,15 @@ matplotlib.use("pdf")
 import matplotlib.pyplot as plt
 from module_obs_network import get_h
 
-def get_r_luyu(name):
+def read_diag_r(name):
     n = 36
     r = np.zeros((n, n))
-    assert name in ["Luyu", "Kriti"]
-    with open(f"binary_const/clim_std_{name}_20180619.txt", "r") as f:
+    assert name in ["Luyu", "Kriti", "Cheng"]
+    if name == "Cheng":
+        fname = "binary_const/20180702_cheng_r.txt"
+    else:
+        fname = f"binary_const/clim_std_{name}_20180619.txt"
+    with open(fname, "r") as f:
         for i in range(n):
             t = f.readline().strip().replace("D", "E")
             r[i, i] = float(t) ** 2
@@ -49,13 +53,12 @@ def print_h_b_ht():
     print(np.diag(get_h_b_ht()) ** 0.5)
 
 def compare_luyu_kriti():
-    print(np.diag(get_r_luyu("Luyu")))
-    print(np.diag(get_r_luyu("Kriti")))
-    plt.semilogy(np.diag(get_r_luyu("Luyu")), label="Luyu")
-    plt.semilogy(np.diag(get_r_luyu("Kriti")), label="Kriti")
+    plt.semilogy(np.diag(read_diag_r("Luyu")), label="Luyu")
+    plt.semilogy(np.diag(read_diag_r("Kriti")), label="Kriti")
+    plt.semilogy(np.diag(read_diag_r("Cheng")), label="Cheng")
     plt.legend()
     plt.savefig("out.pdf")
     plt.close()
 
 if __name__ == "__main__":
-    compare_h_b_ht_diag()
+    compare_luyu_kriti()

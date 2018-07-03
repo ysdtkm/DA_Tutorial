@@ -7,7 +7,7 @@ from module_obs_network import get_h
 from module_constants import get_x_std, get_static_b
 from sys import argv
 from exp_params import SEED
-from read_r_matrix import get_r_luyu, get_h_b_ht
+from read_r_matrix import get_h_b_ht
 
 #-----------------------------------------------------------------------
 # Usage:
@@ -98,7 +98,7 @@ das.outer_loops = 3
 I = np.identity(xdim)
 
 # Set background error covariance
-sigma_b = 0.002
+sigma_b = 0.0001
 B = get_static_b() * sigma_b ** 2
 
 # Set the linear observation operator matrix as the identity by default 
