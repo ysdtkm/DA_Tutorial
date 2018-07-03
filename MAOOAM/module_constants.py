@@ -45,5 +45,16 @@ def read_text_b(filename):
             b[i, :] = np.array(lf)
     return b
 
+def read_xb_yo_xa():
+    with open("binary_const/20180703_cheng_xb_yo_xa.txt", "r") as f:
+        res = []
+        for i in range(3):
+            ls = f.readline().split()
+            lf = list(map(float, ls))
+            assert len(lf) == NDIM
+            res.append(np.array(lf))
+        xb, yo, xa = res
+    return xb, yo, xa
+
 if __name__ == "__main__":
-    get_static_b()
+    print(read_xb_yo_xa())
