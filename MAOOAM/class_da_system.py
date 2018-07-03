@@ -383,7 +383,6 @@ class da_system:
         HL = self.H @ L
         cost_func = partial(self.tdvar_cvt_2j, d=d, hl=HL, r_inv=np.linalg.inv(self.R))
         opt = minimize(cost_func, np.zeros(self.xdim), method="bfgs")
-        import pdb; pdb.set_trace()
         xa = xb + L @ opt.x[:, None]
         xa = xa.A[:, 0]
     assert xa.shape == (self.xdim,)
