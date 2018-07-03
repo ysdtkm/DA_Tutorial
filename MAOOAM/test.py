@@ -1,7 +1,9 @@
 
 import unittest
 import numpy as np
+from module_constants import read_xb_yo_xa, get_static_b
 from module_obs_network import get_h, plot_mat, model_state_example, get_grid_val
+from read_r_matrix import get_r
 from exp_params import SEED
 
 class TestLorenz(unittest.TestCase):
@@ -67,4 +69,14 @@ class TestObsNetwork(unittest.TestCase):
         self.assertTrue(np.isclose(-6.915992899895785 * 2.0, a_tmp))
         self.assertTrue(np.isclose(-16019.881464394632, o_psi))
         self.assertTrue(np.isclose(-39.234272164275836, o_tmp))
+
+class TestTdvar(unittest.TestCase):
+    def test_tdvar_with_cheng(self):
+        n = p = 36
+        xb, yo, xa_cheng = read_xb_yo_xa()
+        B = get_static_b(normalize=False)
+        R = get_r()
+        H = np.identity(n)
+        assert R.shape == (p, p)
+
 

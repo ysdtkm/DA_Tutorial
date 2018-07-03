@@ -18,7 +18,7 @@ def get_x_std():
          6.98347756e-04, 1.35828889e-04, 1.21582441e-07, 2.24123574e-08])
     return x_std
 
-def get_static_b():
+def get_static_b(normalize=True):
     # bcov = np.load("binary_const/mean_b_cov_t0644_0001tu.npy")
     # bcov = np.load("binary_const/mean_b_cov_t0645_0010tu.npy")
     # bcov = np.load("binary_const/mean_b_cov_t0646_0100tu.npy")
@@ -31,8 +31,9 @@ def get_static_b():
     assert bcov.shape == (NDIM, NDIM)
     eigs = np.linalg.eigvals(bcov)
     assert np.all(eigs > 0.0)
-    srad = np.max(eigs)
-    bcov /= srad
+    if normalize:
+        srad = np.max(eigs)
+        bcov /= srad
     return bcov
 
 def read_text_b(filename):
