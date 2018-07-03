@@ -23,12 +23,13 @@ def read_diag_r(name):
 def get_b_clim_kriti():
     b = np.load("binary_const/20180629_cov_kriti_1e6tu.npy")
     assert b.shape == (36, 36)
+    b = np.identity(36)  # ttk
     return b
 
 def get_h_b_ht():
     h = get_h()
     b = get_b_clim_kriti()
-    hbht = h @ b @ h.T * 0.01
+    hbht = h @ b @ h.T * 0.001 ** 2
     return np.diag(np.diag(hbht))
 
 def compare_h_b_ht_diag():
