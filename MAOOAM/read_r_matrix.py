@@ -26,10 +26,17 @@ def get_b_clim_kriti():
     return b
 
 def get_r():
-    h = get_h()
-    b = get_b_clim_kriti()
-    hbht = h @ b @ h.T * 0.01
-    return np.diag(np.diag(hbht))
+    flag = "hbht"
+    if flag == "hbht":
+        h = get_h()
+        b = get_b_clim_kriti()
+        hbht = h @ b @ h.T * 0.01
+        r = np.diag(np.diag(hbht))
+    elif flag in ["Luyu", "Kriti", "Cheng"]:
+        r = read_diag_r(flag)
+    else:
+        raise ValueError
+    return r
 
 def compare_h_b_ht_diag():
     h = get_h()
