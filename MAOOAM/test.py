@@ -85,7 +85,8 @@ class TestTdvar(unittest.TestCase):
         das.setR(R)
         das.setH(H)
         xa_das, KH = das.compute_analysis(xb, yo)
-        print(xa_das, xa_cheng)
+        di = xa_das - xa_cheng
+        self.assertLess(np.max(np.abs(di)), 1.0e-5)
 
 
 
