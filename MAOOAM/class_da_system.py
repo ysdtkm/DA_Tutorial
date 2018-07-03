@@ -334,35 +334,48 @@ class da_system:
   def _3DVar(self,xb,yo):
   #-------------------------------------------------------------------------------------------------
   # Use minimization algorithm to solve for the analysis
+    assert xb.shape == (self.xdim,)
+    assert yo.shape == (self.ydim,)
+    flag = "oi"
+    assert flag in ["cg", "anl", "oi", "cvt"]
+    if flag in ["cg", "anl"]:
+      # make inputs column vectors
+      xb = np.matrix(xb).flatten().T
+      yo = np.matrix(yo).flatten().T
 
-    # make inputs column vectors
-    xb = np.matrix(xb).flatten().T
-    yo = np.matrix(yo).flatten().T
+      # Set parameters
+      xdim = self.xdim
+      Hl = self.H
+      Ht = self.Ht
+      B = self.B
+      R = self.R
+      Rinv = np.linalg.inv(R)
 
-    # Set parameters
-    xdim = self.xdim
-    Hl = self.H
-    Ht = self.Ht
-    B = self.B
-    R = self.R
-    Rinv = np.linalg.inv(R)
+      # 'preconditioning with B'
+      I = np.identity(xdim)
+      BHt = np.dot(B,Ht)
+      BHtRinv = np.dot(BHt,Rinv)
+      A = I + np.dot(BHtRinv,Hl)
+      b1 = xb + np.dot(BHtRinv,yo)
 
-    # 'preconditioning with B'
-    I = np.identity(xdim)
-    BHt = np.dot(B,Ht)
-    BHtRinv = np.dot(BHt,Rinv)
-    A = I + np.dot(BHtRinv,Hl)
-    b1 = xb + np.dot(BHtRinv,yo)
-
-    # Use minimization algorithm to minimize cost function:
-    xa,ierr = sp.sparse.linalg.cg(A,b1,x0=xb,tol=1e-05,maxiter=1000) 
-#   xa,ierr = sp.sparse.linalg.bicgstab(A,b1,x0=np.zeros_like(b1),tol=1e-05,maxiter=1000)
-#   try: gmres, 
-
-    # Compute KH:
-    HBHtPlusR_inv = np.linalg.inv(Hl*BHt + R)
-    KH = BHt*HBHtPlusR_inv*Hl
-
+      if flag == "cg":
+        # Use minimization algorithm to minimize cost function:
+        xa,ierr = sp.sparse.linalg.cg(A,b1,x0=xb,tol=1e-05,maxiter=1000) 
+      else:
+        xa = np.linalg.inv(A) @ b1
+        assert xa.shape == (self.xdim, 1)
+        xa = xa.A[:, 0]
+      HBHtPlusR_inv = np.linalg.inv(Hl*BHt + R)
+      KH = BHt*HBHtPlusR_inv*Hl
+    elif flag == "oi":
+      xb = xb[:, None]
+      yo = yo[:, None]
+      K = self.B @ self.H.T @ np.linalg.inv(self.R + self.H @ self.B @ self.H.T)
+      xa = xb + K @ (yo - self.H @ xb)
+      KH = K @ self.H
+      xa = xa.A[:, 0]
+    assert xa.shape == (self.xdim,)
+    assert KH.shape == (self.xdim, self.xdim)
     return xa, KH
 
 

@@ -98,7 +98,7 @@ das.outer_loops = 3
 I = np.identity(xdim)
 
 # Set background error covariance
-sigma_b = 0.001
+sigma_b = 0.002
 B = get_static_b() * sigma_b ** 2
 
 # Set the linear observation operator matrix as the identity by default 
@@ -133,7 +133,7 @@ print(das.getH())
 # Initialize the timesteps
 #-----------------------------------------------------------------------
 t_nature = sv.getTimes()
-acyc_step = 2                        # (how frequently to perform an analysis)
+acyc_step = 5                        # (how frequently to perform an analysis)
 dtau = (t_nature[acyc_step] - t_nature[0])
 fcst_step = acyc_step                      # (may need to change for 4D DA methods)
 fcst_dt = dtau / fcst_step

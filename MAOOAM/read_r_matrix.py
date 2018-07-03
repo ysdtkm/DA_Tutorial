@@ -29,6 +29,7 @@ def get_r():
     h = get_h()
     p = h.shape[0]
     flag = "identity"
+    assert flag in ["hbht", "Luyu", "Kriti", "Cheng", "identity"]
     if flag == "hbht":
         b = get_b_clim_kriti()
         hbht = h @ b @ h.T * 0.01
