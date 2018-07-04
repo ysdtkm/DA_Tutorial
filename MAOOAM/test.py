@@ -75,9 +75,8 @@ class TestTdvar(unittest.TestCase):
     def test_tdvar_with_cheng(self):
         n = p = 36
         xb, yo, xa_cheng = read_xb_yo_xa()
-        # B = get_static_b(normalize=False) * 10
-        # R = get_r()
         R, B = self.read_cheng_r_b()
+        R **= 2
         B *= 10
         H = get_h()
         assert R.shape == (p, p)
@@ -88,8 +87,18 @@ class TestTdvar(unittest.TestCase):
         das.setR(R)
         das.setH(H)
         xa_das, KH = das.compute_analysis(xb, yo)
+        xa_oi = self.oi(xb, yo, R, B, H)
+        # print(xa_das, xa_oi, xa_cheng)
         di = xa_das - xa_cheng
+        print(np.max(np.abs(di)))
         self.assertLess(np.max(np.abs(di)), 1.0e-5)
+
+    @classmethod
+    def oi(cls, xb, yo, R, B, H):
+        K = B @ H.T @ np.linalg.inv(R + H @ B @ H.T)
+        assert np.allclose(K, B @ np.linalg.inv(R + B))
+        xa = xb + K @ (yo - H @ xb)
+        return xa
 
     @classmethod
     def read_cheng_r_b(cls):
@@ -110,8 +119,5 @@ class TestTdvar(unittest.TestCase):
         assert np.allclose(b, b.T)
         return r, b
 
-
-
-
-
-
+if __name__ == "__main__":
+    unittest.main()

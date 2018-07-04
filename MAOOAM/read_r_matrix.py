@@ -35,7 +35,7 @@ def get_r():
         hbht = h @ b @ h.T * 0.01
         r = np.diag(np.diag(hbht))
     elif flag in ["Luyu", "Kriti", "Cheng"]:
-        r = read_diag_r(flag)
+        r = read_diag_r(flag) ** 2
         assert r.shape == (p, p)
     elif flag == "identity":
         sigma = 0.001

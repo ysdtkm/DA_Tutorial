@@ -338,7 +338,7 @@ class da_system:
   # Use minimization algorithm to solve for the analysis
     assert xb.shape == (self.xdim,)
     assert yo.shape == (self.ydim,)
-    flag = "cvt"
+    flag = "oi"
     assert flag in ["cg", "anl", "oi", "cvt"]
     if flag in ["cg", "anl"]:
       # make inputs column vectors
