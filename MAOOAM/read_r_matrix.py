@@ -5,6 +5,7 @@ import matplotlib
 matplotlib.use("pdf")
 import matplotlib.pyplot as plt
 from module_obs_network import get_h
+from exp_params import FLAG_R
 
 def read_diag_r(name):
     n = 36
@@ -25,7 +26,7 @@ def get_b_clim_kriti():
     assert b.shape == (36, 36)
     return b
 
-def get_r(flag="hbht"):
+def get_r(flag=FLAG_R):
     assert flag in ["hbht", "Luyu", "Kriti", "Cheng", "identity"]
     h = get_h()
     p = h.shape[0]

@@ -6,7 +6,7 @@ import pickle
 import matplotlib
 matplotlib.use("pdf")
 import matplotlib.pyplot as plt
-from exp_params import SEED
+from exp_params import SEED, OBS_NET
 
 NDIM = 36
 
@@ -187,9 +187,15 @@ def get_h_full_coverage():
     return h_mat
 
 def get_h():
-    # h = mask_h_mat(get_h_full_coverage(), mask=None)
-    h = np.identity(NDIM)
-    # h = h[:20, :]
+    if OBS_NET == "full_spectral":
+        h = np.identity(NDIM)
+    elif OBS_NET == "atm_spectral":
+        h = np.identity(NDIM)
+        h = h[:20, :]
+    elif OBS_NET == "full_grid":
+        h = get_h_full_coverage()
+    else:
+        raise ValueError
     return h
 
 def mask_h_mat(h, mask):

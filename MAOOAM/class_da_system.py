@@ -7,6 +7,7 @@ from class_obs_data import obs_data
 import numpy.matlib
 import pickle
 from copy import deepcopy
+from exp_params import TDVAR_METHOD, RHO
 
 #===============================================================================
 class da_system:
@@ -338,9 +339,8 @@ class da_system:
   # Use minimization algorithm to solve for the analysis
     assert xb.shape == (self.xdim,)
     assert yo.shape == (self.ydim,)
-    flag = "oi"
-    assert flag in ["cg", "anl", "oi", "cvt"]
-    if flag in ["cg", "anl"]:
+    assert TDVAR_METHOD in ["cg", "anl", "oi", "cvt"]
+    if TDVAR_METHOD in ["cg", "anl"]:
       # make inputs column vectors
       xb = np.matrix(xb).flatten().T
       yo = np.matrix(yo).flatten().T
@@ -360,24 +360,24 @@ class da_system:
       A = I + np.dot(BHtRinv,Hl)
       b1 = xb + np.dot(BHtRinv,yo)
 
-      if flag == "cg":
+      if TDVAR_METHOD == "cg":
         # Use minimization algorithm to minimize cost function:
         xa,ierr = sp.sparse.linalg.cg(A,b1,x0=xb,tol=1e-05,maxiter=1000) 
-      elif flag == "anl":
+      elif TDVAR_METHOD == "anl":
         xa = np.linalg.inv(A) @ b1
         assert xa.shape == (self.xdim, 1)
         xa = xa.A[:, 0]
       HBHtPlusR_inv = np.linalg.inv(Hl*BHt + R)
       KH = BHt*HBHtPlusR_inv*Hl
-    elif flag in ["oi", "cvt"]:
+    elif TDVAR_METHOD in ["oi", "cvt"]:
       xb = xb[:, None]
       yo = yo[:, None]
       K = self.B @ self.H.T @ np.linalg.inv(self.R + self.H @ self.B @ self.H.T)
       KH = K @ self.H
-      if flag == "oi":
+      if TDVAR_METHOD == "oi":
         xa = xb + K @ (yo - self.H @ xb)
         xa = xa.A[:, 0]
-      elif flag == "cvt":
+      elif TDVAR_METHOD == "cvt":
         d = yo - self.H @ xb
         L = np.linalg.cholesky(self.B)
         HL = self.H @ L
@@ -449,8 +449,7 @@ class da_system:
     # Pa = [(k-1)I/rho + C*Yb]^(-1)
     #----
     I = np.identity(edim)
-    rho = 1.0
-    eigArg = (edim-1)*I/rho + np.dot(C,Yb)
+    eigArg = (edim-1)*I/RHO + np.dot(C,Yb)
 
     lamda,P = np.linalg.eigh(eigArg)
 
@@ -546,7 +545,7 @@ class da_system:
 
     # Compute KH:
     RinvYb = np.dot(Rinv,Yb)
-    IpYbtRinvYb = ((edim-1)/rho)*I + np.dot(Ybt,RinvYb)
+    IpYbtRinvYb = ((edim-1)/RHO)*I + np.dot(Ybt,RinvYb)
     IpYbtRinvYb_inv = np.linalg.inv(IpYbtRinvYb)
     YbtRinv = np.dot(Ybt,Rinv)
     K = np.dot( Xb, np.dot(IpYbtRinvYb_inv,YbtRinv) )

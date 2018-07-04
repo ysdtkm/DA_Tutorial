@@ -2,6 +2,7 @@
 
 import sys
 import numpy as np
+from exp_params import BCOV_FROM
 
 NDIM = 36
 
@@ -19,15 +20,18 @@ def get_x_std():
     return x_std
 
 def get_static_b(normalize=True):
-    # bcov = np.load("binary_const/mean_b_cov_t0644_0001tu.npy")
-    # bcov = np.load("binary_const/mean_b_cov_t0645_0010tu.npy")
-    # bcov = np.load("binary_const/mean_b_cov_t0646_0100tu.npy")
-    # bcov = np.load("binary_const/mean_b_cov_t0647_1000tu.npy")
-    # bcov = np.load("binary_const/mean_b_cov_t0800_6h.npy")
-    bcov = read_text_b("binary_const/20180702_cheng_b.txt")
-    # bcov = np.load("binary_const/mean_b_cov_t0829_6h_ocnobs.npy")
-    # bcov = np.load("binary_const/mean_b_cov_t0830_6h_atmobs.npy")
-    # bcov = np.identity(NDIM)
+    bcovs = {
+        "Cheng": read_text_b("binary_const/20180702_cheng_b.txt"),
+        "t0644": np.load("binary_const/mean_b_cov_t0644_0001tu.npy"),
+        "t0645": np.load("binary_const/mean_b_cov_t0645_0010tu.npy"),
+        "t0646": np.load("binary_const/mean_b_cov_t0646_0100tu.npy"),
+        "t0647": np.load("binary_const/mean_b_cov_t0647_1000tu.npy"),
+        "t0800": np.load("binary_const/mean_b_cov_t0800_6h.npy"),
+        "t0829ocn": np.load("binary_const/mean_b_cov_t0829_6h_ocnobs.npy"),
+        "t0830atm": np.load("binary_const/mean_b_cov_t0830_6h_atmobs.npy"),
+        "identity": np.identity(NDIM),
+    }
+    bcov = bcovs[BCOV_FROM]
     assert bcov.shape == (NDIM, NDIM)
     eigs = np.linalg.eigvals(bcov)
     assert np.all(eigs > 0.0)

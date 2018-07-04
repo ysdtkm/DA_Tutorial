@@ -6,7 +6,7 @@ from class_da_system import da_system
 from module_obs_network import get_h
 from module_constants import get_x_std, get_static_b
 from sys import argv
-from exp_params import SEED
+from exp_params import SEED, SIGMA_B, EDIM
 from read_r_matrix import get_r
 
 #-----------------------------------------------------------------------
@@ -80,7 +80,7 @@ das.t0 = das.t[0]
 #-----------------------------------------------------------------------
 # Initialize the ensemble
 #-----------------------------------------------------------------------
-das.edim = 37
+das.edim = EDIM
 das.ens_bias_init = 0
 das.ens_sigma_init = 0.0001
 das.x0 += np.random.randn(xdim) * das.ens_sigma_init  # truth is like an ensemble member
@@ -98,8 +98,7 @@ das.outer_loops = 3
 I = np.identity(xdim)
 
 # Set background error covariance
-sigma_b = 0.0002
-B = get_static_b() * sigma_b ** 2
+B = get_static_b() * SIGMA_B ** 2
 
 # Set the linear observation operator matrix as the identity by default 
 H = get_h()
