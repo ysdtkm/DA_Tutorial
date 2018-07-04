@@ -8,8 +8,8 @@ ifdef INTMODE
   TL_AD_INTEGRATOR = $(INTMODE)_tl_ad_integrator
 else
   # Define integrator module
-  INTEGRATOR = rk4_integrator
-  TL_AD_INTEGRATOR = rk4_tl_ad_integrator
+  INTEGRATOR = rk2_integrator
+  TL_AD_INTEGRATOR = rk2_tl_ad_integrator
 endif
 
 

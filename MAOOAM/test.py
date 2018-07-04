@@ -90,7 +90,6 @@ class TestTdvar(unittest.TestCase):
         xa_oi = self.oi(xb, yo, R, B, H)
         # print(xa_das, xa_oi, xa_cheng)
         di = xa_das - xa_cheng
-        print(np.max(np.abs(di)))
         self.assertLess(np.max(np.abs(di)), 1.0e-5)
 
     @classmethod
