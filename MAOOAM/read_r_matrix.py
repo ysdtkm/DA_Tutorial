@@ -25,17 +25,16 @@ def get_b_clim_kriti():
     assert b.shape == (36, 36)
     return b
 
-def get_r():
+def get_r(flag="hbht"):
+    assert flag in ["hbht", "Luyu", "Kriti", "Cheng", "identity"]
     h = get_h()
     p = h.shape[0]
-    flag = "Cheng"
-    assert flag in ["hbht", "Luyu", "Kriti", "Cheng", "identity"]
     if flag == "hbht":
         b = get_b_clim_kriti()
         hbht = h @ b @ h.T * 0.01
         r = np.diag(np.diag(hbht))
     elif flag in ["Luyu", "Kriti", "Cheng"]:
-        r = read_diag_r(flag) ** 2
+        r = read_diag_r(flag)
         assert r.shape == (p, p)
     elif flag == "identity":
         sigma = 0.001
@@ -65,13 +64,14 @@ def print_h_b_ht():
     plt.close()
     print(np.diag(get_r()) ** 0.5)
 
-def compare_luyu_kriti():
-    plt.semilogy(np.diag(read_diag_r("Luyu")), label="Luyu")
-    plt.semilogy(np.diag(read_diag_r("Kriti")), label="Kriti")
-    plt.semilogy(np.diag(read_diag_r("Cheng")), label="Cheng")
+def compare_r():
+    plt.semilogy(np.diag(get_r("hbht")), label="H B Ht")
+    plt.semilogy(np.diag(get_r("Luyu")), label="Luyu")
+    plt.semilogy(np.diag(get_r("Kriti")), label="Kriti old")
+    plt.semilogy(np.diag(get_r("Cheng")), label="Cheng")
     plt.legend()
     plt.savefig("out.pdf")
     plt.close()
 
 if __name__ == "__main__":
-    compare_luyu_kriti()
+    compare_r()
