@@ -4,7 +4,7 @@ PRIME = 10 ** 6 + 3
 SEED = PRIME * 2
 
 T_RUN = 10 ** 4
-DT = 0.1
+DT = 0.01
 ACYC_STEP = int(2.5 / DT)
 assert abs(DT * ACYC_STEP - 2.5) < 1.0e-6
 FLAG_R = "Cheng"
