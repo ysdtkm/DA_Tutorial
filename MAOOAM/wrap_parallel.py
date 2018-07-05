@@ -16,7 +16,7 @@ def main():
     changes2 = []
     shell("mkdir -p %s/out" % wdir_base)
     res = exec_parallel(wdir_base, "template", params1, params2, "sigma_b_%.06f", "none_%d",
-                        changes1, changes2, "3DVar", "make", "out.pdf")
+                        changes1, changes2, "make", "3DVar", "out.pdf")
     plot_reduced_rmse(params1, params2, "sigma_b", "none", res)
 
 def plot_reduced_rmse(params1, params2, name1, name2, res):
