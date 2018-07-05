@@ -12,7 +12,7 @@ def main():
     wdir_base = sys.argv[1]
     params1 = list(np.geomspace(0.001, 0.1, 2))
     params2 = [1]
-    changes1 = [Change("exp_params.py", 17, "SIGMA_B", "SIGMA_B = %f")]
+    changes1 = [Change("exp_params.py", 18, "SIGMA_B", "SIGMA_B = %f")]
     changes2 = []
     shell("mkdir -p %s/out" % wdir_base)
     res = exec_parallel(wdir_base, "template", params1, params2, "sigma_b_%.06f", "none_%d",
