@@ -45,17 +45,17 @@ def shell(cmd, check=True):
     return p.stdout, p.stderr
 
 def exec_parallel(dir_template, wdir_base, params1, params2, p1_fmt, p2_fmt,
-                  p1_changes, p2_changes, command, out_file):
+                  p1_changes, p2_changes, command, name, out_file):
     shell("mkdir -p %s/out" % wdir_base)
     params_prod = itertools.product(params1, params2)
     job = functools.partial(exec_single_job, dir_template, wdir_base, p1_fmt, p2_fmt,
-                            p1_changes, p2_changes, command, out_file)
+                            p1_changes, p2_changes, command, name, out_file)
     with Pool(5) as p:
         res = p.map(job, params_prod)
     return inverse_itertools_2d_product(params1, params2, res)
 
 def exec_single_job(wdir_base, dir_template, p1_fmt, p2_fmt, p1_changes, p2_changes,
-                    command, out_file, param):
+                    command, name, out_file, param):
     p1, p2 = param
     s1 = (p1_fmt % p1).replace(".", "_")
     s2 = (p2_fmt % p2).replace(".", "_")
@@ -75,7 +75,8 @@ def exec_single_job(wdir_base, dir_template, p1_fmt, p2_fmt, p1_changes, p2_chan
     _, ext = os.path.splitext(out_file)
     try:
         shell("cp -f %s %s/out/%s_%s%s" % (out_file, wdir_base, s1, s2, ext))
-        res = np.load("rmse_ETKF.npy")
+        assert name in ["ETKF", "3DVar", "hybrid"]
+        res = np.load(f"rmse_{name}.npy")
         print("%s done" % dname)
     except:
         res = np.empty(5)

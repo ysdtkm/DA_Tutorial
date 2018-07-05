@@ -8,29 +8,18 @@ matplotlib.use("pdf")
 import matplotlib.pyplot as plt
 from util_parallel import Change, shell, exec_parallel
 
-def main_hybrid_etkf():
+def main():
     wdir_base = sys.argv[1]
-    params1 = list(range(2, 39, 2))
-    params2 = [0]
-    changes1 = [Change("analysis_init.py", 83, "das.edim", "das.edim = %d")]
-    changes2 = []
-    shell("mkdir -p %s/out" % wdir_base)
-    res = exec_parallel(wdir_base, "template", params1, params2, "ens_%02d", "none_%d",
-                        changes1, changes2, "make", "out.pdf")
-    plot_reduced_rmse(params1, params2, res)
-
-def main_3dvar():
-    wdir_base = sys.argv[1]
-    params1 = list(np.geomspace(0.001, 0.1, 20))
+    params1 = list(np.geomspace(0.001, 0.1, 2))
     params2 = [1]
-    changes1 = [Change("analysis_init.py", 101, "sigma_b", "sigma_b = %f")]
+    changes1 = [Change("exp_params.py", 17, "SIGMA_B", "SIGMA_B = %f")]
     changes2 = []
     shell("mkdir -p %s/out" % wdir_base)
     res = exec_parallel(wdir_base, "template", params1, params2, "sigma_b_%.06f", "none_%d",
-                        changes1, changes2, "make", "out.pdf")
-    plot_reduced_rmse(params1, params2, res)
+                        changes1, changes2, "3DVar", "make", "out.pdf")
+    plot_reduced_rmse(params1, params2, "sigma_b", "none", res)
 
-def plot_reduced_rmse(params1, params2, res):
+def plot_reduced_rmse(params1, params2, name1, name2, res):
     if params1 is params2 is res is None:
         with open("plot_reduced_rmse.pkl", "rb") as f:
             params1, params2, res = pickle.load(f)
@@ -47,12 +36,12 @@ def plot_reduced_rmse(params1, params2, res):
     for ir in range(nr):
         fig, ax = plt.subplots()
         cm = plt.imshow(res_npy[ir, :, :], cmap="Reds")
-        cm.set_clim(0, 0.2)
+        # cm.set_clim(0, 0.2)
         plt.colorbar(cm)
-        plt.xlabel("none")
+        plt.xlabel(name1)
         ax.set_xticks(range(n2))
         ax.set_xticklabels(params2, rotation=90)
-        plt.ylabel("sigma_b")
+        plt.ylabel(name2)
         ax.set_yticks(range(n1))
         ax.set_yticklabels(params1)
         plt.savefig("out/rmse_%s.pdf" % names[ir])
@@ -61,12 +50,12 @@ def plot_reduced_rmse(params1, params2, res):
         if n2 >= 2:
             continue
         plt.loglog(params1, res_npy[ir, :, 0])
-        plt.xlabel("sigma_b")
+        plt.xlabel(name1)
         # plt.ylim([0, 0.01])
         plt.ylabel("RMS error")
         plt.savefig("out/rmse_onedim_%s.pdf" % names[ir])
         plt.close()
 
 if __name__ == "__main__":
-    main_hybrid_etkf()
+    main()
 
