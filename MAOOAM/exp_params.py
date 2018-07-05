@@ -14,7 +14,7 @@ EDIM = 37
 RHO = 1.0
 
 BCOV_FROM = "Cheng"
-TDVAR_METHOD = "inv"
+TDVAR_METHOD = "cvt"
 SIGMA_B = 0.0002
 
 SKIP_HEAVY_PLOT = True
