@@ -17,6 +17,7 @@ import time
 from maooam import ic_def
 from maooam import ic
 import sys
+from exp_params import SKIP_HEAVY_PLOT
 
 class MaooamFortran:
     def __init__(self, dt):
@@ -185,6 +186,8 @@ class maooam:
   # Plot 3D-slice of model output
   #------------------------------------------------------------------
   def plot(self, states,cvec,outfile='maooam-3d',plot_title='3D-slice of MAOOAM attractor',xidx=[0,1,2]):
+    if SKIP_HEAVY_PLOT:
+      return
 
     nr,nc = np.shape(states)
     x = states[:,xidx[0]]
@@ -254,6 +257,8 @@ class maooam:
   # Plot model output lines and points
   #-----------------------------------------------------------------------------
   def plot_lines_and_points(self,states,points,cvec,outfile='maooam-3d',plot_title='3D-slice of MAOOAM attractor',xidx=[0,1,2]):
+    if SKIP_HEAVY_PLOT:
+      return
 
     nr,nc = np.shape(states)
     x = states[:,xidx[0]]
@@ -345,6 +350,8 @@ class maooam:
   # Plot model output lines and lines
   #-----------------------------------------------------------------------------
   def plot_lines_and_lines(self,states1,states2,cvec,outfile='maooam-3d',plot_title='3D-slice of MAOOAM attractor',name1='trajectory 1', name2='trajectory 2', xidx = [0,1,2]):
+    if SKIP_HEAVY_PLOT:
+      return
 
     print('states1 = ')
     print(states1)
