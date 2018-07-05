@@ -14,6 +14,6 @@ EDIM = 37
 RHO = 1.0
 
 BCOV_FROM = "Cheng"
-TDVAR_METHOD = "cvt"
+TDVAR_METHOD = "oi"
 SIGMA_B = 0.0002
 
