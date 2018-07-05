@@ -3,6 +3,7 @@ from class_da_system import da_system
 import numpy as np
 from sys import argv
 import matplotlib.pyplot as plt
+from exp_params import SKIP_HEAVY_PLOT
 
 def main():
     nature_file ='x_nature.pkl'
@@ -24,7 +25,8 @@ def main():
     rmses = np.empty(5)
     for i, name in enumerate(slices):
         rmses[i] = print_time_averaged_rmse(nature, analysis, slices[name], name)
-        plot_rmse_all(nature, freerun, analysis, method, slices[name], "img/%s/%s.pdf" % (method, name))
+        if not SKIP_HEAVY_PLOT:
+            plot_rmse_all(nature, freerun, analysis, method, slices[name], "img/%s/%s.pdf" % (method, name))
     np.save("rmse_%s.npy" % method, rmses)
 
 def plot_rmse_all(nature, freerun, analysis, method, slice, img_name):

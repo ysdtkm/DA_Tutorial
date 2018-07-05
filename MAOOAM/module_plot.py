@@ -8,7 +8,7 @@ matplotlib.use("pdf")
 import matplotlib.pyplot as plt
 from class_state_vector import state_vector
 from class_da_system import da_system
-from exp_params import SEED
+from exp_params import SEED, SKIP_HEAVY_PLOT
 
 NDIM = 36
 
@@ -108,23 +108,25 @@ def plot_all(methods):
     freerun_file = 'x_freerun.pkl'
     freerun = state_vector()
     freerun = freerun.load(freerun_file)
-    plot_time_colormap(freerun.getTrajectory() - nature.getTrajectory(),
-                       "img/error_free_run.pdf", *vlim_diff, "error free run", "RdBu_r", True)
-    plot_time_colormap(freerun.getTrajectory(),
-                       "img/freerun.pdf", *vlim_raw, "freerun", "viridis")
-    plot_time_colormap(nature.getTrajectory(),
-                       "img/nature.pdf", *vlim_raw, "nature", "viridis")
+    if not SKIP_HEAVY_PLOT:
+        plot_time_colormap(freerun.getTrajectory() - nature.getTrajectory(),
+                           "img/error_free_run.pdf", *vlim_diff, "error free run", "RdBu_r", True)
+        plot_time_colormap(freerun.getTrajectory(),
+                           "img/freerun.pdf", *vlim_raw, "freerun", "viridis")
+        plot_time_colormap(nature.getTrajectory(),
+                           "img/nature.pdf", *vlim_raw, "nature", "viridis")
     for method in methods:
         analysis_file = 'x_analysis_{method}.pkl'.format(method=method)
         das = da_system()
         das = das.load(analysis_file)
         analysis = das.getStateVector()
-        plot_time_colormap(analysis.getTrajectory() - nature.getTrajectory(),
-                           "img/%s/error_analysis.pdf" % method, *vlim_diff,
-                           "error analysis %s" % method, "RdBu_r", True)
-        plot_time_colormap(analysis.getTrajectory(),
-                           "img/%s/analysis.pdf" % method, *vlim_raw,
-                           "analysis %s" % method, "viridis")
+        if not SKIP_HEAVY_PLOT:
+            plot_time_colormap(analysis.getTrajectory() - nature.getTrajectory(),
+                               "img/%s/error_analysis.pdf" % method, *vlim_diff,
+                               "error analysis %s" % method, "RdBu_r", True)
+            plot_time_colormap(analysis.getTrajectory(),
+                               "img/%s/analysis.pdf" % method, *vlim_raw,
+                               "analysis %s" % method, "viridis")
 
 def read_and_plot_bcov():
     Pb_hist = np.load("Pb_hist.npy")
