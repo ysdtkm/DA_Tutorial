@@ -145,6 +145,7 @@
     Here are the functions to generate the parameters.
 """
 import numpy as np
+from exp_params import T_RUN, DT
 
 
 # -----------------------------------------------------------
@@ -152,8 +153,8 @@ import numpy as np
 # -----------------------------------------------------------
 
 t_trans = 0 #10  # transient period (e.g. 1.e7)
-t_run = 10 ** 3  # length of trajectory on the attractor (e.g. 5.e8)
-dt = 0.5  # the time step
+t_run = T_RUN  # length of trajectory on the attractor (e.g. 5.e8)
+dt = DT  # the time step
 writeout = True  # write out all variables every tw time units
 tw = 10.0  # the time step of writing
 f2py = False # activate the f2py optimization

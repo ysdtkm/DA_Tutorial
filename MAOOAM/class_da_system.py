@@ -339,8 +339,8 @@ class da_system:
   # Use minimization algorithm to solve for the analysis
     assert xb.shape == (self.xdim,)
     assert yo.shape == (self.ydim,)
-    assert TDVAR_METHOD in ["cg", "anl", "oi", "cvt"]
-    if TDVAR_METHOD in ["cg", "anl"]:
+    assert TDVAR_METHOD in ["cg", "inv", "oi", "cvt"]
+    if TDVAR_METHOD in ["cg", "inv"]:
       # make inputs column vectors
       xb = np.matrix(xb).flatten().T
       yo = np.matrix(yo).flatten().T
@@ -363,7 +363,7 @@ class da_system:
       if TDVAR_METHOD == "cg":
         # Use minimization algorithm to minimize cost function:
         xa,ierr = sp.sparse.linalg.cg(A,b1,x0=xb,tol=1e-05,maxiter=1000) 
-      elif TDVAR_METHOD == "anl":
+      elif TDVAR_METHOD == "inv":
         xa = np.linalg.inv(A) @ b1
         assert xa.shape == (self.xdim, 1)
         xa = xa.A[:, 0]

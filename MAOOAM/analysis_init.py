@@ -6,7 +6,7 @@ from class_da_system import da_system
 from module_obs_network import get_h
 from module_constants import get_x_std, get_static_b
 from sys import argv
-from exp_params import SEED, SIGMA_B, EDIM
+from exp_params import SEED, SIGMA_B, EDIM, ACYC_STEP
 from read_r_matrix import get_r
 
 #-----------------------------------------------------------------------
@@ -132,7 +132,7 @@ print(das.getH())
 # Initialize the timesteps
 #-----------------------------------------------------------------------
 t_nature = sv.getTimes()
-acyc_step = 5                        # (how frequently to perform an analysis)
+acyc_step = ACYC_STEP                        # (how frequently to perform an analysis)
 dtau = (t_nature[acyc_step] - t_nature[0])
 fcst_step = acyc_step                      # (may need to change for 4D DA methods)
 fcst_dt = dtau / fcst_step
