@@ -2,6 +2,7 @@
 
 PRIME = 10 ** 6 + 3
 SEED = PRIME * 2
+X0_INIT = "Cheng"
 
 T_RUN = 10 ** 4
 DT = 0.1

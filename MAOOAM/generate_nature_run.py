@@ -4,7 +4,7 @@ from class_state_vector import state_vector
 
 import params_maooam
 from params_maooam import ndim, tw, t_run, t_trans, dt
-from exp_params import SEED
+from exp_params import SEED, X0_INIT
 #from maooam import params_maooam
 #from maooam.params_maooam import ndim, tw, t_run, t_trans, dt
 from maooam import integrator
@@ -14,7 +14,12 @@ import sys
 #------------------------------------------------------------------
 # Setup initial state
 #------------------------------------------------------------------
-ic_file='x0.dat'
+if X0_INIT == "Cheng":
+  ic_file = "binary_const/x0_cheng_20180706.txt"
+elif X0_INIT == "Takuma":
+  ic_file = 'binary_const/x0.dat'
+else:
+  raise ValueError
 name = 'x_nature'
 np.random.seed(SEED * 1)
 
