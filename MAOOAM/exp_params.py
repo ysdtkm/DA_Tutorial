@@ -2,9 +2,10 @@
 
 PRIME = 10 ** 6 + 3
 SEED = PRIME * 2
-X0_INIT = "Cheng"
+X0_INIT = "Takuma"
+RANDOM_SAMPLE_INIT = True
 
-T_RUN = 10 ** 4
+T_RUN = 10 ** 3
 DT = 0.5
 ACYC_STEP = int(2.5 / DT)
 assert abs(DT * ACYC_STEP - 2.5) < 1.0e-6
@@ -20,4 +21,4 @@ TDVAR_METHOD = "oi"
 SIGMA_B = 0.005
 DIAGONALIZE_B = False
 
-SKIP_HEAVY_PLOT = True
+SKIP_HEAVY_PLOT = False

@@ -6,7 +6,7 @@ from class_da_system import da_system
 from module_obs_network import get_h
 from module_constants import get_x_std, get_static_b
 from sys import argv
-from exp_params import SEED, SIGMA_B, EDIM, ACYC_STEP
+from exp_params import SEED, SIGMA_B, EDIM, ACYC_STEP, RANDOM_SAMPLE_INIT
 from read_r_matrix import get_r
 
 #-----------------------------------------------------------------------
@@ -73,7 +73,11 @@ das.setStateVector(sv)
 das.setObsData(obs)
 das.xdim = xdim
 das.ydim = ydim
-das.x0 = x_nature[0,:]
+if RANDOM_SAMPLE_INIT:
+  t = np.random.randint(x_nature.shape[1])
+  das.x0 = x_nature[t,:]
+else:
+  das.x0 = x_nature[0,:]
 das.t = sv.getTimes()
 das.t0 = das.t[0]
 
@@ -82,8 +86,7 @@ das.t0 = das.t[0]
 #-----------------------------------------------------------------------
 das.edim = EDIM
 das.ens_bias_init = 0
-das.ens_sigma_init = 0.0001
-das.x0 += np.random.randn(xdim) * das.ens_sigma_init  # truth is like an ensemble member
+das.ens_sigma_init = 0.1  # multiplied by climatological variability at da_system.initEns
 
 #-----------------------------------------------------------------------
 # Initialize 4D-Var parameters

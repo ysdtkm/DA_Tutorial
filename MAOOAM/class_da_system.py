@@ -8,6 +8,7 @@ import numpy.matlib
 import pickle
 from copy import deepcopy
 from exp_params import TDVAR_METHOD, RHO
+from read_r_matrix import get_b_clim_kriti
 
 #===============================================================================
 class da_system:
@@ -205,6 +206,8 @@ class da_system:
     x0 = np.matrix(x0).flatten().T
     mu = np.matrix(mu).flatten().T
     Xrand = np.random.normal(0,sigma,(xdim,edim))
+    clim_stdv = np.diag(get_b_clim_kriti()) ** 0.5
+    Xrand *= clim_stdv[:, None]  # Ptb is proportional to climatological variability
     Xrand = np.matrix(Xrand)
 #   print('Xrand = ')
 #   print(Xrand)
