@@ -8,6 +8,7 @@ from module_obs_network import get_h
 from exp_params import FLAG_R
 
 def read_diag_r(name):
+    # return R matrix in spectral space, which is a diag matrix (10% clim stdv) ** 2
     n = 36
     r = np.zeros((n, n))
     assert name in ["Luyu", "Kriti", "Cheng"]
@@ -36,6 +37,7 @@ def get_r(flag=FLAG_R):
         r = np.diag(np.diag(hbht))
     elif flag in ["Luyu", "Kriti", "Cheng"]:
         r = read_diag_r(flag)
+        r *= 100  # ttk
         assert r.shape == (p, p)
     elif flag == "identity":
         sigma = 0.001

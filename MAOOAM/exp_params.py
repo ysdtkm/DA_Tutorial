@@ -9,7 +9,7 @@ DT = 0.1
 ACYC_STEP = int(2.5 / DT)
 assert abs(DT * ACYC_STEP - 2.5) < 1.0e-6
 FLAG_R = "Cheng"
-ERROR_FREE_OBS = True  # ttk
+ERROR_FREE_OBS = False
 OBS_NET = "full_spectral"
 
 EDIM = 37
