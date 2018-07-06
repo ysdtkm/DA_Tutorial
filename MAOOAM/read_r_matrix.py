@@ -37,7 +37,7 @@ def get_r(flag=FLAG_R):
         r = np.diag(np.diag(hbht))
     elif flag in ["Luyu", "Kriti", "Cheng"]:
         r = read_diag_r(flag)
-        r *= 100  # ttk
+        r **= 0.5  # ttk
         assert r.shape == (p, p)
     elif flag == "identity":
         sigma = 0.001
