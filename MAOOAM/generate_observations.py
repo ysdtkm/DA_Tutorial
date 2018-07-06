@@ -2,7 +2,7 @@ import numpy as np
 from class_state_vector import state_vector
 from class_obs_data import obs_data
 from module_obs_network import get_h, NDIM
-from exp_params import SEED
+from exp_params import SEED, ERROR_FREE_OBS
 from read_r_matrix import get_r
 
 infile = 'x_nature.pkl'
@@ -52,6 +52,8 @@ hx = np.zeros((nr, nobs))
 for i in range(nobs):
   # eta[:, i] = np.random.normal(mu, sigma, nr)
   eta[:, i] = np.random.randn(nr) * R[i, i] ** 0.5 + mu
+  if ERROR_FREE_OBS:
+    eta[:, i] *= 0.0
 for j in range(nr):
   # (Could apply H(x_nature) here):
   hx[j, :] = H @ x_nature[j, :]

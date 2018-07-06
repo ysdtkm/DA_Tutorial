@@ -19,7 +19,7 @@ def get_x_std():
          6.98347756e-04, 1.35828889e-04, 1.21582441e-07, 2.24123574e-08])
     return x_std
 
-def get_static_b(normalize=True):
+def get_static_b(normalize=True, name=BCOV_FROM):
     bcovs = {
         "Cheng": read_text_b("binary_const/20180702_cheng_b.txt"),
         "t0644": np.load("binary_const/mean_b_cov_t0644_0001tu.npy"),
@@ -31,7 +31,7 @@ def get_static_b(normalize=True):
         "t0830atm": np.load("binary_const/mean_b_cov_t0830_6h_atmobs.npy"),
         "identity": np.identity(NDIM),
     }
-    bcov = bcovs[BCOV_FROM]
+    bcov = bcovs[name]
     assert bcov.shape == (NDIM, NDIM)
     eigs = np.linalg.eigvals(bcov)
     assert np.all(eigs > 0.0)
@@ -64,4 +64,5 @@ def read_xb_yo_xa():
     return xb, yo, xa
 
 if __name__ == "__main__":
-    print(read_xb_yo_xa())
+    maxeigval = np.max(np.linalg.eigvalsh(get_static_b(False, "Cheng")))
+    print(maxeigval ** 0.5)
