@@ -12,14 +12,14 @@ outfile = 'y_obs.pkl'
 # Define observation bias (mu) and error (sigma)
 # Note: sigma will be multiplied by nature run climatological standard deviation
 #--------------------------------------------------------------------------------
-mu = 0
-sigma = 0.001
+# mu = 0
+# sigma = 0.001
 np.random.seed(SEED * 2)
 
 #--------------------------------------------------------------------------------
 # Create observation object
 #--------------------------------------------------------------------------------
-obs = obs_data(name='observe_full_state', mu_init=mu, sigma_init=sigma)
+obs = obs_data(name='observe_full_state')
 
 #--------------------------------------------------------------------------------
 # Read the nature run
@@ -51,7 +51,8 @@ eta = np.zeros((nr, nobs))
 hx = np.zeros((nr, nobs))
 for i in range(nobs):
   # eta[:, i] = np.random.normal(mu, sigma, nr)
-  eta[:, i] = np.random.randn(nr) * R[i, i] ** 0.5 + mu
+  assert np.all(R == np.diag(np.diag(R)))
+  eta[:, i] = np.random.randn(nr) * R[i, i] ** 0.5
   if ERROR_FREE_OBS:
     eta[:, i] *= 0.0
 for j in range(nr):
