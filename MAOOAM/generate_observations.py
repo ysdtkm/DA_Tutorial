@@ -51,7 +51,6 @@ eta = np.zeros((nr, nobs))
 hx = np.zeros((nr, nobs))
 for i in range(nobs):
   # eta[:, i] = np.random.normal(mu, sigma, nr)
-  import pdb; pdb.set_trace()
   assert np.all(R == np.diag(np.diag(R)))
   eta[:, i] = np.random.randn(nr) * R[i, i] ** 0.5
   if ERROR_FREE_OBS:
