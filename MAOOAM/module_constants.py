@@ -2,7 +2,7 @@
 
 import sys
 import numpy as np
-from exp_params import BCOV_FROM
+from exp_params import BCOV_FROM, DIAGONALIZE_B
 
 NDIM = 36
 
@@ -38,6 +38,8 @@ def get_static_b(normalize=True):
     if normalize:
         srad = np.max(eigs)
         bcov /= srad
+    if DIAGONALIZE_B:
+        bcov = np.diag(np.diag(bcov))
     return bcov
 
 def read_text_b(filename):
