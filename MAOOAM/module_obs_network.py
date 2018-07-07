@@ -187,16 +187,23 @@ def get_h_full_coverage():
     return h_mat
 
 def get_h():
+    natm = 20
     if OBS_NET == "full_spectral":
         h = np.identity(NDIM)
     elif OBS_NET == "atm_spectral":
         h = np.identity(NDIM)
-        h = h[:20, :]
+        h = h[:natm, :]
     elif OBS_NET == "ocn_spectral":
         h = np.identity(NDIM)
-        h = h[20:, :]
+        h = h[natm:, :]
     elif OBS_NET == "full_grid":
         h = get_h_full_coverage()
+    elif OBS_NET == "atm_grid":
+        h = get_h_full_coverage()
+        h = h[:natm, :]
+    elif OBS_NET == "ocn_grid":
+        h = get_h_full_coverage()
+        h = h[natm:, :]
     else:
         raise ValueError
     return h
