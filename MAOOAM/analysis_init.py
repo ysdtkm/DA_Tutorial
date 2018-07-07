@@ -6,7 +6,7 @@ from class_da_system import da_system
 from module_obs_network import get_h
 from module_constants import get_x_std, get_static_b
 from sys import argv
-from exp_params import SEED, SIGMA_B, EDIM, ACYC_STEP, RANDOM_SAMPLE_INIT
+from exp_params import SEED, SIGMA_B, EDIM, ACYC_STEP, RANDOM_SAMPLE_INIT, INIT_SIGMAS
 from read_r_matrix import get_r
 
 #-----------------------------------------------------------------------
@@ -86,7 +86,7 @@ das.t0 = das.t[0]
 #-----------------------------------------------------------------------
 das.edim = EDIM
 das.ens_bias_init = 0
-das.ens_sigma_init = 0.1  # multiplied by climatological variability at da_system.initEns
+das.ens_sigma_init = SIGMA_INIT  # multiplied by climatological variability at da_system.initEns
 
 #-----------------------------------------------------------------------
 # Initialize 4D-Var parameters

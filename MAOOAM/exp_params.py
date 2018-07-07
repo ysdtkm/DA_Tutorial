@@ -2,14 +2,13 @@
 
 PRIME = 10 ** 6 + 3
 SEED = PRIME * 2
-X0_INIT = "Takuma"
+X0_INIT = "Cheng"
 RANDOM_SAMPLE_INIT = True
+INIT_SIGMAS = 0.1
 
-T_RUN = 10 ** 3
-DT = 0.5
-ACYC_STEP = int(2.5 / DT)
-assert abs(DT * ACYC_STEP - 2.5) < 1.0e-6
-FLAG_R = "Cheng"
+T_RUN = 10 ** 4
+DT = 0.1
+ACYC_STEP = int(round(2.5 / DT))
 ERROR_FREE_OBS = False
 OBS_NET = "full_spectral"
 
