@@ -204,6 +204,10 @@ def get_h():
     elif OBS_NET == "ocn_grid":
         h = get_h_full_coverage()
         h = h[natm:, :]
+    elif OBS_NET == "Kriti_ocean":
+        ht = read_fort_txt_2d("binary_const/20180707_ht_kriti_ocean.txt")
+        h = ht.T
+        assert h.shape == (NDIM - natm, NDIM)
     else:
         raise ValueError
     return h
@@ -240,7 +244,19 @@ def plot_mat(mat):
     plt.savefig("tmp.png")
     plt.close()
 
+def read_fort_txt_2d(filename):
+    with open(filename, "r") as f:
+        lines = list(f.readlines())
+    nl = len(lines)
+    nc = len(lines[0].split())
+    mat = np.empty((nl, nc))
+    for i in range(nl):
+        l = lines[i].replace("D", "E").split()
+        assert len(l) == nc
+        lf = [float(x) for x in l]
+        mat[i, :] = np.array(lf)
+    return mat
+
 if __name__ == "__main__":
-    plot_mat(get_h_comparison())
-    print(get_h_comparison())
+    pass
 
