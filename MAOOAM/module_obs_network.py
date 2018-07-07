@@ -192,6 +192,9 @@ def get_h():
     elif OBS_NET == "atm_spectral":
         h = np.identity(NDIM)
         h = h[:20, :]
+    elif OBS_NET == "ocn_spectral":
+        h = np.identity(NDIM)
+        h = h[20:, :]
     elif OBS_NET == "full_grid":
         h = get_h_full_coverage()
     else:
