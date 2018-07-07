@@ -53,7 +53,7 @@ def plot_reduced_rmse(params1, params2, name1, name2, res):
         plt.xlabel(name1)
         # plt.ylim([0, 0.01])
         plt.ylabel("RMS error")
-        plt.savefig("out/rmse_onedim_%s.pdf" % names[ir])
+        plt.savefig("out/rmse_onedim_%s.pdf" % names[ir], bbox_inches="tight")
         plt.close()
 
 if __name__ == "__main__":
