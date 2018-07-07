@@ -10,8 +10,8 @@ from util_parallel import Change, shell, exec_parallel
 
 def main():
     wdir_base = sys.argv[1]
-    params1 = list(range(2, 22, 2))
-    params2 = [0.0, 0.02, 0.1, 0.5]
+    params1 = list(range(2, 38))
+    params2 = [0.0, 0.02, 0.1, 0.5, 0.9]
     changes1 = [Change("exp_params.py", 16, "EDIM", "EDIM = %d")]
     changes2 = [Change("exp_params.py", 24, "ALPHA", "ALPHA = %f")]
     shell("mkdir -p %s/out" % wdir_base)
