@@ -22,10 +22,10 @@ def main():
 def plot_reduced_rmse(params1, params2, name1, name2, res):
     if params1 is params2 is res is None:
         with open("plot_reduced_rmse.pkl", "rb") as f:
-            params1, params2, res = pickle.load(f)
+            params1, params2, name1, name2, res = pickle.load(f)
     else:
         with open("plot_reduced_rmse.pkl", "wb") as f:
-            pickle.dump([params1, params2, res], f)
+            pickle.dump([params1, params2, name1, name2, res], f)
     n1, n2 = len(params1), len(params2)
     nr = len(res[0][0])
     res_npy = np.empty((nr, n1, n2))
@@ -35,7 +35,7 @@ def plot_reduced_rmse(params1, params2, name1, name2, res):
             res_npy[:, i1, i2] = res[i1][i2]
     for ir in range(nr):
         fig, ax = plt.subplots()
-        cm = plt.imshow(res_npy[ir, :, :], cmap="Reds")
+        cm = plt.imshow(res_npy[ir, :, :], cmap="Reds", norm=matplotlib.colors.LogNorm())
         # cm.set_clim(0, 0.2)
         plt.colorbar(cm)
         plt.xlabel(name2)
@@ -44,7 +44,7 @@ def plot_reduced_rmse(params1, params2, name1, name2, res):
         plt.ylabel(name1)
         ax.set_yticks(range(n1))
         ax.set_yticklabels(params1)
-        plt.savefig("out/rmse_%s.pdf" % names[ir])
+        plt.savefig("out/rmse_%s.pdf" % names[ir], bbox_inches="tight")
         plt.close()
 
         if n2 >= 2:
