@@ -6,7 +6,7 @@ from class_da_system import da_system
 from module_obs_network import get_h
 from module_constants import get_x_std, get_static_b
 from sys import argv
-from exp_params import SEED, SIGMA_B, EDIM, ACYC_STEP, RANDOM_SAMPLE_INIT, INIT_SIGMAS
+from exp_params import SEED, SIGMA_B, EDIM, ACYC_STEP, RANDOM_SAMPLE_INIT, INIT_SIGMAS, ALPHA
 from read_r_matrix import get_r
 
 #-----------------------------------------------------------------------
@@ -67,8 +67,7 @@ _,ydim = np.shape(y_obs)
 #-----------------------------------------------------------------------
 # Initialize the da system
 #-----------------------------------------------------------------------
-alpha = 0.1
-das = da_system(alpha=alpha)
+das = da_system(alpha=ALPHA)
 das.setStateVector(sv)
 das.setObsData(obs)
 das.xdim = xdim

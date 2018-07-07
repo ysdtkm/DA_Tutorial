@@ -10,14 +10,14 @@ from util_parallel import Change, shell, exec_parallel
 
 def main():
     wdir_base = sys.argv[1]
-    params1 = list(range(2, 38, 2))
-    params2 = [1]
+    params1 = list(range(2, 22, 2))
+    params2 = [0.0, 0.02, 0.1, 0.5]
     changes1 = [Change("exp_params.py", 16, "EDIM", "EDIM = %d")]
-    changes2 = []
+    changes2 = [Change("exp_params.py", 24, "ALPHA", "ALPHA = %f")]
     shell("mkdir -p %s/out" % wdir_base)
-    res = exec_parallel(wdir_base, "template", params1, params2, "edim_%02d", "none_%d",
-                        changes1, changes2, "make", "ETKF", "out.pdf")
-    plot_reduced_rmse(params1, params2, "ensemble size", "none", res)
+    res = exec_parallel(wdir_base, "template", params1, params2, "edim_%02d", "alpha_%.04f",
+                        changes1, changes2, "make", "hybrid", "out.pdf")
+    plot_reduced_rmse(params1, params2, "ensemble size", "alpha", res)
 
 def plot_reduced_rmse(params1, params2, name1, name2, res):
     if params1 is params2 is res is None:
@@ -38,10 +38,10 @@ def plot_reduced_rmse(params1, params2, name1, name2, res):
         cm = plt.imshow(res_npy[ir, :, :], cmap="Reds")
         # cm.set_clim(0, 0.2)
         plt.colorbar(cm)
-        plt.xlabel(name1)
+        plt.xlabel(name2)
         ax.set_xticks(range(n2))
         ax.set_xticklabels(params2, rotation=90)
-        plt.ylabel(name2)
+        plt.ylabel(name1)
         ax.set_yticks(range(n1))
         ax.set_yticklabels(params1)
         plt.savefig("out/rmse_%s.pdf" % names[ir])

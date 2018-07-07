@@ -340,9 +340,17 @@ class da_system:
   def _3DVar(self,xb,yo):
   #-------------------------------------------------------------------------------------------------
   # Use minimization algorithm to solve for the analysis
-    assert xb.shape == (self.xdim,)
-    assert yo.shape == (self.ydim,)
+    assert xb.shape in [(self.xdim,), (self.xdim, 1)]
+    assert yo.shape in [(self.ydim,), (self.ydim, 1)]
     assert TDVAR_METHOD in ["cg", "inv", "oi", "cvt"]
+    if isinstance(xb, np.matrix):
+      xb = xb.A
+    if isinstance(yo, np.matrix):
+      yo = yo.A
+    if xb.shape == (self.xdim, 1):
+      xb = xb[:, 0]
+    if yo.shape == (self.ydim, 1):
+      yo = yo[:, 0]
     if TDVAR_METHOD in ["cg", "inv"]:
       # make inputs column vectors
       xb = np.matrix(xb).flatten().T
