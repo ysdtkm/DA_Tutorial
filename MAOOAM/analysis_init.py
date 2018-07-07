@@ -86,7 +86,7 @@ das.t0 = das.t[0]
 #-----------------------------------------------------------------------
 das.edim = EDIM
 das.ens_bias_init = 0
-das.ens_sigma_init = SIGMA_INIT  # multiplied by climatological variability at da_system.initEns
+das.ens_sigma_init = INIT_SIGMAS  # multiplied by climatological variability at da_system.initEns
 
 #-----------------------------------------------------------------------
 # Initialize 4D-Var parameters

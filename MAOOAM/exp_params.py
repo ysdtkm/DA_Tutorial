@@ -11,6 +11,7 @@ DT = 0.1
 ACYC_STEP = int(round(2.5 / DT))
 ERROR_FREE_OBS = False
 OBS_NET = "full_spectral"
+FLAG_R = "Cheng"
 
 EDIM = 37
 RHO = 1.0
