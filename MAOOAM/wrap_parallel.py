@@ -10,14 +10,14 @@ from util_parallel import Change, shell, exec_parallel
 
 def main():
     wdir_base = sys.argv[1]
-    params1 = list(np.geomspace(0.0001, 0.1, 20))
+    params1 = list(range(2, 38, 2))
     params2 = [1]
-    changes1 = [Change("exp_params.py", 21, "SIGMA_B", "SIGMA_B = %f")]
+    changes1 = [Change("exp_params.py", 16, "EDIM", "EDIM = %d")]
     changes2 = []
     shell("mkdir -p %s/out" % wdir_base)
-    res = exec_parallel(wdir_base, "template", params1, params2, "sigma_b_%.06f", "none_%d",
-                        changes1, changes2, "make", "3DVar", "out.pdf")
-    plot_reduced_rmse(params1, params2, "sigma_b", "none", res)
+    res = exec_parallel(wdir_base, "template", params1, params2, "edim_%02d", "none_%d",
+                        changes1, changes2, "make", "ETKF", "out.pdf")
+    plot_reduced_rmse(params1, params2, "ensemble size", "none", res)
 
 def plot_reduced_rmse(params1, params2, name1, name2, res):
     if params1 is params2 is res is None:
