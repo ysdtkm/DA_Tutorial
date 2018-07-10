@@ -4,7 +4,7 @@ PRIME = 10 ** 6 + 3
 SEED = PRIME * 2
 X0_INIT = "Cheng"
 RANDOM_SAMPLE_INIT = True
-INIT_SIGMAS = 0.1
+INIT_SIGMAS = 1.0
 
 T_RUN = 10 ** 5
 DT = 0.1
