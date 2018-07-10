@@ -157,7 +157,7 @@ def cov_to_mean_and_std(pb_hist, to_corr=False):
     stdv_mat = np.std(mat_hist_cut, axis=0)
     rms_mat = np.mean(mat_hist_cut ** 2, axis=0) ** 0.5
     assert np.all(rms_mat > 0.0)
-    flow_dependence = stdv_mat / rms_mat
+    flow_dependence = stdv_mat ** 2 / rms_mat ** 2
     eps = 1.0e-8
     assert np.all(flow_dependence < 1.0 + eps)
     return mean_mat, stdv_mat, flow_dependence
