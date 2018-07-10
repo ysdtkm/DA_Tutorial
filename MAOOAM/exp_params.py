@@ -4,9 +4,9 @@ PRIME = 10 ** 6 + 3
 SEED = PRIME * 2
 X0_INIT = "Cheng"
 RANDOM_SAMPLE_INIT = True
-INIT_SIGMAS = 1.0
+INIT_SIGMAS = 0.1
 
-T_RUN = 10 ** 5
+T_RUN = 10 ** 3
 DT = 0.1
 ACYC_STEP = int(round(2.5 / DT))
 ERROR_FREE_OBS = False
@@ -15,6 +15,7 @@ FLAG_R = "hbht"
 
 EDIM = 37
 RHO = 1.0
+RELAX = 0.6
 
 BCOV_FROM = "t0830atm"
 TDVAR_METHOD = "inv"

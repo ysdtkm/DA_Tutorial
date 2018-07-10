@@ -7,7 +7,7 @@ from class_obs_data import obs_data
 import numpy.matlib
 import pickle
 from copy import deepcopy
-from exp_params import TDVAR_METHOD, RHO
+from exp_params import TDVAR_METHOD, RHO, RELAX
 from read_r_matrix import get_b_clim_kriti
 
 #===============================================================================
@@ -549,6 +549,8 @@ class da_system:
 
     # Add the same mean vector wm to each column
     Xa = np.dot(Xb,Wa) + np.matlib.repmat(xm, 1, edim)
+    if RELAX > 0.0:
+      Xa = self._relaxation(Xb, Xa, RELAX)
 
     if verbose:
       print ('Xa = ')
@@ -564,6 +566,19 @@ class da_system:
     
     return Xa, KH
 
+  def _relaxation(self, Xb, Xa, alpha):
+    assert isinstance(Xb, np.matrix)
+    assert Xb.shape == (self.xdim, self.edim)
+    assert isinstance(Xa, np.matrix)
+    assert Xa.shape == (self.xdim, self.edim)
+    assert 0.0 <= alpha <= 1.0
+    Xb_ptb = Xb - np.mean(Xb, axis=1)
+    Xa_ptb = Xa - np.mean(Xa, axis=1)
+    new_ptb = (1.0 - alpha) * Xa_ptb + alpha * Xb_ptb
+    Xa_new = np.mean(Xa, axis=1) + new_ptb
+    assert isinstance(Xa_new, np.matrix)
+    assert Xa_new.shape == (self.xdim, self.edim)
+    return Xa_new
 
   #-------------------------------------------------------------------------------------------------
   def _4DVar_outerLoop(self,xb_4d,yo_4d,params):
