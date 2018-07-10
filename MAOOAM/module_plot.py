@@ -132,35 +132,35 @@ def read_and_plot_bcov():
     Pb_hist = np.load("Pb_hist.npy")
     assert len(Pb_hist.shape) == 3
     assert Pb_hist.shape[1] == Pb_hist.shape[2]
+
     counter = Pb_hist.shape[0]
-    mean_cov = np.mean(Pb_hist[counter // 2:, :, :], axis=0)  # discard formar half as spinup
-    title = "B cov (sample = %d)" % (counter // 2)
-    plot_mean_bcov(mean_cov / np.max(np.linalg.eigvalsh(mean_cov)), "img/bcov.pdf", title, True)
-    plot_eig_bcov(mean_cov, "img/bcov_eigval.pdf", "img/bcov_eigvec.pdf", 0)
-    np.save("mean_b_cov.npy", mean_cov)
+    me, sd, fl = cov_to_mean_and_std(Pb_hist, False)
+    srad = np.max(np.linalg.eigvalsh(me))
+    assert srad > 0.0
+    np.save("mean_b_cov.npy", me)
+    plot_mean_bcov(me / srad, "img/bcov.pdf", f"B cov (sample = {counter // 2})", True)
+    plot_mean_bcov(sd / srad, "img/std_cov.pdf", "Stdv of ens cov")
+    plot_mean_bcov(fl, "img/flow_dependency.pdf", "Flow dependency of ens cov")
+    plot_eig_bcov(me, "img/bcov_eigval.pdf", "img/bcov_eigvec.pdf", 0)
 
-    me, sd, fl = cov_to_mean_and_std_corr(Pb_hist)
-    title = "B corr (sample = %d)" % (counter // 2)
-    plot_mean_bcov(me, "img/bcorr.pdf", title)
-
-    plot_mean_bcov(sd, "img/std_corr.pdf", "Stdv of ens corr")
-    plot_mean_bcov(fl, "img/flow_dependency.pdf", "Flow dependency of ens corr")
-
-def cov_to_mean_and_std_corr(pb_hist):
+def cov_to_mean_and_std(pb_hist, to_corr=False):
     assert len(pb_hist.shape) == 3
     nt = pb_hist.shape[0]
-    corr_hist = np.empty_like(pb_hist)
+    mat_hist = np.empty_like(pb_hist)
     for i in range(nt):
-        corr_hist[i, :, :] = cov_to_corr(pb_hist[i, :, :])
-    corr_hist_cut = corr_hist[nt // 2:, :, :]
-    mean_corr = np.mean(corr_hist_cut, axis=0)
-    stdv_corr = np.std(corr_hist_cut, axis=0)
-    rms_corr = np.mean(corr_hist_cut ** 2, axis=0) ** 0.5
+        if to_corr:
+            mat_hist[i, :, :] = cov_to_corr(pb_hist[i, :, :])
+        else:
+            mat_hist[i, :, :] = pb_hist[i, :, :]
+    mat_hist_cut = mat_hist[nt // 2:, :, :]  # discard formar half as spinup
+    mean_mat = np.mean(mat_hist_cut, axis=0)
+    stdv_mat = np.std(mat_hist_cut, axis=0)
+    rms_mat = np.mean(mat_hist_cut ** 2, axis=0) ** 0.5
+    assert np.all(rms_mat > 0.0)
+    flow_dependence = stdv_mat / rms_mat
     eps = 1.0e-8
-    assert np.all(rms_corr > eps)
-    flow_dependence = stdv_corr / rms_corr
     assert np.all(flow_dependence < 1.0 + eps)
-    return mean_corr, stdv_corr, flow_dependence
+    return mean_mat, stdv_mat, flow_dependence
 
 def read_and_plot_mean_bcov():
     for intvl, name in [(1, "t0644"), (10, "t0645"), (100, "t0646"), (1000, "t0647")]:
