@@ -13,20 +13,19 @@ matplotlib.use("pdf")
 import matplotlib.pyplot as plt
 import numpy as np
 
-INPATH = "/lustre/tyoshida/prgm/DA_Tutorial/MAOOAM"
-WKPATH = sys.argv[1]
-
 def main_parallel():
+    wkpath = sys.argv[1]
+    inpath = f"{wkpath}/template"
     params = [
         ParameterAxis("ensemble member", list(range(2, 38, 12)), "%02d", [Rewriter("exp_params.py", 16, "EDIM", "EDIM = {param:d}")])
     ]
     if True:
-        res = Runner.run_parallel(params, "make", 4)
+        res = Runner.run_parallel(params, "make", wkpath, inpath)
         save_results(params, res)
     else:
         params, res = load_results()
-    visualize_1d_rmse(params, res)
-    visualize_2d_rmse(params, res)
+    visualize_1d_rmse(params, res, wkpath)
+    visualize_2d_rmse(params, res, wkpath)
 
 def save_results(params, res):
     with open("all_results.pkl", "wb") as f:
@@ -37,7 +36,7 @@ def load_results():
         params, res = pickle.load(f)
     return params, res
 
-def visualize_1d_rmse(params, res):
+def visualize_1d_rmse(params, res, wkpath):
     assert len(params) == 1
     assert isinstance(res, np.ndarray)
     names = ["atmos_psi", "atmos_temp", "ocean_psi", "ocean_temp", "all"]
@@ -47,10 +46,10 @@ def visualize_1d_rmse(params, res):
         plt.title(f"RMSE of {component} variables")
         plt.xlabel(params[0].name)
         plt.ylabel("RMS error")
-        plt.savefig(f"{WKPATH}/out/rmse_onedim_{component}.pdf", bbox_inches="tight")
+        plt.savefig(f"{wkpath}/out/rmse_onedim_{component}.pdf", bbox_inches="tight")
         plt.close()
 
-def visualize_2d_rmse(params, res):
+def visualize_2d_rmse(params, res, wkpath):
     if len(params) == 1:
         params.append(ParameterAxis("none", [0], "%01d", []))
         res = res[:, None]
@@ -68,16 +67,16 @@ def visualize_2d_rmse(params, res):
         plt.ylabel(params[0].name)
         ax.set_yticks(range(len(params[0].values)))
         ax.set_yticklabels(params[0].values)
-        plt.savefig(f"{WKPATH}/out/rmse_{component}.pdf", bbox_inches="tight")
+        plt.savefig(f"{wkpath}/out/rmse_{component}.pdf", bbox_inches="tight")
         plt.close()
 
-def get_output_obj(suffix_path):
+def get_output_obj(suffix_path, wkpath):
     fname = suffix_path.replace("/", "_")[1:]
-    shell(f"cp -f out.pdf {WKPATH}/out/{fname}.pdf")
+    shell(f"cp -f out.pdf {wkpath}/out/{fname}.pdf")
     npa = np.load("rmse_ETKF.npy")
     return npa
 
-def get_failed_obj(suffix_path):
+def get_failed_obj(suffix_path, wkpath):
     return np.ones(5) * np.nan
 
 # Following are backend. Generally no need to edit.
@@ -126,34 +125,34 @@ class Runner:
         return kd_array
 
     @classmethod
-    def exec_single_job(cls, params, command, list_param_val):
+    def exec_single_job(cls, params, command, wkpath, inpath, list_param_val):
         k_dim = len(params)
         assert len(list_param_val) == k_dim
         str_path_part = [(params[j].path_fmt % list_param_val[j]).replace(".", "_") for j in range(k_dim)]
         suffix_path = "".join([f"/{str_path_part[j]}" for j in range(k_dim)])
-        single_dir_name = f"{WKPATH}{suffix_path}"
+        single_dir_name = f"{wkpath}{suffix_path}"
         shell(f"mkdir -p {single_dir_name}")
         os.chdir(single_dir_name)
-        shell(f"cp -rf {INPATH}/* .")
+        shell(f"cp -rf {inpath}/* .")
         for j in range(k_dim):
             for r in params[j].rewriters:
                 r.rewrite_file_with_param(list_param_val[j])
         try:
             shell(command, writeout=True)
-            res = get_output_obj(suffix_path)
+            res = get_output_obj(suffix_path, wkpath)
             print(f"util_parallel: {suffix_path} done")
         except:
-            res = get_failed_obj(suffix_path)
+            res = get_failed_obj(suffix_path, wkpath)
             print(f"util_parallel: {suffix_path} failed")
         return res
 
     @classmethod
-    def run_parallel(cls, params, command, max_proc=10):
-        shell(f"rm -rf {WKPATH}")
-        shell(f"mkdir -p {WKPATH}/out")
+    def run_parallel(cls, params, command, max_proc=10, wkpath, inpath, max_proc=10):
+        shell(f"rm -rf {wkpath}")
+        shell(f"mkdir -p {wkpath}/out")
         param_vals = [p.values for p in params]
         param_vals_prod = itertools.product(*param_vals)
-        job = functools.partial(cls.exec_single_job, params, command)
+        job = functools.partial(cls.exec_single_job, params, command, wkpath, inpath)
         with Pool(min(cpu_count(), max_proc)) as p:
             res = p.map(job, param_vals_prod)
         return cls.inverse_itertools_kd_product(param_vals, res)
