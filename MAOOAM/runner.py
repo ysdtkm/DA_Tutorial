@@ -18,58 +18,39 @@ WKPATH = "/lustre/tyoshida/shrt/MAOOAM_WK"
 def main_parallel():
     params = [
         ParameterAxis("ensemble member", list(range(2, 38, 12)), "%02d", [Rewriter("exp_params.py", 16, "EDIM", "EDIM = {param:d}")]),
+        ParameterAxis("none", [0], "%02d", []),
     ]
     res = Runner.run_parallel(params, "make", 4)
-    visualize_1d_rmse(params, res)
-
-# def plot_reduced_rmse(params1, params2, name1, name2, res):
-#     if params1 is params2 is res is None:
-#         with open("plot_reduced_rmse.pkl", "rb") as f:
-#             params1, params2, name1, name2, res = pickle.load(f)
-#     else:
-#         with open("plot_reduced_rmse.pkl", "wb") as f:
-#             pickle.dump([params1, params2, name1, name2, res], f)
-#     n1, n2 = len(params1), len(params2)
-#     nr = len(res[0][0])
-#     res_npy = np.empty((nr, n1, n2))
-#     names = ["atmos_psi", "atmos_temp", "ocean_psi", "ocean_temp", "all"]
-#     for i1 in range(n1):
-#         for i2 in range(n2):
-#             res_npy[:, i1, i2] = res[i1][i2]
-#     for ir in range(nr):
-#         fig, ax = plt.subplots()
-#         cm = plt.imshow(res_npy[ir, :, :], cmap="Reds", norm=matplotlib.colors.LogNorm())
-#         # cm.set_clim(0, 0.2)
-#         plt.colorbar(cm)
-#         plt.xlabel(name2)
-#         ax.set_xticks(range(n2))
-#         ax.set_xticklabels(params2, rotation=90)
-#         plt.ylabel(name1)
-#         ax.set_yticks(range(n1))
-#         ax.set_yticklabels(params1)
-#         plt.savefig("out/rmse_%s.pdf" % names[ir], bbox_inches="tight")
-#         plt.close()
-# 
-#         if n2 >= 2:
-#             continue
-#         plt.loglog(params1, res_npy[ir, :, 0])
-#         plt.xlabel(name1)
-#         # plt.ylim([0, 0.01])
-#         plt.ylabel("RMS error")
-#         plt.savefig("out/rmse_onedim_%s.pdf" % names[ir], bbox_inches="tight")
-#         plt.close()
+    visualize_2d_rmse(params, res)
 
 def visualize_1d_rmse(params, res):
     assert len(params) == 1
     assert isinstance(res, np.ndarray)
     names = ["atmos_psi", "atmos_temp", "ocean_psi", "ocean_temp", "all"]
-    import pdb; pdb.set_trace()
     for ic, component in enumerate(names):
         subtract_rmse = np.vectorize(lambda x: x[ic])
         plt.loglog(params[0].values, subtract_rmse(res))
         plt.xlabel(component)
         plt.ylabel("RMS error")
         plt.savefig(f"rmse_onedim_{component}.pdf", bbox_inches="tight")
+        plt.close()
+
+def visualize_2d_rmse(params, res):
+    assert len(params) == 2
+    names = ["atmos_psi", "atmos_temp", "ocean_psi", "ocean_temp", "all"]
+    for ic, component in enumerate(names):
+        fig, ax = plt.subplots()
+        subtract_rmse = np.vectorize(lambda x: x[ic])
+        cm = plt.imshow(subtract_rmse(res), cmap="Reds", norm=matplotlib.colors.LogNorm())
+        plt.colorbar(cm)
+        import pdb; pdb.set_trace()
+        plt.xlabel(params[1].name)
+        ax.set_xticks(range(len(params[1].values)))
+        ax.set_xticklabels(params[1].values, rotation=90)
+        plt.ylabel(params[0].name)
+        ax.set_yticks(range(len(params[0].values)))
+        ax.set_yticklabels(params[0].values)
+        plt.savefig(f"rmse_{component}.pdf", bbox_inches="tight")
         plt.close()
 
 def get_output_obj():
