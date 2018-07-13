@@ -15,12 +15,12 @@ import numpy as np
 
 def main_parallel():
     wkpath = sys.argv[1]
-    inpath = f"{wkpath}/template"
+    templatepath = f"{wkpath}/template"
     params = [
         ParameterAxis("ensemble member", list(range(2, 38, 12)), "%02d", [Rewriter("exp_params.py", 16, "EDIM", "EDIM = {param:d}")])
     ]
     if True:
-        res = Runner.run_parallel(params, "make", wkpath, inpath)
+        res = Runner.run_parallel(params, "make", wkpath, templatepath)
         save_results(params, res)
     else:
         params, res = load_results()
@@ -125,7 +125,7 @@ class Runner:
         return kd_array
 
     @classmethod
-    def exec_single_job(cls, params, command, wkpath, inpath, list_param_val):
+    def exec_single_job(cls, params, command, wkpath, templatepath, list_param_val):
         k_dim = len(params)
         assert len(list_param_val) == k_dim
         str_path_part = [(params[j].path_fmt % list_param_val[j]).replace(".", "_") for j in range(k_dim)]
@@ -133,7 +133,7 @@ class Runner:
         single_dir_name = f"{wkpath}{suffix_path}"
         shell(f"mkdir -p {single_dir_name}")
         os.chdir(single_dir_name)
-        shell(f"cp -rf {inpath}/* .")
+        shell(f"cp -rf {templatepath}/* .")
         for j in range(k_dim):
             for r in params[j].rewriters:
                 r.rewrite_file_with_param(list_param_val[j])
@@ -147,12 +147,12 @@ class Runner:
         return res
 
     @classmethod
-    def run_parallel(cls, params, command, wkpath, inpath, max_proc=10):
+    def run_parallel(cls, params, command, wkpath, templatepath, max_proc=10):
         shell(f"rm -rf {wkpath}/out")
         shell(f"mkdir -p {wkpath}/out")
         param_vals = [p.values for p in params]
         param_vals_prod = itertools.product(*param_vals)
-        job = functools.partial(cls.exec_single_job, params, command, wkpath, inpath)
+        job = functools.partial(cls.exec_single_job, params, command, wkpath, templatepath)
         with Pool(min(cpu_count(), max_proc)) as p:
             res = p.map(job, param_vals_prod)
         return cls.inverse_itertools_kd_product(param_vals, res)
