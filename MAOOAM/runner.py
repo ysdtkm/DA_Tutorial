@@ -7,6 +7,9 @@ from multiprocessing import Pool, cpu_count
 import os
 import sys
 import subprocess as sp
+import matplotlib
+matplotlib.use("pdf")
+import matplotlib.pyplot as plt
 import numpy as np
 
 INPATH = "/lustre/tyoshida/prgm/DA_Tutorial/MAOOAM"
@@ -59,16 +62,22 @@ def main_parallel():
 def visualize_1d_rmse(params, res):
     assert len(params) == 1
     assert isinstance(res, np.ndarray)
+    names = ["atmos_psi", "atmos_temp", "ocean_psi", "ocean_temp", "all"]
     import pdb; pdb.set_trace()
-    subtract_rmse_entire_system = np.vectorize(lambda x: x[0])
-    print(subtract_rmse_entire_system(res))
+    for ic, component in enumerate(names):
+        subtract_rmse = np.vectorize(lambda x: x[ic])
+        plt.loglog(params[0].values, subtract_rmse(res))
+        plt.xlabel(component)
+        plt.ylabel("RMS error")
+        plt.savefig(f"rmse_onedim_{component}.pdf", bbox_inches="tight")
+        plt.close()
 
 def get_output_obj():
     npa = np.load("rmse_ETKF.npy")
     return npa
 
 def get_failed_obj():
-    return "Failed"
+    return np.ones(5) * np.nan
 
 # Following are backend. Generally no need to edit.
 class Rewriter:
