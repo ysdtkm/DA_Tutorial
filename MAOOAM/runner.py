@@ -5,6 +5,7 @@ import functools
 import itertools
 from multiprocessing import Pool, cpu_count
 import os
+import pickle
 import sys
 import subprocess as sp
 import matplotlib
@@ -16,12 +17,26 @@ INPATH = "/lustre/tyoshida/prgm/DA_Tutorial/MAOOAM"
 WKPATH = "/lustre/tyoshida/shrt/MAOOAM_WK"
 
 def main_parallel():
+    shell("rm -rf out && mkdir -p out")
     params = [
-        ParameterAxis("ensemble member", list(range(2, 38, 12)), "%02d", [Rewriter("exp_params.py", 16, "EDIM", "EDIM = {param:d}")]),
-        ParameterAxis("none", [0], "%02d", []),
+        ParameterAxis("ensemble member", list(range(2, 38, 12)), "%02d", [Rewriter("exp_params.py", 16, "EDIM", "EDIM = {param:d}")])
     ]
-    res = Runner.run_parallel(params, "make", 4)
+    if False:
+        res = Runner.run_parallel(params, "make", 4)
+        save_results(params, res)
+    else:
+        params, res = load_results()
+    visualize_1d_rmse(params, res)
     visualize_2d_rmse(params, res)
+
+def save_results(params, res):
+    with open("all_results.pkl", "wb") as f:
+        pickle.dump([params, res], f)
+
+def load_results():
+    with open("all_results.pkl", "rb") as f:
+        params, res = pickle.load(f)
+    return params, res
 
 def visualize_1d_rmse(params, res):
     assert len(params) == 1
@@ -29,13 +44,17 @@ def visualize_1d_rmse(params, res):
     names = ["atmos_psi", "atmos_temp", "ocean_psi", "ocean_temp", "all"]
     for ic, component in enumerate(names):
         subtract_rmse = np.vectorize(lambda x: x[ic])
-        plt.loglog(params[0].values, subtract_rmse(res))
-        plt.xlabel(component)
+        plt.semilogy(params[0].values, subtract_rmse(res))
+        plt.title(f"RMSE of {component} variables")
+        plt.xlabel(params[0].name)
         plt.ylabel("RMS error")
-        plt.savefig(f"rmse_onedim_{component}.pdf", bbox_inches="tight")
+        plt.savefig(f"out/rmse_onedim_{component}.pdf", bbox_inches="tight")
         plt.close()
 
 def visualize_2d_rmse(params, res):
+    if len(params) == 1:
+        params.append(ParameterAxis("none", [0], "%01d", []))
+        res = res[:, None]
     assert len(params) == 2
     names = ["atmos_psi", "atmos_temp", "ocean_psi", "ocean_temp", "all"]
     for ic, component in enumerate(names):
@@ -43,14 +62,14 @@ def visualize_2d_rmse(params, res):
         subtract_rmse = np.vectorize(lambda x: x[ic])
         cm = plt.imshow(subtract_rmse(res), cmap="Reds", norm=matplotlib.colors.LogNorm())
         plt.colorbar(cm)
-        import pdb; pdb.set_trace()
+        plt.title(f"RMSE of {component} variables")
         plt.xlabel(params[1].name)
         ax.set_xticks(range(len(params[1].values)))
         ax.set_xticklabels(params[1].values, rotation=90)
         plt.ylabel(params[0].name)
         ax.set_yticks(range(len(params[0].values)))
         ax.set_yticklabels(params[0].values)
-        plt.savefig(f"rmse_{component}.pdf", bbox_inches="tight")
+        plt.savefig(f"out/rmse_{component}.pdf", bbox_inches="tight")
         plt.close()
 
 def get_output_obj():
@@ -106,36 +125,20 @@ class Runner:
         return kd_array
 
     @classmethod
-    def shell(cls, cmd, writeout=False):
-        assert isinstance(cmd, str)
-        p = sp.run(cmd, shell=True, encoding="utf8", stderr=sp.PIPE, stdout=sp.PIPE)
-        if writeout:
-            with open("stdout", "w") as f:
-                f.write(p.stdout)
-            with open("stderr", "w") as f:
-                f.write(p.stdout)
-        else:
-            if p.returncode != 0:
-                print(p.stdout)
-                print(p.stderr)
-        if p.returncode != 0:
-            raise Exception("shell %s failed" % cmd)
-
-    @classmethod
     def exec_single_job(cls, params, command, list_param_val):
         k_dim = len(params)
         assert len(list_param_val) == k_dim
         str_path_part = [(params[j].path_fmt % list_param_val[j]).replace(".", "_") for j in range(k_dim)]
         suffix_path = "".join([f"/{str_path_part[j]}" for j in range(k_dim)])
         single_dir_name = f"{WKPATH}{suffix_path}"
-        cls.shell(f"mkdir -p {single_dir_name}")
+        shell(f"mkdir -p {single_dir_name}")
         os.chdir(single_dir_name)
-        cls.shell(f"cp -rf {INPATH}/* .")
+        shell(f"cp -rf {INPATH}/* .")
         for j in range(k_dim):
             for r in params[j].rewriters:
                 r.rewrite_file_with_param(list_param_val[j])
         try:
-            cls.shell(command, writeout=True)
+            shell(command, writeout=True)
             res = get_output_obj()
             print(f"util_parallel: {suffix_path} done")
         except:
@@ -145,13 +148,28 @@ class Runner:
 
     @classmethod
     def run_parallel(cls, params, command, max_proc=10):
-        cls.shell(f"rm -rf {WKPATH}")
+        shell(f"rm -rf {WKPATH}")
         param_vals = [p.values for p in params]
         param_vals_prod = itertools.product(*param_vals)
         job = functools.partial(cls.exec_single_job, params, command)
         with Pool(min(cpu_count(), max_proc)) as p:
             res = p.map(job, param_vals_prod)
         return cls.inverse_itertools_kd_product(param_vals, res)
+
+def shell(cmd, writeout=False):
+    assert isinstance(cmd, str)
+    p = sp.run(cmd, shell=True, encoding="utf8", stderr=sp.PIPE, stdout=sp.PIPE)
+    if writeout:
+        with open("stdout", "w") as f:
+            f.write(p.stdout)
+        with open("stderr", "w") as f:
+            f.write(p.stdout)
+    else:
+        if p.returncode != 0:
+            print(p.stdout)
+            print(p.stderr)
+    if p.returncode != 0:
+        raise Exception("shell %s failed" % cmd)
 
 if __name__ == "__main__":
     main_parallel()
