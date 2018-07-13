@@ -17,7 +17,8 @@ def main_parallel():
     wkpath = sys.argv[1]
     templatepath = f"{wkpath}/template"
     params = [
-        ParameterAxis("ensemble member", list(range(2, 38, 12)), "%02d", [Rewriter("exp_params.py", 16, "EDIM", "EDIM = {param:d}")])
+        ParameterAxis("ensemble member", list(range(2, 38, 12)), "%02d", \
+            [Rewriter("exp_params.py", 16, "EDIM", "EDIM = {param:d}")])
     ]
     if True:
         res = Runner.run_parallel(params, "make", wkpath, templatepath)
