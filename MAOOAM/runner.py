@@ -147,8 +147,8 @@ class Runner:
         return res
 
     @classmethod
-    def run_parallel(cls, params, command, max_proc=10, wkpath, inpath, max_proc=10):
-        shell(f"rm -rf {wkpath}")
+    def run_parallel(cls, params, command, wkpath, inpath, max_proc=10):
+        shell(f"rm -rf {wkpath}/out")
         shell(f"mkdir -p {wkpath}/out")
         param_vals = [p.values for p in params]
         param_vals_prod = itertools.product(*param_vals)
