@@ -6,7 +6,7 @@ X0_INIT = "Cheng"
 RANDOM_SAMPLE_INIT = True
 INIT_SIGMAS = 0.1
 
-T_RUN = 10 ** 5
+T_RUN = 10 ** 2
 DT = 0.1
 ACYC_STEP = int(round(2.5 / DT))
 ERROR_FREE_OBS = False
