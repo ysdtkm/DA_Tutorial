@@ -17,11 +17,10 @@ INPATH = "/lustre/tyoshida/prgm/DA_Tutorial/MAOOAM"
 WKPATH = "/lustre/tyoshida/shrt/MAOOAM_WK"
 
 def main_parallel():
-    shell("rm -rf out && mkdir -p out")
     params = [
         ParameterAxis("ensemble member", list(range(2, 38, 12)), "%02d", [Rewriter("exp_params.py", 16, "EDIM", "EDIM = {param:d}")])
     ]
-    if False:
+    if True:
         res = Runner.run_parallel(params, "make", 4)
         save_results(params, res)
     else:
@@ -48,7 +47,7 @@ def visualize_1d_rmse(params, res):
         plt.title(f"RMSE of {component} variables")
         plt.xlabel(params[0].name)
         plt.ylabel("RMS error")
-        plt.savefig(f"out/rmse_onedim_{component}.pdf", bbox_inches="tight")
+        plt.savefig(f"{WKPATH}/out/rmse_onedim_{component}.pdf", bbox_inches="tight")
         plt.close()
 
 def visualize_2d_rmse(params, res):
@@ -69,14 +68,16 @@ def visualize_2d_rmse(params, res):
         plt.ylabel(params[0].name)
         ax.set_yticks(range(len(params[0].values)))
         ax.set_yticklabels(params[0].values)
-        plt.savefig(f"out/rmse_{component}.pdf", bbox_inches="tight")
+        plt.savefig(f"{WKPATH}/out/rmse_{component}.pdf", bbox_inches="tight")
         plt.close()
 
-def get_output_obj():
+def get_output_obj(suffix_path):
+    fname = suffix_path.replace("/", "_")[1:]
+    shell(f"cp -f out.pdf {WKPATH}/out/{fname}.pdf")
     npa = np.load("rmse_ETKF.npy")
     return npa
 
-def get_failed_obj():
+def get_failed_obj(suffix_path):
     return np.ones(5) * np.nan
 
 # Following are backend. Generally no need to edit.
@@ -139,16 +140,17 @@ class Runner:
                 r.rewrite_file_with_param(list_param_val[j])
         try:
             shell(command, writeout=True)
-            res = get_output_obj()
+            res = get_output_obj(suffix_path)
             print(f"util_parallel: {suffix_path} done")
         except:
-            res = get_failed_obj()
+            res = get_failed_obj(suffix_path)
             print(f"util_parallel: {suffix_path} failed")
         return res
 
     @classmethod
     def run_parallel(cls, params, command, max_proc=10):
         shell(f"rm -rf {WKPATH}")
+        shell(f"mkdir -p {WKPATH}/out")
         param_vals = [p.values for p in params]
         param_vals_prod = itertools.product(*param_vals)
         job = functools.partial(cls.exec_single_job, params, command)
