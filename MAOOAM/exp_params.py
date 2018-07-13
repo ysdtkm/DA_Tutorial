@@ -10,7 +10,7 @@ T_RUN = 10 ** 3
 DT = 0.1
 ACYC_STEP = int(round(2.5 / DT))
 ERROR_FREE_OBS = False
-OBS_NET = "atmos_grid"
+OBS_NET = "atm_grid"
 FLAG_R = "hbht"
 
 EDIM = 37
