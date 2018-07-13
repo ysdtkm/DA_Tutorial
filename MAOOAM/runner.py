@@ -59,11 +59,13 @@ def main_parallel():
 def visualize_1d_rmse(params, res):
     assert len(params) == 1
     assert isinstance(res, np.ndarray)
-    n = len(params[0])
+    import pdb; pdb.set_trace()
+    subtract_rmse_entire_system = np.vectorize(lambda x: x[0])
+    print(subtract_rmse_entire_system(res))
 
 def get_output_obj():
     npa = np.load("rmse_ETKF.npy")
-    return (npa,)
+    return npa
 
 def get_failed_obj():
     return "Failed"
@@ -102,13 +104,16 @@ class ParameterAxis:
 
 class Runner:
     @classmethod
-    def inverse_itertools_kd_product(cls, param_vals, map_result):
-        k_dim = len(param_vals)
-        ns = [len(param_vals[j]) for j in range(k_dim)]
-        assert np.prod(ns, dtype=int) == len(map_result)
-        res_np = np.array(map_result, dtype=object)
-        res = res_np.reshape(ns)
-        return res
+    def inverse_itertools_kd_product(cls, param_vals, product_objs):
+        ns = [len(pv) for pv in param_vals]
+        assert len(product_objs) == np.prod(ns, dtype=int)
+        indices = [list(range(n)) for n in ns]
+        product_indices = list(itertools.product(*indices))
+        kd_array = np.empty(ns, dtype=object)
+        for i, res in enumerate(product_objs):
+            idx = product_indices[i]
+            kd_array[idx] = product_objs[i]
+        return kd_array
 
     @classmethod
     def shell(cls, cmd, writeout=False):
