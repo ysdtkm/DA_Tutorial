@@ -29,15 +29,15 @@ cd ${wdir}
 
 echo "#!/bin/bash"                                    > tmp.sh
 echo "#SBATCH -n 20"                                 >> tmp.sh
-echo "#SBATCH -t 24:15:00"                           >> tmp.sh
+echo "#SBATCH -t 00:15:00"                           >> tmp.sh
 echo "#SBATCH -J ${word}"                            >> tmp.sh
 echo "set -e"                                        >> tmp.sh
 if [ ${parallel} = "true" ]; then
-  echo "python3 template/wrap_parallel.py ${wdir}"     >> tmp.sh
-  echo "cp -r out ${storagedir}/${word}"               >> tmp.sh
+  echo "python3 template/runner.py ${wdir}"          >> tmp.sh
+  echo "cp -r out ${storagedir}/${word}"             >> tmp.sh
 else
-  echo "make all"                                      >> tmp.sh
-  echo "cp out.pdf ${storagedir}/${word}.pdf"          >> tmp.sh
+  echo "make all"                                    >> tmp.sh
+  echo "cp out.pdf ${storagedir}/${word}.pdf"        >> tmp.sh
 fi
 
 sbatch tmp.sh

@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 INPATH = "/lustre/tyoshida/prgm/DA_Tutorial/MAOOAM"
-WKPATH = "/lustre/tyoshida/shrt/MAOOAM_WK"
+WKPATH = sys.argv[1]
 
 def main_parallel():
     params = [
