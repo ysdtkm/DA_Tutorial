@@ -18,7 +18,7 @@ def main_parallel():
     templatepath = f"{wkpath}/template"
     params = [
         ParameterAxis("ensemble member", list(range(2, 38, 12)), "%02d", \
-            [Rewriter("exp_params.py", 16, "EDIM", "EDIM = {param:d}")])
+            [Rewriter("exp_params.py", 16, "EDIM = {param:d}")])
     ]
     if True:
         res = Runner.run_parallel(params, "make", wkpath, templatepath)
@@ -82,23 +82,24 @@ def get_failed_obj(suffix_path, wkpath):
 
 # Following are backend. Generally no need to edit.
 class Rewriter:
-    def __init__(self, relative_file_name, line_num, match, formattable_replacer):
+    def __init__(self, relative_file_name, line_num, formattable_replacer, disable_check=False):
         assert isinstance(relative_file_name, str)
         assert isinstance(line_num, int)
-        assert isinstance(match, str)
         assert isinstance(formattable_replacer, str)
         self.relative_file_name = relative_file_name
         self.line_num = line_num
-        self.match = match
         self.formattable_replacer = formattable_replacer
+        self.disable_check = disable_check
 
     def rewrite_file_with_param(self, param):
         with open(self.relative_file_name, "r") as f:
             lines = f.readlines()
+        str_to_match = re.sub(r"\{[^)]*\}", "", self.formattable_replacer)  # remove curly brackets
         with open(self.relative_file_name, "w") as f:
             for i, l in enumerate(lines):
                 if i == self.line_num - 1:
-                    assert self.match in l
+                    if (not self.disable_check) and (not str_to_match in l):
+                        raise ValueError(f"Rewriter checking error: pattern '{str_to_match}' not in line {self.line_num} of {self.relative_file_name}")
                     f.write(self.formattable_replacer.format(param=param) + "\n")
                 else:
                     f.write(l)
