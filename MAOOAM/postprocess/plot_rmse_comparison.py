@@ -9,6 +9,20 @@ import matplotlib.pyplot as plt
 
 DIR_RESULTS = "/lustre/tyoshida/six_month/result_exempt"
 
+def get_exp_dict():
+    exp_dict = {
+        ("full", "hybrid"): "t0902",
+        ("atmos", "hybrid"): "t0901",
+        ("ocean", "hybrid"): "t0900",
+        ("full", "ETKF"): "t0933",
+        ("atmos", "ETKF"): "t0931",
+        ("ocean", "ETKF"): "t0932",
+        ("full", "3DVar"): "t0942",
+        ("atmos", "3DVar"): "t0944",
+        ("ocean", "3DVar"): "t0945",
+    }
+    return exp_dict
+
 def read_error_ETKF_or_hybrid(parent_dir, expname):
     with open(f"{parent_dir}/{expname}/plot_reduced_rmse.pkl", "rb") as f:
         obj = pickle.load(f)
@@ -28,6 +42,12 @@ class TestAll(unittest.TestCase):
         for exp in ["t0942", "t0944", "t0945"]:
             res = read_error_3DVar(DIR_RESULTS, exp)
             self.assertTrue(isinstance(res, np.ndarray))
+
+    def test_get_exp_dict(self):
+        exp_dict = get_exp_dict()
+        for obs in ["full", "atmos", "ocean"]:
+            for da in ["hybrid", "ETKF", "3DVar"]:
+                print(obs, da, exp_dict[(obs, da)])
 
 if __name__ == "__main__":
     unittest.main()
