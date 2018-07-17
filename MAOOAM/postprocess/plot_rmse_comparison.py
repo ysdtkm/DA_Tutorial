@@ -56,19 +56,21 @@ def get_rmse_comparison(obs):
 
     return rmse_3dvar, rmse_ETKF, rmse_hybrid
 
-def plot_rmse_comparison(obs):
-    rmse_3dvar, rmse_ETKF, rmse_hybrid = get_rmse_comparison(obs)
-    plt.rcParams["font.size"] = 14
-    plt.plot(EDIM_LIST, rmse_ETKF, label="ETKF", marker=".")
-    plt.plot(EDIM_LIST, rmse_hybrid, label="hybrid", marker="x")
-    plt.axhline(y=rmse_3dvar, label="3DVar", color="green")
-    plt.ylim(0.0, 0.01)
-    plt.title(f"{obs} observation (grid space)")
-    plt.xlabel("Ensemble size")
-    plt.ylabel("RMS error of entire state")
-    plt.legend()
-    plt.savefig(f"out/rmse_comparison_{obs}.pdf", bbox_inches="tight")
-    plt.close()
+def plot_rmse_comparison():
+    for obs in OBS_LIST:
+        ymax = {"full": 0.005, "atmos": 0.01, "ocean": 0.1}
+        rmse_3dvar, rmse_ETKF, rmse_hybrid = get_rmse_comparison(obs)
+        plt.rcParams["font.size"] = 14
+        plt.plot(EDIM_LIST, rmse_ETKF, label="ETKF", marker=".")
+        plt.plot(EDIM_LIST, rmse_hybrid, label="hybrid", marker="x")
+        plt.axhline(y=rmse_3dvar, label="3DVar", color="green")
+        plt.ylim(0.0, ymax[obs])
+        plt.title(f"{obs} observation (grid space)")
+        plt.xlabel("Ensemble size")
+        plt.ylabel("RMS error of entire state")
+        plt.legend()
+        plt.savefig(f"out/rmse_comparison_{obs}.pdf", bbox_inches="tight")
+        plt.close()
 
 class TestAll(unittest.TestCase):
     def test_read_error_ETKF_or_hybrid(self):
@@ -91,4 +93,4 @@ class TestAll(unittest.TestCase):
                 self.assertTrue(isinstance(res, str))
 
 if __name__ == "__main__":
-    plot_rmse_comparison("full")
+    plot_rmse_comparison()
