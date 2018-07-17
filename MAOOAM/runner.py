@@ -4,6 +4,7 @@ import collections
 import functools
 import itertools
 from multiprocessing import Pool, cpu_count
+import re
 import os
 import pickle
 import sys
