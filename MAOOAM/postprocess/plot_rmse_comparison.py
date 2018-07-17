@@ -41,19 +41,34 @@ def get_rmse_comparison(obs):
     index_rmse_component = 4
     rmse_3dvar = read_error_3DVar(DIR_RESULTS, get_exp_dict(obs, "3DVar"))[index_rmse_component]
 
-    rmse_ETKF_hybrid = {}
-    for da in ["ETKF", "hybrid"]:
-        rmse_2dlist = read_error_ETKF_or_hybrid(DIR_RESULTS, get_exp_dict(obs, da))[-1]
-        assert len(rmse_2dlist) == len(EDIM_LIST)
-        rmse_ndarray = np.empty(len(EDIM_LIST))
-        for i in range(len(EDIM_LIST)):
-            rmse_ndarray[i] = rmse_2dlist[i][0][index_rmse_component]
-        rmse_ETKF_hybrid[da] = rmse_ndarray
-    return rmse_3dvar, rmse_ETKF_hybrid
+    rmse_ETKF_2dlist = read_error_ETKF_or_hybrid(DIR_RESULTS, get_exp_dict(obs, "ETKF"))[-1]
+    assert len(rmse_ETKF_2dlist) == len(EDIM_LIST)
+    rmse_ETKF = np.empty(len(EDIM_LIST))
+    for i in range(len(EDIM_LIST)):
+        rmse_ETKF[i] = rmse_ETKF_2dlist[i][0][index_rmse_component]
+
+    index_alpha_05 = 3
+    rmse_hybrid_2dlist = read_error_ETKF_or_hybrid(DIR_RESULTS, get_exp_dict(obs, "hybrid"))[-1]
+    assert len(rmse_hybrid_2dlist) == len(EDIM_LIST)
+    rmse_hybrid = np.empty(len(EDIM_LIST))
+    for i in range(len(EDIM_LIST)):
+        rmse_hybrid[i] = rmse_hybrid_2dlist[i][index_alpha_05][index_rmse_component]
+
+    return rmse_3dvar, rmse_ETKF, rmse_hybrid
 
 def plot_rmse_comparison(obs):
-    rmse_3dvar, rmse_ETKF_hybrid = get_rmse_comparison(obs)
-    print(rmse_ETKF_hybrid)
+    rmse_3dvar, rmse_ETKF, rmse_hybrid = get_rmse_comparison(obs)
+    plt.rcParams["font.size"] = 14
+    plt.plot(EDIM_LIST, rmse_ETKF, label="ETKF", marker=".")
+    plt.plot(EDIM_LIST, rmse_hybrid, label="hybrid", marker="x")
+    plt.axhline(y=rmse_3dvar, label="3DVar", color="green")
+    plt.ylim(0.0, 0.01)
+    plt.title(f"{obs} observation (grid space)")
+    plt.xlabel("Ensemble size")
+    plt.ylabel("RMS error of entire state")
+    plt.legend()
+    plt.savefig(f"out/rmse_comparison_{obs}.pdf", bbox_inches="tight")
+    plt.close()
 
 class TestAll(unittest.TestCase):
     def test_read_error_ETKF_or_hybrid(self):
