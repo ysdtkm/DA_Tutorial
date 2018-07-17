@@ -9,7 +9,7 @@ storagedir="/lustre/tyoshida/shrt/sync/maooam"
 # preparation
 word=t`/lustre/tyoshida/repos/python/pythonpath/oneliner/serial`
 wdir="${wdir_base}/${word}"
-parallel=true
+parallel=false
 
 cd ${modeldir}
 make clean
