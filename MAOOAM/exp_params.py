@@ -17,7 +17,7 @@ EDIM = 37
 RHO = 1.0
 RELAX = 0.6
 
-BCOV_FROM = "t0829atm"
+BCOV_FROM = "t0830atm"
 TDVAR_METHOD = "inv"
 SIGMA_B = 0.002
 DIAGONALIZE_B = False
