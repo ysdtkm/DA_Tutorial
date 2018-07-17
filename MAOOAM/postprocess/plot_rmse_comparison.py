@@ -34,12 +34,15 @@ def read_error_3DVar(parent_dir, expname):
 
 class TestAll(unittest.TestCase):
     def test_read_error_ETKF_or_hybrid(self):
-        for exp in ["t0900", "t0901", "t0902", "t0931", "t0932", "t0933"]:
-            res = read_error_ETKF_or_hybrid(DIR_RESULTS, exp)
-            self.assertTrue(isinstance(res, list))
+        for obs in ["full", "atmos", "ocean"]:
+            for da in ["hybrid", "ETKF"]:
+                exp = get_exp_dict()[(obs, da)]
+                res = read_error_ETKF_or_hybrid(DIR_RESULTS, exp)
+                self.assertTrue(isinstance(res, list))
 
     def test_read_error_3DVar(self):
-        for exp in ["t0942", "t0944", "t0945"]:
+        for obs in ["full", "atmos", "ocean"]:
+            exp = get_exp_dict()[(obs, "3DVar")]
             res = read_error_3DVar(DIR_RESULTS, exp)
             self.assertTrue(isinstance(res, np.ndarray))
 
@@ -47,7 +50,8 @@ class TestAll(unittest.TestCase):
         exp_dict = get_exp_dict()
         for obs in ["full", "atmos", "ocean"]:
             for da in ["hybrid", "ETKF", "3DVar"]:
-                print(obs, da, exp_dict[(obs, da)])
+                res = exp_dict[(obs, da)]
+                self.assertTrue(isinstance(res, str))
 
 if __name__ == "__main__":
     unittest.main()
