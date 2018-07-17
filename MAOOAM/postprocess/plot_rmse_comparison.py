@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 DIR_RESULTS = "/lustre/tyoshida/six_month/result_exempt"
 OBS_LIST = ["full", "atmos", "ocean"]
 DA_LIST = ["hybrid", "ETKF", "3DVar"]
+EDIM_LIST = list(range(2, 38))
 
 def get_exp_dict(obs, da):
     exp_dict = {
@@ -35,11 +36,24 @@ def read_error_3DVar(parent_dir, expname):
     obj = np.load(f"{parent_dir}/{expname}/rmse_3DVar.npy")
     return obj
 
-def plot_rmse_comparison(obs):
+def get_rmse_comparison(obs):
     assert obs in OBS_LIST
-    rmse_3dvar = read_error_3DVar(DIR_RESULTS, get_exp_dict(obs, "3DVar"))[4]
-    rmse_ETKF = read_error_ETKF_or_hybrid(DIR_RESULTS, get_exp_dict(obs, "ETKF"))
-    import pdb; pdb.set_trace()
+    index_rmse_component = 4
+    rmse_3dvar = read_error_3DVar(DIR_RESULTS, get_exp_dict(obs, "3DVar"))[index_rmse_component]
+
+    rmse_ETKF_hybrid = {}
+    for da in ["ETKF", "hybrid"]:
+        rmse_2dlist = read_error_ETKF_or_hybrid(DIR_RESULTS, get_exp_dict(obs, da))[-1]
+        assert len(rmse_2dlist) == len(EDIM_LIST)
+        rmse_ndarray = np.empty(len(EDIM_LIST))
+        for i in range(len(EDIM_LIST)):
+            rmse_ndarray[i] = rmse_2dlist[i][0][index_rmse_component]
+        rmse_ETKF_hybrid[da] = rmse_ndarray
+    return rmse_3dvar, rmse_ETKF_hybrid
+
+def plot_rmse_comparison(obs):
+    rmse_3dvar, rmse_ETKF_hybrid = get_rmse_comparison(obs)
+    print(rmse_ETKF_hybrid)
 
 class TestAll(unittest.TestCase):
     def test_read_error_ETKF_or_hybrid(self):
@@ -62,4 +76,4 @@ class TestAll(unittest.TestCase):
                 self.assertTrue(isinstance(res, str))
 
 if __name__ == "__main__":
-    unittest.main()
+    plot_rmse_comparison("full")
