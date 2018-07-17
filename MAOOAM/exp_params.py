@@ -10,16 +10,16 @@ T_RUN = 10 ** 5
 DT = 0.1
 ACYC_STEP = int(round(2.5 / DT))
 ERROR_FREE_OBS = False
-OBS_NET = "atm_grid"
+OBS_NET = "ocn_grid"
 FLAG_R = "hbht"
 
 EDIM = 37
 RHO = 1.0
 RELAX = 0.6
 
-BCOV_FROM = "t0830atm"
+BCOV_FROM = "t0829ocn"
 TDVAR_METHOD = "inv"
-SIGMA_B = 0.002
+SIGMA_B = 0.02
 DIAGONALIZE_B = False
 
 ALPHA = 0.5
