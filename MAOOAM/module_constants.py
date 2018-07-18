@@ -33,7 +33,7 @@ def get_static_b(normalize=True, name=BCOV_FROM):
     }
     bcov = bcovs[name]
     assert bcov.shape == (NDIM, NDIM)
-    eigs = np.linalg.eigvals(bcov)
+    eigs = np.linalg.eigvalsh(bcov)
     assert np.all(eigs > 0.0)
     if normalize:
         srad = np.max(eigs)
