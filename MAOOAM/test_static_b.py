@@ -18,15 +18,10 @@ class TestStaticB(unittest.TestCase):
         b0 = read_text_b("binary_const/20180702_cheng_b.txt")
         for i in range(100):
             e1 = np.linalg.eigvals(b0)
-            e2 = np.linalg.eigvals(b0)
-            self.assertEqual(np.max(np.abs(e1 - e2)), 0.0, i)
-
-            m1 = np.max(e1)
-            m2 = np.max(e2)
-            self.assertEqual(m1 - m2, 0.0, i)
-
             b1 = b0 / np.max(e1)
+            e2 = np.linalg.eigvals(b0)
             b2 = b0 / np.max(e2)
+            self.assertEqual(np.max(np.abs(e1 - e2)), 0.0, i)
             self.assertEqual(np.max(np.abs(b1 - b2)), 0.0, i)
 
     def test_read_text_b(self):
