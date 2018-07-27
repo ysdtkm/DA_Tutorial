@@ -15,7 +15,7 @@ def plot_r():
     luyu_r = module_obs_network.read_fort_txt_2d("binary_const/clim_std_Luyu_20180619.txt").flatten()
 
     kriti_r_obs_space = module_obs_network.read_fort_txt_2d("binary_const/20180727_kriti_r_in_obs_space.txt").flatten() ** 2
-    kriti_hxxThT = module_obs_network.read_fort_txt_2d("fort.502").flatten() ** 2
+    kriti_hxxThT = module_obs_network.read_fort_txt_2d("binary_const/20180727_kriti_hxxtht.txt").flatten() ** 2
 
     r_with_diag = np.diag(h @ np.diag(luyu_r ** 2) @ h.T)
     r_no_diag = np.diag(h @ bclim * 0.01 @ h.T)
