@@ -6,16 +6,16 @@ X0_INIT = "Cheng"
 RANDOM_SAMPLE_INIT = True
 INIT_SIGMAS = 0.1
 
-T_RUN = 10 ** 5
+T_RUN = 10 ** 4
 DT = 0.1
 ACYC_STEP = int(round(2.5 / DT))
 ERROR_FREE_OBS = False
-OBS_NET = "full_grid"
-FLAG_R = "hbht"
+OBS_NET = "Kriti_fixed"
+FLAG_R = "hr_squared"
 
 EDIM = 37
 RHO = 1.0
-RELAX = 0.6
+RELAX = 0.0
 
 BCOV_FROM = "t0829ocn"
 TDVAR_METHOD = "inv"
@@ -24,4 +24,4 @@ DIAGONALIZE_B = False
 
 ALPHA = 0.5
 
-SKIP_HEAVY_PLOT = True
+SKIP_HEAVY_PLOT = False

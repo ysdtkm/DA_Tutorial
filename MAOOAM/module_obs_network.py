@@ -208,6 +208,8 @@ def get_h():
         ht = read_fort_txt_2d("binary_const/20180707_ht_kriti_ocean.txt")
         h = ht.T
         assert h.shape == (NDIM - natm, NDIM)
+    elif OBS_NET == "Kriti_fixed":
+        h = read_fort_txt_2d("binary_const/20180727_kriti_h.txt").T
     else:
         raise ValueError
     return h

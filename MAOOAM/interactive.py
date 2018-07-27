@@ -19,11 +19,13 @@ def plot_r():
 
     r_with_diag = np.diag(h @ np.diag(luyu_r ** 2) @ h.T)
     r_no_diag = np.diag(h @ bclim * 0.01 @ h.T)
+    r_one_side = (h @ luyu_r[:, None]).flatten() ** 2
 
     plt.semilogy(r_with_diag, label="Luyu's R (diagonal)")
     plt.semilogy(r_no_diag, label="hxxThT, mine")
     plt.semilogy(kriti_r_obs_space, label="kriti hrrhT")
     plt.semilogy(kriti_hxxThT, label="kriti_hxxThT")
+    plt.semilogy(r_one_side, label="one side")
     plt.legend()
     plt.show()
 

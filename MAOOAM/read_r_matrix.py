@@ -28,7 +28,7 @@ def get_b_clim_kriti():
     return b
 
 def get_r(flag=FLAG_R):
-    assert flag in ["hbht", "Luyu", "Kriti", "Cheng", "identity"]
+    assert flag in ["hbht", "Luyu", "Kriti", "Cheng", "identity", "hr_squared"]
     h = get_h()
     p = h.shape[0]
     if flag == "hbht":
@@ -41,6 +41,11 @@ def get_r(flag=FLAG_R):
     elif flag == "identity":
         sigma = 0.001
         r = np.identity(p) * sigma ** 2
+    elif flag == "hr_squared":
+        rvec = np.diag(read_diag_r("Luyu")) ** 0.5
+        assert rvec.shape == (p,)
+        hr = h @ rvec[:, None]
+        r = np.diag(np.diag(hr @ hr.T))
     else:
         raise ValueError
     return r
@@ -71,6 +76,7 @@ def compare_r():
     plt.semilogy(np.diag(get_r("Luyu")), label="Luyu")
     plt.semilogy(np.diag(get_r("Kriti")), label="Kriti old")
     plt.semilogy(np.diag(get_r("Cheng")), label="Cheng")
+    plt.semilogy(np.diag(get_r("hr_squared")), label="hr_squared")
     plt.legend()
     plt.savefig("out.pdf")
     plt.close()

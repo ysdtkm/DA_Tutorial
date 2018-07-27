@@ -7,7 +7,7 @@
 #   cmd_*: Command to be executed
 #================================
 
-MAIN = 3DVar
+MAIN = ETKF
 STEP_ALL = compile prep $(MAIN) plot tex
 
 src_compile =
