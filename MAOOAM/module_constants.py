@@ -63,6 +63,21 @@ def read_xb_yo_xa():
         xb, yo, xa = res
     return xb, yo, xa
 
+def compare_static_b_diag():
+    import matplotlib
+    matplotlib.use("pdf")
+    import matplotlib.pyplot as plt
+    var_ocn = np.diag(get_static_b(True, "t0829ocn"))
+    var_atm = np.diag(get_static_b(True, "t0830atm"))
+    var_full = np.diag(get_static_b(True, "t0800"))
+    plt.rcParams["font.size"] = 14
+    plt.semilogy(var_full, label="Full obs")
+    plt.semilogy(var_atm, label="Atmos obs")
+    plt.semilogy(var_ocn, label="Ocean obs")
+    plt.legend()
+    plt.xlabel("Model index")
+    plt.ylabel("Background error variance\n(diagonal elements of normalized B)")
+    plt.savefig("tmp.pdf", bbox_inches="tight")
+
 if __name__ == "__main__":
-    maxeigval = np.max(np.linalg.eigvalsh(get_static_b(False, "Cheng")))
-    print(maxeigval ** 0.5)
+    compare_static_b_diag()

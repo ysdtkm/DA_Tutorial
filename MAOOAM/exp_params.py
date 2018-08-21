@@ -8,7 +8,7 @@ INIT_SIGMAS = 0.1
 
 T_RUN = 10 ** 4
 DT = 0.1
-ACYC_STEP = int(round(2.5 / DT))
+ACYC_STEP = int(round(0.4 / DT))
 ERROR_FREE_OBS = False
 OBS_NET = "Kriti_fixed"
 FLAG_R = "hr_squared"
