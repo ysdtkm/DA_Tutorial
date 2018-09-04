@@ -1,6 +1,6 @@
 
 ifndef COMPILER
-  COMPILER=gfortran
+  COMPILER=ifort
 endif
 ifdef INTMODE
   # Define integrator module
