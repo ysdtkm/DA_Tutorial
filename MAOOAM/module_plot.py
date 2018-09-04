@@ -64,7 +64,7 @@ def plot_eig_bcov(bcov, img_name_eigval, img_name_eigvec, intvl):
     plt.colorbar(cm)
     plt.title(r"Eigenvectors of $B$ ($\tau$ = %d)" % intvl)
     plt.xlabel("Eigenvector index")
-    plt.ylabel("Model variable")
+    plt.ylabel("Model variable index")
     plt.savefig(img_name_eigvec, bbox_inches="tight")
     plt.close()
 
