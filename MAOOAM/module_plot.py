@@ -23,8 +23,8 @@ def plot_time_colormap(dat, img_name, vmin=None, vmax=None, title="", cmap="RdBu
     if (vmin is not None) and (vmax is not None):
         cm.set_clim(vmin, vmax)
     plt.colorbar(cm)
-    plt.xlabel("model variable")
-    plt.ylabel("time")
+    plt.xlabel("Model variable")
+    plt.ylabel("Time")
     plt.title(title)
     plt.savefig(img_name, bbox_inches="tight")
     plt.close()
@@ -36,8 +36,8 @@ def plot_mean_bcov(bcov, img_name, title, log=False):
     cm = plt.imshow(bcov, cmap="RdBu_r", norm=norm, extent=get_extent_square())
     cm.set_clim(-vmax, vmax)
     plt.colorbar(cm)
-    plt.xlabel("Model variable")
-    plt.ylabel("Model variable")
+    plt.xlabel("Model variable index")
+    plt.ylabel("Model variable index")
     plt.title(title)
     plt.savefig(img_name, bbox_inches="tight")
     plt.close()
@@ -163,8 +163,8 @@ def cov_to_mean_and_std(pb_hist, to_corr=False):
     return mean_mat, stdv_mat, flow_dependence
 
 def read_and_plot_mean_bcov():
-    for intvl, name in [(1, "t0644"), (10, "t0645"), (100, "t0646"), (1000, "t0647")]:
-        mean_cov = np.load(f"binary_const/mean_b_cov_{name}_{intvl:04d}tu.npy")
+    for intvl, name in [(1, "t1227"), (10, "t1228"), (100, "t1229"), (1000, "t1230")]:
+        mean_cov = np.load(f"binary_const/mean_b_cov_{name}.npy")
         assert len(mean_cov.shape) == 2
         assert mean_cov.shape[0] == mean_cov.shape[1] == NDIM
         title = r"Normalized $B$ ($\tau$ = %d)" % intvl
