@@ -36,8 +36,8 @@ def plot_mean_bcov(bcov, img_name, title, log=False):
     cm = plt.imshow(bcov, cmap="RdBu_r", norm=norm, extent=get_extent_square())
     cm.set_clim(-vmax, vmax)
     plt.colorbar(cm)
-    plt.xlabel("model variable")
-    plt.ylabel("model variable")
+    plt.xlabel("Model variable")
+    plt.ylabel("Model variable")
     plt.title(title)
     plt.savefig(img_name, bbox_inches="tight")
     plt.close()
@@ -52,19 +52,19 @@ def plot_eig_bcov(bcov, img_name_eigval, img_name_eigvec, intvl):
     xs = np.arange(1, len(eigval) + 1)
     plt.plot(xs, eigval)
     plt.yscale("log")
-    plt.title(r"eigenvalues of $B_0$ ($\tau$ = %d)" % intvl)
+    plt.title(r"Eigenvalues of $B_0$ ($\tau$ = %d)" % intvl)
     plt.ylim(10 ** (-15), 10 ** (-3))
-    plt.xlabel("eigenvector index")
-    plt.ylabel("eigenvalues")
+    plt.xlabel("Eigenvector index")
+    plt.ylabel("Eigenvalues")
     plt.savefig(img_name_eigval, bbox_inches="tight")
     plt.close()
 
     cm = plt.imshow(eigvec, cmap="RdBu_r", extent=get_extent_square())
     cm.set_clim(-1, 1)
     plt.colorbar(cm)
-    plt.title(r"eigenvectors of $B$ ($\tau$ = %d)" % intvl)
-    plt.xlabel("eigenvector index")
-    plt.ylabel("model variable")
+    plt.title(r"Eigenvectors of $B$ ($\tau$ = %d)" % intvl)
+    plt.xlabel("Eigenvector index")
+    plt.ylabel("Model variable")
     plt.savefig(img_name_eigvec, bbox_inches="tight")
     plt.close()
 
@@ -167,7 +167,7 @@ def read_and_plot_mean_bcov():
         mean_cov = np.load(f"binary_const/mean_b_cov_{name}_{intvl:04d}tu.npy")
         assert len(mean_cov.shape) == 2
         assert mean_cov.shape[0] == mean_cov.shape[1] == NDIM
-        title = r"normalized $B$ ($\tau$ = %d)" % intvl
+        title = r"Normalized $B$ ($\tau$ = %d)" % intvl
         plot_mean_bcov(mean_cov / np.max(np.linalg.eigvalsh(mean_cov)), "img/bcov_%05d.pdf" % intvl, title, True)
         plot_eig_bcov(mean_cov, "img/bcov_%05d_eigval.pdf" % intvl, "img/bcov_%05d_eigvec.pdf" % intvl, intvl)
 
@@ -185,4 +185,4 @@ def main():
         read_and_plot_bcov()
 
 if __name__ == "__main__":
-    main()
+    read_and_plot_mean_bcov()

@@ -282,5 +282,6 @@ def plot_h_matrix():
     plot_mat(h)
 
 if __name__ == "__main__":
-    plot_h_matrix()
+    h = get_h_full_coverage()
+    print(np.linalg.cond(h))
 
