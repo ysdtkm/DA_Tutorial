@@ -69,6 +69,8 @@ def get_grid_val(waves, x, y, is_atm, elem):
                 gridval += waves[j_all] * 2.0 * np.sin(0.5 * hos[j] * n * x) * np.sin(pos[j] * y)
     if elem == "tmp":
         gridval *= (f0 ** 2 * L ** 2) / R
+        if is_atm:
+            gridval *= 2
     elif elem == "psi":
         gridval *= L ** 2 * f0
     else:
