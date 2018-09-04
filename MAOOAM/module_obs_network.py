@@ -239,11 +239,29 @@ def get_h_comparison():
     return h_mat
 
 def plot_mat(mat):
-    # plt.imshow(mat, cmap="RdBu_r")
-    plt.imshow(mat, norm=matplotlib.colors.SymLogNorm(linthresh=0.1),
-               cmap="RdBu_r")
-    plt.colorbar()
-    plt.savefig("tmp.png")
+    plt.rcParams["font.size"] = 14
+    vmax = 600
+    extent = (0, NDIM, NDIM, 0)
+    fig, ax = plt.subplots()
+    plt.imshow(mat, extent=extent, vmin=-vmax, vmax=vmax, cmap="RdBu_r")
+    plt.title("Observation operator H")
+    plt.colorbar(extend="both")
+
+    ax.set_xlabel("Model variables")
+    ax.set_xticks([5, 15, 24, 32])
+    xlabel = ["Psi (Atmos)", "T (Atmos)", "Psi (Ocean)", "T (Ocean)"]
+    ax.set_xticklabels(xlabel, horizontalalignment="center", size=11)
+    ax.xaxis.set_tick_params(size=0)
+
+    ax.set_ylabel("Observations")
+    ax.set_yticks([5, 15, 24, 32])
+    ylabel = ["U (Atmos)", "T (Atmos)", "U (Ocean)", "T (Ocean)"]
+    ax.set_yticklabels(ylabel,
+        verticalalignment="center",
+        size=11, rotation=90)
+    ax.yaxis.set_tick_params(size=0)
+
+    plt.savefig("tmp.pdf")
     plt.close()
 
 def read_fort_txt_2d(filename):
@@ -259,6 +277,10 @@ def read_fort_txt_2d(filename):
         mat[i, :] = np.array(lf)
     return mat
 
+def plot_h_matrix():
+    h = get_h_full_coverage()
+    plot_mat(h)
+
 if __name__ == "__main__":
-    pass
+    plot_h_matrix()
 
