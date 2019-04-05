@@ -18,9 +18,9 @@ def get_grid_val(waves, x, y, is_atm, elem):
     assert elem in ["psi", "tmp", "u", "v"]
 
     f0 = 1.032e-4
-    n = 1.5
-    na = 10
-    no = 8
+    n = 1.5  # x-y aspect ratio
+    na = 10  # Number of atmosphere wave numbers per level
+    no = 8  # Number of ocean wave numbers
     R = 287.0
     L = 5000000.0 / np.pi
 
@@ -72,7 +72,7 @@ def get_grid_val(waves, x, y, is_atm, elem):
     if elem == "tmp":
         gridval *= (f0 ** 2 * L ** 2) / R
         if is_atm:
-            gridval *= 2
+            gridval *= 2  # Equation 12 of De Cruz+ 2016
     elif elem == "psi":
         gridval *= L ** 2 * f0
     else:
